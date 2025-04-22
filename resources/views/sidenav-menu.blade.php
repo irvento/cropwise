@@ -6,6 +6,21 @@
                 <a href="{{ route('dashboard') }}" class="block py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100">
                     Dashboard
                 </a>
+                <a href="{{ route('farm.index') }}" class="block py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100">
+                    Farm
+                </a>
+                <a href="{{ route('schedule.index') }}" class="block py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100">
+                    Schedule
+                </a>
+                <a href="{{ route('inventory.index') }}" class="block py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100">
+                    Inventory
+                </a>
+                <a href="{{ route('finance.index') }}" class="block py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100">
+                    Finance
+                </a>
+                <a href="{{ route('hr.index') }}" class="block py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100">
+                    Human Resources
+                </a>
                 <a href="{{ route('profile.show') }}" class="block py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100">
                     Profile
                 </a>

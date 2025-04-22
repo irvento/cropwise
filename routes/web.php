@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\farmController;
+use App\Http\Controllers\financeController;
+use App\Http\Controllers\hrController;
+use App\Http\Controllers\inventoryController;
+use App\Http\Controllers\schedulesController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,3 +27,12 @@ Route::get('/farm', [farmController::class, 'index'])->name('farm.index');
 Route::get('/farm/crops', [farmController::class, 'cropsindex'])->name('crops.index');
 
 Route::get('/farm/livestocks', [farmController::class, 'livestocksindex'])->name('livestocks.index');
+
+Route::get('/schedule', [schedulesController::class, 'index'])->name('schedule.index');
+
+Route::get('/inventory', [inventoryController::class, 'index'])->name('inventory.index');
+
+Route::get('/finance', [financeController::class, 'index'])->name('finance.index');
+
+Route::get('/hr', [hrController::class, 'index'])->name('hr.index');
+
