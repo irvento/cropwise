@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\farmController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -15,3 +16,10 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+//FARM
+Route::get('/farm', [farmController::class, 'index'])->name('farm.index');
+
+Route::get('/farm/crops', [farmController::class, 'cropsindex'])->name('crops.index');
+
+Route::get('/farm/livestocks', [farmController::class, 'livestocksindex'])->name('livestocks.index');

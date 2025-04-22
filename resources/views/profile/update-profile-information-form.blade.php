@@ -14,6 +14,7 @@
                 <!-- Profile Photo File Input -->
                 <input type="file" id="photo" class="hidden"
                             wire:model.live="photo"
+                            
                             x-ref="photo"
                             x-on:change="
                                     photoName = $refs.photo.files[0].name;
