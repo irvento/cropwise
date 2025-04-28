@@ -44,8 +44,8 @@ To set up the Farm Management System locally, follow these steps:
 1. **Clone the repository**:
 
    ```
-   git clone https://github.com/yourusername/farm-management-system.git
-   cd farm-management-system
+   git clone https://github.com/irvento/cropwise.git
+
    
    ```
 2. **Install dependencies**:
