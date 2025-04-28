@@ -12,9 +12,87 @@
 
 <div class="container">
     <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    The Farm
+                </div>
+                <div class="card-body">
+                    <p>farm</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    Finance
+                </div>
+                <div class="card-body">
+                    <p>Financi...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    Inventory
+                </div>
+                <div class="card-body">
+                    <p>Inventory</p>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    Weather
+                </div>
+                <div class="card-body">
+                    <p>weather conditions...</p>
+                </div>
+            </div>
+        </div>
 
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    stats
+                </div>
+                <div class="card-body">
+                    <p>Some additional information...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    stats 2
+                </div>
+                <div class="card-body">
+                    <p>More additional information...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    stats 3
+                </div>
+                <div class="card-body">
+                    <p>Details about one more info...</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
             </div>
