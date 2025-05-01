@@ -24,7 +24,7 @@
             @livewire('navigation-menu') <!-- TOP NAV -->
         
             <div class="flex flex-1">
-                @include('sidenav-menu') <!-- SIDE NAV -->
+                @include('layouts.sidenav-menu') <!-- SIDE NAV -->
         
                 <!-- Main Content -->
                 <div class="flex-1 p-6 overflow-y-auto">

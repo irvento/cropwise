@@ -1,0 +1,70 @@
+
+<!-- resources/views/sidenav-menu.blade.php -->
+
+<div class="flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white dark:bg-gray-900 shadow-lg h-screen p-6 border-r border-gray-200 dark:border-gray-700 transition-all duration-300">
+        <nav class="space-y-2">
+            <!-- Dashboard -->
+            <a href="{{ route('dashboard') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-500 transition-all duration-200 px-4 py-3 rounded-md hover:bg-blue-50 dark:hover:bg-gray-800 hover:shadow-sm active:bg-blue-700 active:border-b-2 active:border-blue-600">
+                <i class="fas fa-tachometer-alt text-blue-500 group-hover:text-blue-600 text-xl transform group-hover:scale-110 transition-transform"></i>
+                <span class="font-medium ml-3 group-hover:font-semibold group-hover:text-blue-600 dark:group-hover:text-blue-500">Dashboard</span>
+                <i class="fas fa-chevron-right ml-auto text-xs text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+            </a>
+
+            <!-- Farm Management -->
+            <a href="{{ route('farm.index') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-500 transition-all duration-200 px-4 py-3 rounded-md hover:bg-green-50 dark:hover:bg-gray-800 hover:shadow-sm active:bg-green-700 active:border-b-2 active:border-green-600">
+                <i class="fas fa-tractor text-green-500 group-hover:text-green-600 text-xl transform group-hover:scale-110 transition-transform"></i>
+                <span class="font-medium ml-3 group-hover:font-semibold group-hover:text-green-600 dark:group-hover:text-green-500">Farm Management</span>
+                <i class="fas fa-chevron-right ml-auto text-xs text-green-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+            </a>
+
+            <!-- Schedules -->
+            <a href="{{ route('schedule.index') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-500 transition-all duration-200 px-4 py-3 rounded-md hover:bg-purple-50 dark:hover:bg-gray-800 hover:shadow-sm active:bg-purple-700 active:border-b-2 active:border-purple-600">
+                <i class="fas fa-calendar-alt text-purple-500 group-hover:text-purple-600 text-xl transform group-hover:scale-110 transition-transform"></i>
+                <span class="font-medium ml-3 group-hover:font-semibold group-hover:text-purple-600 dark:group-hover:text-purple-500">Schedules</span>
+                <i class="fas fa-chevron-right ml-auto text-xs text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+            </a>
+
+            <!-- Inventory -->
+            <a href="{{ route('inventory.index') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-amber-600 dark:hover:text-amber-500 transition-all duration-200 px-4 py-3 rounded-md hover:bg-amber-50 dark:hover:bg-gray-800 hover:shadow-sm active:bg-amber-700 active:border-b-2 active:border-amber-600">
+                <i class="fas fa-warehouse text-amber-500 group-hover:text-amber-600 text-xl transform group-hover:scale-110 transition-transform"></i>
+                <span class="font-medium ml-3 group-hover:font-semibold group-hover:text-amber-600 dark:group-hover:text-amber-500">Inventory</span>
+                <i class="fas fa-chevron-right ml-auto text-xs text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+            </a>
+
+            <!-- Financial Reports -->
+            <a href="{{ route('finance.index') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-500 transition-all duration-200 px-4 py-3 rounded-md hover:bg-emerald-50 dark:hover:bg-gray-800 hover:shadow-sm active:bg-emerald-700 active:border-b-2 active:border-emerald-600">
+                <i class="fas fa-chart-line text-emerald-500 group-hover:text-emerald-600 text-xl transform group-hover:scale-110 transition-transform"></i>
+                <span class="font-medium ml-3 group-hover:font-semibold group-hover:text-emerald-600 dark:group-hover:text-emerald-500">Financial Reports</span ```blade
+                <i class="fas fa-chevron-right ml-auto text-xs text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+            </a>
+
+            <!-- Human Resources -->
+            <a href="{{ route('hr.index') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-500 transition-all duration-200 px-4 py-3 rounded-md hover:bg-indigo-50 dark:hover:bg-gray-800 hover:shadow-sm active:bg-indigo-700 active:border-b-2 active:border-indigo-600">
+                <i class="fas fa-users text-indigo-500 group-hover:text-indigo-600 text-xl transform group-hover:scale-110 transition-transform"></i>
+                <span class="font-medium ml-3 group-hover:font-semibold group-hover:text-indigo-600 dark:group-hover:text-indigo-500">Human Resources</span>
+                <i class="fas fa-chevron-right ml-auto text-xs text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+            </a>
+
+            <div class="border-t border-gray-300 dark:border-gray-600 my-4"></div>
+
+            <!-- My Profile -->
+            <a href="{{ route('profile.show') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-pink-600 dark:hover:text-pink-500 transition-all duration-200 px-4 py-3 rounded-md hover:bg-pink-50 dark:hover:bg-gray-800 hover:shadow-sm active:bg-pink-700 active:border-b-2 active:border-pink-600">
+                <i class="fas fa-user text-pink-500 group-hover:text-pink-600 text-xl transform group-hover:scale-110 transition-transform"></i>
+                <span class="font-medium ml-3 group-hover:font-semibold group-hover:text-pink-600 dark:group-hover:text-pink-500">My Profile</span>
+                <i class="fas fa-chevron-right ml-auto text-xs text-pink-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+            </a>
+
+            <!-- Logout -->
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="flex items-center group space-x-4 w-full text-left text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-all duration-200 px-4 py-3 rounded-md hover:bg-red-50 dark:hover:bg-gray-800 hover:shadow-sm active:bg-red-700 active:border-b-2 active:border-red-600">
+                    <i class="fas fa-sign-out-alt text-red-500 group-hover:text-red-600 text-xl transform group-hover:scale-110 transition-transform group-hover:animate-pulse"></i>
+                    <span class="font-medium ml-3 group-hover:font-semibold group-hover:text-red-600 dark:group-hover:text-red-500">Logout</span>
+                    <i class="fas fa-chevron-right ml-auto text-xs text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                </button>
+            </form>
+        </nav>
+    </aside>
+</div>
