@@ -5,94 +5,51 @@
         </h2>
     </x-slot>
 
- <!-- Disclaimer this is an initial dashboard for reference, this will be further fix in development -->
+    <!-- Disclaimer: This is an initial dashboard for reference; it will be further refined in development -->
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6 space-y-6">
 
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    The Farm
-                                </div>
-                                <div class="card-body">
-                                    <p>farm</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    Finance
-                                </div>
-                                <div class="card-body">
-                                    <p>Financi...</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    Inventory
-                                </div>
-                                <div class="card-body">
-                                    <p>Inventory</p>
-                                </div>
-                            </div>
-                        </div>
+                <!-- First Row -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">The Farm</h3>
+                        <p class="text-gray-600 dark:text-gray-300">farm</p>
                     </div>
 
-                    <div class="row mt-3">
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    Weather
-                                </div>
-                                <div class="card-body">
-                                    <p>weather conditions...</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    stats
-                                </div>
-                                <div class="card-body">
-                                    <p>Some additional information...</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    stats 2
-                                </div>
-                                <div class="card-body">
-                                    <p>More additional information...</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Finance</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Financi...</p>
                     </div>
 
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    stats 3
-                                </div>
-                                <div class="card-body">
-                                    <p>Details about one more info...</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Inventory</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Inventory</p>
                     </div>
+                </div>
+
+                <!-- Second Row -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Weather</h3>
+                        <p class="text-gray-600 dark:text-gray-300">weather conditions...</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Stats</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Some additional information...</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Stats 2</h3>
+                        <p class="text-gray-600 dark:text-gray-300">More additional information...</p>
+                    </div>
+                </div>
+
+                <!-- Full Width Row -->
+                <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4">
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Stats 3</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Details about one more info...</p>
                 </div>
 
             </div>
