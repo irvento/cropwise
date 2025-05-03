@@ -10,17 +10,17 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6">
                 @if($weatherData)
                     <div class="text-center">
-                        <h1 class="text-2xl font-bold mb-4">
+                        <h1 class=" text-gray-800 dark:text-gray-200 text-2xl font-bold mb-4">
                             Weather in {{ $weatherData['city'] }}, {{ $weatherData['country'] }}
                         </h1>
                         <p class="text-gray-500 mb-2">Last updated: {{ $weatherData['last_updated'] }}</p>
                         
                         <div class="flex justify-center items-center my-6">
                             <img src="{{ $weatherData['icon'] }}" alt="Weather icon" class="w-24 h-24">
-                            <span class="text-4xl ml-4">{{ $weatherData['temp_c'] }}°C</span>
+                            <span class=" text-gray-800 dark:text-gray-200 text-4xl ml-4">{{ $weatherData['temp_c'] }}°C</span>
                         </div>
                         
-                        <p class="text-xl mb-2">{{ $weatherData['condition'] }}</p>
+                        <p class=" text-gray-800 dark:text-gray-200 text-xl mb-2">{{ $weatherData['condition'] }}</p>
                         <p class="text-gray-600">Feels like: {{ $weatherData['feelslike_c'] }}°C</p>
                         
                         <div class="grid grid-cols-2 gap-4 mt-8 max-w-md mx-auto">
