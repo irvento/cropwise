@@ -46,22 +46,6 @@
                 <i class="fas fa-chevron-right ml-auto text-xs text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
             </a>
 
-            <!-- Weather-->
-@isset($currentCity)
-<aside class="w-64 bg-white dark:bg-gray-900 shadow-lg h-screen p-6 border-r border-gray-200 dark:border-gray-700 transition-all duration-300">
-    <!-- ... other menu items ... -->
-    
-    <!-- Weather link with fallback -->
-    <a href="{{ route('weather.show', $currentCity ?? 'Manolo Fortich') }}" class="...">
-        <i class="fas fa-cloud text-indigo-500 text-xl transform group-hover:scale-110 transition-transform"></i>
-        <span class="font-medium ml-3 group-hover:font-semibold">Weather</span>
-        <i class="fas fa-chevron-right ml-auto text-xs text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
-    </a>
-    
-    <!-- ... rest of menu ... -->
-</aside>
-@endisset
-
             <div class="border-t border-gray-300 dark:border-gray-600 my-4"></div>
 
             <!-- My Profile -->
