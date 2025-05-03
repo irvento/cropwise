@@ -13,9 +13,9 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
-    'openweather' => [
-        'key' => env('OPENWEATHER_API_KEY'),
-        'url' => env('OPENWEATHER_API_URL'),
+    'weatherapi' => [
+        'key' => env('WEATHER_API_KEY'),
+        'url' => env('WEATHER_API_URL'),
     ],
 
 
