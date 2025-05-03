@@ -5,6 +5,7 @@ use App\Http\Controllers\financeController;
 use App\Http\Controllers\hrController;
 use App\Http\Controllers\inventoryController;
 use App\Http\Controllers\schedulesController;
+use App\Http\Controllers\WeatherController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +21,9 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+//WEATHER
+Route::get('/weather/{city}', [WeatherController::class, 'show'])->name('weather.show');
 
 //FARM
 Route::get('/farm', [farmController::class, 'index'])->name('farm.index');
