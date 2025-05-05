@@ -69,8 +69,9 @@
                     <a href="{{ route('finance.index') }}" class="block">
                         <div class="bg-gray-100 dark:bg-gray-700 p-6 text-center rounded shadow">
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Farm's Finance </h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Finances</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">Finance</p>
                         </div>
+
                     </a>
                 </div>
             </div>
