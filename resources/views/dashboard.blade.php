@@ -8,33 +8,33 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6">
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    <!-- Box 1 -->
-                    <a href="#" class="block">
+                <div class="grid gridw-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <!-- Farm -->
+                    <a href="{{ route('farm.index') }}" class="block">
                         <div class="bg-gray-100 dark:bg-gray-700 p-6 text-center rounded shadow">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Box 1</h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Content for box 1</p>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">The Farm</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">Content</p>
                         </div>
                     </a>
-                    <!-- Box 2 -->
-                    <a href="#" class="block">
+                    <!-- Task -->
+                    <a href="{{ route('schedule.index') }}" class="block">
                         <div class="bg-gray-100 dark:bg-gray-700 p-6 text-center rounded shadow">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Box 2</h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Content for box 2</p>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Task</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">Task info</p>
                         </div>
                     </a>
-                    <!-- Box 3 -->
-                    <a href="#" class="block">
+                    <!-- Weather -->
+                    <a href="{{ route('weather.show', $currentCity ?? 'Manolo Fortich') }}" class="block">
                         <div class="bg-gray-100 dark:bg-gray-700 p-6 text-center rounded shadow">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Box 3</h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Content for box 3</p>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Weather Today</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">Content for weather</p>
                         </div>
                     </a>
-                    <!-- Box 4 -->
-                    <a href="#" class="block">
+                    <!-- schedules -->
+                    <a href="{{ route('schedule.index') }}" class="block">
                         <div class="bg-gray-100 dark:bg-gray-700 p-6 text-center rounded shadow">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Box 4</h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Content for box 4</p>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Schedules</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">Tables</p>
                         </div>
                     </a>
                     <!-- Box 5 -->
@@ -52,24 +52,24 @@
                         </div>
                     </a>
                     <!-- Box 7 -->
-                    <a href="#" class="block">
+                    <a href="{{ route('farm.index') }}" class="block">
                         <div class="bg-gray-100 dark:bg-gray-700 p-6 text-center rounded shadow">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Box 7</h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Content for box 7</p>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Livestock</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">Livestock Analytics</p>
                         </div>
                     </a>
                     <!-- Box 8 -->
-                    <a href="#" class="block">
+                    <a href="{{ route('farm.index') }}" class="block">
                         <div class="bg-gray-100 dark:bg-gray-700 p-6 text-center rounded shadow">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Box 8</h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Content for box 8</p>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Crops</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">Crops Analytics</p>
                         </div>
                     </a>
                     <!-- Box 9 -->
-                    <a href="#" class="block">
+                    <a href="{{ route('finance.index') }}" class="block">
                         <div class="bg-gray-100 dark:bg-gray-700 p-6 text-center rounded shadow">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Box 9</h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Content for box 9</p>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Farm's Finance </h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-300"></p>
                         </div>
                     </a>
                 </div>
