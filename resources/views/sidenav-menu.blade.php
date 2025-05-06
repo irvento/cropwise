@@ -1,11 +1,10 @@
 <!-- resources/views/sidenav-menu.blade.php -->
-
 <div class="flex">
     <!-- Sidebar -->
-    <aside class="w-auto bg-lime-100 dark:bg-gray-900 shadow-lg h-auto p-6 border-r border-black dark:border-gray-700 transition-all duration-300">
+    <aside class="w-64 min-h-screen bg-lime-100 dark:bg-gray-900 shadow-lg p-6 border-r border-black dark:border-gray-700 transition-all duration-300">
         <nav class="space-y-2">
             <!-- Dashboard -->
-            <a href="http://127.0.0.1:8000/dashboard" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 transition-all duration-200 px-4 py-3 rounded-md hover:bg-blue-50 dark:hover:bg-gray-800 hover:shadow-sm">
+            <a href="{{ route('dashboard') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 transition-all duration-200 px-4 py-3 rounded-md hover:bg-blue-50 dark:hover:bg-gray-800 hover:shadow-sm">
                 <i class="fas fa-tachometer-alt text-blue-500 text-xl transform group-hover:scale-110 transition-transform"></i>
                 <span class="font-medium ml-3 group-hover:font-semibold">Dashboard</span>
                 <i class="fas fa-chevron-right ml-auto text-xs text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
@@ -66,4 +65,5 @@
             </form>
         </nav>
     </aside>
+    
 </div>

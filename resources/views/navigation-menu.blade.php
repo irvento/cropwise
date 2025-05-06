@@ -1,6 +1,6 @@
-<nav x-data="{ open: false }" class="bg-amber-400 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 shadow-lg">
+<nav x-data="{ open: false }" class="bg-amber-400 dark:bg-gray-800 border-b border-black dark:border-gray-700 shadow-lg sticky top-0 z-50 shadow-md">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
@@ -18,11 +18,11 @@
                 </div>
             </div>
 
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="flex items-center ms-auto"> <!-- Changed to ms-auto to push to right -->
                 <!-- Teams Dropdown -->
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
-                    <div class="ms-3 relative">
-                        <x-dropdown align="right" width="60">
+                    <div class="relative ms-3">
+                        <x-dropdown align="left" width="60"> <!-- Changed align to left -->
                             <x-slot name="trigger">
                                 <span class="inline-flex rounded-md">
                                     <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 transition ease-in-out duration-150">
@@ -72,8 +72,8 @@
                 @endif
 
                 <!-- Settings Dropdown -->
-                <div class="ms-3 relative">
-                    <x-dropdown align="right" width="48">
+                <div class="relative ms-3">
+                    <x-dropdown align="left" width="48"> <!-- Changed align to left -->
                         <x-slot name="trigger">
                             @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                                 <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
@@ -125,7 +125,7 @@
             </div>
 
             <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
+            <div class="-me-2 flex items-center sm:hidden ms-auto"> <!-- Added ms-auto -->
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
                     <svg class="size-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />

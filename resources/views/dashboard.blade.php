@@ -10,12 +10,21 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6 border border-black">
                 <div class="grid gridw-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     <!-- Farm -->
-                    <a href="{{ route('farm.index') }}" class="block sm:rounded-lg p-1 shadow-md border border-black">
-                        <div class="bg-gray-100 dark:bg-gray-700 p-6 text-center rounded shadow">
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">The Farm</h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Content</p>
+                    <a href="{{ route('farm.index') }}" class="block overflow-hidden rounded-xl shadow-md border border-black"> <!-- Changed to rounded-xl and added overflow-hidden -->
+                        <div style="background-image: url('https://i.pinimg.com/736x/d7/6a/f9/d76af9ea799e6480d6497059d43b1c04.jpg');"
+                             class="relative items-center bg-cover bg-center bg-no-repeat p-6 text-center shadow overflow-hidden rounded-lg"> <!-- Added rounded-lg here -->
+                            
+                            <!-- White overlay -->
+                            <div class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-lg"></div> <!-- Added rounded-lg here -->
+                            
+                            <!-- Content on top of overlay -->
+                            <div class="relative z-10">
+                                <img src="https://cdn-icons-png.flaticon.com/128/18363/18363848.png" alt="logo" class="size-33 mx-auto mb-2">
+                                <h2 class="text-lg font-semibold text-white dark:text-gray-200">THE FARM</h2>
+                            </div>
                         </div>
                     </a>
+                    
                     <!-- Task -->
                     <a href="{{ route('schedule.index') }}" class="block sm:rounded-lg p-1 shadow-md border border-black">
                         <div class="bg-gray-100 dark:bg-gray-700 p-6 text-center rounded shadow">
