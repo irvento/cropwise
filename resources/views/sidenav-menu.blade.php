@@ -2,7 +2,7 @@
 
 <div class="flex">
     <!-- Sidebar -->
-    <aside class="w-64 bg-lime-100 dark:bg-gray-900 shadow-lg h-screen p-6 border-r border-black dark:border-gray-700 transition-all duration-300">
+    <aside class="w-auto bg-lime-100 dark:bg-gray-900 shadow-lg h-auto p-6 border-r border-black dark:border-gray-700 transition-all duration-300">
         <nav class="space-y-2">
             <!-- Dashboard -->
             <a href="http://127.0.0.1:8000/dashboard" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 transition-all duration-200 px-4 py-3 rounded-md hover:bg-blue-50 dark:hover:bg-gray-800 hover:shadow-sm">

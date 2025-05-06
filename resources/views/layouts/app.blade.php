@@ -23,14 +23,14 @@
         <div class="min-h-screen bg-gradient-to-b from-white to-yellow-400 dark:from-gray-900 dark:to-yellow-600 flex flex-col ">
             @livewire('navigation-menu') <!-- TOP NAV -->
         
-            <div class="flex flex-1">
+            <div class="flex">
                 @include('sidenav-menu') <!-- SIDE NAV -->
         
                 <!-- Main Content -->
-                <div class="flex-1 p-6 overflow-y-auto">
+                <div class="flex-1 p-2 overflow-y-auto">
                     @if (isset($header))
                         <header class="bg-amber-300 dark:bg-gray-800 shadow-lg rounded-lg border border-black">
-                            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                            <div class="max-w-7xl mx-auto py-3 px-4 sm:px-6 lg:px-8">
                                 {{ $header }}
                             </div>
                         </header>
@@ -39,8 +39,11 @@
                     <main >
                         {{ $slot }}
                     </main>
+
                 </div>
             </div>
+            <footer class="bg-white p-6 border border-black "><p class="self-center">All rights reserved. Cropwise 2025</p></footer>
+
         </div>
 
         @stack('modals')

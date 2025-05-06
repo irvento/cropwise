@@ -5,10 +5,10 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 ">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6 border border-black">
-                <div class="grid gridw-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 shadow-md">
+                <div class="grid gridw-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     <!-- Farm -->
                     <a href="{{ route('farm.index') }}" class="block sm:rounded-lg p-1 shadow-md border border-black">
                         <div class="bg-gray-100 dark:bg-gray-700 p-6 text-center rounded shadow">
