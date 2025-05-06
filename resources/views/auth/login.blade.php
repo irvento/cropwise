@@ -22,6 +22,7 @@
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
+            <!-- Email -->
             <div>
                 <x-label for="email" value="{{ __('Email') }}" class="text-lg" />
                 <div class="relative">
@@ -36,6 +37,7 @@
                 </div>
             </div>
 
+            <!-- Password -->
             <div class="mt-6">
                 <x-label for="password" value="{{ __('Password') }}" class="text-lg" />
                 <div class="relative">
@@ -50,37 +52,39 @@
                 </div>
             </div>
 
-            <div class="flex justify-between items-center mt-6 flex-wrap gap-2">
+            <!-- Remember me + Forgot password -->
+            <div class="flex justify-between items-center mt-6 text-sm text-gray-700 dark:text-gray-300">
                 <label for="remember_me" class="flex items-center">
                     <x-checkbox id="remember_me" name="remember" class="h-5 w-5 text-indigo-600" />
-                    <span class="ms-2 text-lg text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
+                    <span class="ms-2 text-lg">{{ __('Remember me') }}</span>
                 </label>
-            
-                <p class="text-sm text-gray-700 dark:text-gray-300">
-                    Don't have an account?
-                    <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:underline dark:text-blue-400">
-                        Register
-                    </a>
-                </p>
-            </div>
 
-            <div class="flex items-center justify-end mt-6">
                 @if (Route::has('password.request'))
-                    <a class="underline text-lg text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 rounded-md" 
-                       href="{{ route('password.request') }}">
+                    <a href="{{ route('password.request') }}" class="text-black dark:text-indigo-400 hover:underline text-md">
                         {{ __('Forgot your password?') }}
                     </a>
                 @endif
+            </div>
 
-                <x-button class="ms-4 bg-yellow-500 hover:bg-yellow-600 text-lg py-3 px-6 rounded-xl border-black border shadow-xs
-">
+            <!-- Login Button -->
+            <div class="flex justify-center mt-8">
+                <x-button class="w-full max-w-xs bg-yellow-500 hover:bg-yellow-600 text-lg py-3 px-6 rounded-xl border border-black shadow-sm flex items-center justify-center">
                     {{ __('Log in') }}
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                     </svg>
                 </x-button>
             </div>
+
+            <!-- Register link -->
+            <div class="mt-4 text-center">
+                <p class="text-sm text-gray-700 dark:text-gray-300">
+                    {{ __("Don't have an account?") }}
+                    <a href="{{ route('register') }}" class="font-bold text-blue-600 hover:underline dark:text-blue-400">
+                        {{ __('Register') }}
+                    </a>
+                </p>
+            </div>
         </form>
-       
     </x-authentication-card>
 </x-guest-layout>

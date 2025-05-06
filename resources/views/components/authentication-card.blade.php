@@ -9,8 +9,8 @@
                     {{ $logo }}
                 </div>
             </div>
-            <div class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-                <p>CropWise</p>
+            <div>
+                <p style="font-family:Arial Black, Gadget, sans-serif; font-size: 50px; text-shadow: -6px 4px 2px #0000008f; letter-spacing: 2px; word-spacing: 2px; color: #e3ff66; font-weight: 700; text-decoration: none solid rgb(68, 68, 68); font-style: normal; font-variant: normal; text-transform: uppercase;">CropWise</p>
             </div>
         </div>
     </div>
