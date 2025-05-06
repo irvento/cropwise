@@ -1,5 +1,8 @@
 <x-guest-layout>
     <x-authentication-card>
+        <div class="mb-4 flex justify-center">
+            <h1 class="text-xl sm:text-2xl font-semibold">Register</h1>
+        </div>
         <x-slot name="logo">
             <x-authentication-card-logo />
         </x-slot>

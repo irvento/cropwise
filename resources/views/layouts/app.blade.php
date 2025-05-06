@@ -19,32 +19,44 @@
     </head>
     <body class="font-sans antialiased">
         <x-banner />
-
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col">
+    
+        <div class="min-h-screen bg-gradient-to-b from-white to-yellow-400 dark:from-gray-900 dark:to-yellow-600 flex flex-col">
             @livewire('navigation-menu') <!-- TOP NAV -->
-        
-            <div class="flex flex-1">
-                @include('sidenav-menu') <!-- SIDE NAV -->
-        
-                <!-- Main Content -->
-                <div class="flex-1 p-6 overflow-y-auto">
+    
+            <div class="flex flex-1 overflow-hidden">
+                @include('sidenav-menu') <!-- Move sidebar OUTSIDE the scrollable content -->
+    
+                <!-- Main Content Area -->
+                <div class="flex-1 flex flex-col overflow-hidden">
                     @if (isset($header))
-                        <header class="bg-white dark:bg-gray-800 shadow">
-                            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        <header class="bg-amber-300 dark:bg-gray-800 shadow-md px-4 py-4">
+                            <div class="max-w-7xl mx-auto">
                                 {{ $header }}
                             </div>
                         </header>
                     @endif
-        
-                    <main>
+    
+                    <main class="flex-1 overflow-y-auto px-4 py-2">
                         {{ $slot }}
                     </main>
                 </div>
             </div>
+    
+            <!-- Footer -->
+            <footer class="bg-white dark:bg-gray-900 border-t border-black dark:border-gray-700">
+                <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col sm:flex-row justify-between items-center text-gray-700 dark:text-gray-300">
+                    <p class="text-sm">&copy; 2025 Cropwise. All rights reserved.</p>
+                    <div class="flex space-x-4 mt-2 sm:mt-0">
+                        <a href="#" class="hover:text-blue-500 transition-colors duration-200"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="hover:text-blue-400 transition-colors duration-200"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-pink-500 transition-colors duration-200"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </footer>
         </div>
-
+    
         @stack('modals')
-
         @livewireScripts
     </body>
+    
 </html>
