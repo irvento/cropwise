@@ -50,11 +50,18 @@
                 </div>
             </div>
 
-            <div class="block mt-6">
+            <div class="flex justify-between items-center mt-6 flex-wrap gap-2">
                 <label for="remember_me" class="flex items-center">
                     <x-checkbox id="remember_me" name="remember" class="h-5 w-5 text-indigo-600" />
                     <span class="ms-2 text-lg text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
                 </label>
+            
+                <p class="text-sm text-gray-700 dark:text-gray-300">
+                    Don't have an account?
+                    <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:underline dark:text-blue-400">
+                        Register
+                    </a>
+                </p>
             </div>
 
             <div class="flex items-center justify-end mt-6">
@@ -65,7 +72,7 @@
                     </a>
                 @endif
 
-                <x-button class="ms-4 bg-yellow-500 hover:bg-yellow-600 text-lg py-3 px-6 rounded-xl border shadow-xs
+                <x-button class="ms-4 bg-yellow-500 hover:bg-yellow-600 text-lg py-3 px-6 rounded-xl border-black border shadow-xs
 ">
                     {{ __('Log in') }}
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -74,5 +81,6 @@
                 </x-button>
             </div>
         </form>
+       
     </x-authentication-card>
 </x-guest-layout>
