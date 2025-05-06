@@ -20,7 +20,7 @@
     <body class="font-sans antialiased">
         <x-banner />
 
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col">
+        <div class="min-h-screen bg-gradient-to-b from-white to-yellow-400 dark:from-gray-900 dark:to-yellow-600 flex flex-col ">
             @livewire('navigation-menu') <!-- TOP NAV -->
         
             <div class="flex flex-1">
@@ -29,14 +29,14 @@
                 <!-- Main Content -->
                 <div class="flex-1 p-6 overflow-y-auto">
                     @if (isset($header))
-                        <header class="bg-amber-300 dark:bg-gray-800 shadow-lg">
+                        <header class="bg-amber-300 dark:bg-gray-800 shadow-lg rounded-lg border border-black">
                             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                                 {{ $header }}
                             </div>
                         </header>
                     @endif
         
-                    <main>
+                    <main >
                         {{ $slot }}
                     </main>
                 </div>
