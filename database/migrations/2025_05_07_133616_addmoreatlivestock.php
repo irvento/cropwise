@@ -8,8 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('livestock', function (Blueprint $table) {
-            $table->string('animalvariety')->after('name');
-            $table->integer('growthduration')->after('animalvariety');
+            $table->string('growthduration')->nullable()->after('animalvariety');
             $table->integer('age')->nullable()->after('growthduration');
             $table->decimal('weight', 8, 2)->nullable()->after('age');
             $table->string('health_status')->nullable()->after('weight');
@@ -21,15 +20,9 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('livestock', function (Blueprint $table) {
-            $table->dropColumn([
-                'animalvariety',
-                'growthduration',
-                'age',
-                'weight',
-                'health_status',
-                'location',
-                'owner_id',
-            ]);
+            $table->dropColumn(['growthduration', 'age', 'weight', 'health_status', 'location']);
+            $table->dropForeign(['owner_id']);
+            $table->dropColumn('owner_id');
         });
     }
 };
