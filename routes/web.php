@@ -6,6 +6,7 @@ use App\Http\Controllers\hrController;
 use App\Http\Controllers\inventoryController;
 use App\Http\Controllers\schedulesController;
 use App\Http\Controllers\WeatherController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,9 +29,9 @@ Route::get('/weather/{city}', [WeatherController::class, 'show'])->name('weather
 //FARM
 Route::get('/farm', [farmController::class, 'index'])->name('farm.index');
 
-Route::get('/farm/crops', [farmController::class, 'cropsindex'])->name('crops.index');
+Route::get('/farm/crops', [farmController::class, 'cropsindex'])->name('admin.farm.crops.index');
 
-Route::get('/farm/livestocks', [farmController::class, 'livestocksindex'])->name('livestocks.index');
+Route::get('/farm/livestocks', [farmController::class, 'livestocksindex'])->name('admin.farm.livestocks.index');
 
 Route::get('/schedule', [schedulesController::class, 'index'])->name('schedule.index');
 
@@ -39,4 +40,9 @@ Route::get('/inventory', [inventoryController::class, 'index'])->name('inventory
 Route::get('/finance', [financeController::class, 'index'])->name('finance.index');
 
 Route::get('/hr', [hrController::class, 'index'])->name('hr.index');
+
+// Task management routes
+Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('tasks', TaskController::class);
+});
 
