@@ -6,6 +6,7 @@ use App\Http\Controllers\hrController;
 use App\Http\Controllers\inventoryController;
 use App\Http\Controllers\schedulesController;
 use App\Http\Controllers\WeatherController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -39,4 +40,9 @@ Route::get('/inventory', [inventoryController::class, 'index'])->name('inventory
 Route::get('/finance', [financeController::class, 'index'])->name('finance.index');
 
 Route::get('/hr', [hrController::class, 'index'])->name('hr.index');
+
+// Task management routes
+Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('tasks', TaskController::class);
+});
 
