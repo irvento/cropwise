@@ -29,9 +29,9 @@ Route::get('/weather/{city}', [WeatherController::class, 'show'])->name('weather
 //FARM
 Route::get('/farm', [farmController::class, 'index'])->name('farm.index');
 
-Route::get('/farm/crops', [farmController::class, 'cropsindex'])->name('crops.index');
+Route::get('/farm/crops', [farmController::class, 'cropsindex'])->name('admin.farm.crops.index');
 
-Route::get('/farm/livestocks', [farmController::class, 'livestocksindex'])->name('livestocks.index');
+Route::get('/farm/livestocks', [farmController::class, 'livestocksindex'])->name('admin.farm.livestocks.index');
 
 Route::get('/schedule', [schedulesController::class, 'index'])->name('schedule.index');
 

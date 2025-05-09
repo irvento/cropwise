@@ -2,24 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
+use App\Services\WeatherService;
 use Illuminate\Http\Request;
 
 class farmController extends Controller
 {
+    public function __construct(
+        protected WeatherService $weatherService
+    ) {}
+
     public function index()
     {
-        return view('admin.farm.index');
+        try {
+            $weatherData = $this->weatherService->getWeatherByCity('Manolo Fortich');
+        } catch (\Exception $e) {
+            $weatherData = null;
+        }
+
+        return view('admin.farm.index', [
+            'weatherData' => $weatherData
+        ]);
     }
 
     public function cropsindex()
     {
-        return view('admin.farm.crops.index');
+        return view('admin.farm.crop.index');
     }
 
     public function livestocksindex()
     {
-        return view('admin.farm.livestocks.index');
+        return view('admin.farm.livestock.index');
     }
 
-    
-}
+} 
