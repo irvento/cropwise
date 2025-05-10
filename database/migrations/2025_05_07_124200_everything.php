@@ -203,7 +203,6 @@ return new class extends Migration {
             $table->date('expected_harvest_date');
             $table->integer('quantity_planted');
             $table->string('status');
-            $table->foreignId('responsible_employee_id')->constrained('employees');
             $table->text('notes')->nullable();
             $table->timestamps();
         });
