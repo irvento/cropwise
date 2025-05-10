@@ -74,7 +74,7 @@
                                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4 text-center">Farm Management</h3>
                                 <div class="flex justify-center space-x-8">
                                     <!-- Crops Circle -->
-                                    <a href="{{ route('admin.farm.crops.index') }}" class="group">
+                                    <a href="{{ route('admin.crops.index') }}" class="group">
                                         <div class="w-24 h-24 rounded-full bg-green-500 border-2 border-black shadow-lg flex items-center justify-center transform transition-transform duration-200 group-hover:scale-105 overflow-hidden">
                                             <img src="https://cdn-icons-png.flaticon.com/128/9923/9923298.png" alt="Crops" class="w-14 h-14 object-contain">
                                         </div>

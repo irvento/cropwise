@@ -25,6 +25,7 @@ class PlantingScheduleController extends Controller
         return view('admin.planting-schedules.create', compact('fields', 'crops'));
     }
 
+
     public function store(Request $request)
     {
         $validated = $request->validate([

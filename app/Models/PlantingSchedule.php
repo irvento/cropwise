@@ -22,8 +22,9 @@ class PlantingSchedule extends Model
     ];
 
     protected $casts = [
-        'planting_date' => 'date',
-        'expected_harvest_date' => 'date',
+        'planting_date' => 'datetime',
+        'expected_harvest_date' => 'datetime',
+        'quantity_planted' => 'float'
     ];
 
     public function field()
@@ -36,4 +37,8 @@ class PlantingSchedule extends Model
         return $this->belongsTo(Crop::class);
     }
 
+    public function responsibleEmployee()
+    {
+        return $this->belongsTo(Employee::class, 'responsible_employee_id');
+    }
 } 

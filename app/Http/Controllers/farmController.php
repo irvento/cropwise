@@ -25,10 +25,7 @@ class farmController extends Controller
         ]);
     }
 
-    public function cropsindex()
-    {
-        return view('admin.farm.crop.index');
-    }
+  
 
     public function livestocksindex()
     {
