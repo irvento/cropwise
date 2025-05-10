@@ -29,10 +29,6 @@ class Inventory extends Model
         'selling_price' => 'decimal:2',
     ];
 
-    /**
-     * Relationships
-     
-
     public function category()
     {
         return $this->belongsTo(InventoryCategory::class, 'category_id');
@@ -46,6 +42,10 @@ class Inventory extends Model
     public function transactions()
     {
         return $this->hasMany(InventoryTransaction::class, 'item_id');
-    }*/
-   
+    }
+
+    public function plantingSchedules()
+    {
+        return $this->hasMany(PlantingSchedule::class, 'seed_id');
+    }
 }

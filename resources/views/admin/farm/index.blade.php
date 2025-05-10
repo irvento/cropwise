@@ -108,7 +108,7 @@
                         <!-- Finances Card -->
                         <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-sm rounded-lg">
                             <div class="p-6">
-                                <a href="{{ route('finance.index') }}" class="group block">
+                                <a href="{{ route('admin.finance.index') }}" class="group block">
                                 <h4 class="text-lg font-semibold text-white flex items-center"><img src="https://cdn-icons-png.flaticon.com/128/781/781760.png" alt="finance" style="width: 20px; height: 20px;"> Finances</h4>
                                     <div class="bg-blue-500 border-2 border-black shadow-lg rounded-lg p-4 transform transition-transform duration-200 group-hover:scale-105 my-4">
                                         <div class="flex items-center space-x-4">
@@ -126,7 +126,7 @@
                         <!-- Inventory Card -->
                         <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-sm rounded-lg">
                             <div class="p-6">
-                                <a href="{{ route('inventory.index') }}" class="group block">
+                                <a href="{{ route('admin.inventory.index') }}" class="group block">
 
                                 <h4 class="text-lg font-semibold text-white flex items-center"><img src="https://cdn-icons-png.flaticon.com/128/2897/2897785.png" alt="inventory" style="width: 20px; height: 20px;"> Inventory</h4>
                                     <div class="bg-yellow-500 border-2 border-black shadow-lg rounded-lg p-4 transform transition-transform duration-200 group-hover:scale-105 my-4">

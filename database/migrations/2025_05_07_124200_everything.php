@@ -69,8 +69,6 @@ return new class extends Migration {
             $table->integer('quantity');
             $table->decimal('unit_price', 10, 2);
             $table->decimal('total_amount', 10, 2);
-            $table->date('date');
-            $table->foreignId('recorded_by')->constrained('users');
             $table->text('notes')->nullable();
             $table->timestamps();
         });
