@@ -17,7 +17,6 @@ class PlantingSchedule extends Model
         'expected_harvest_date',
         'quantity_planted',
         'status',
-        'responsible_employee_id',
         'notes'
     ];
 

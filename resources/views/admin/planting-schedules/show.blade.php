@@ -94,24 +94,7 @@
                             </p>
                         </div>
 
-                        <!-- Responsible Employee -->
-                        <div class="space-y-1">
-                            <h3 class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Responsible</h3>
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-gray-700 dark:text-gray-300">
-                                    {{ substr($plantingSchedule->responsibleEmployee->name ?? 'N/A', 0, 1) }}
-                                </div>
-                                <div>
-                                    <p class="text-base font-medium text-gray-900 dark:text-gray-100">
-                                        {{ $plantingSchedule->responsibleEmployee->name ?? 'Not assigned' }}
-                                    </p>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                                        {{ $plantingSchedule->responsibleEmployee->position ?? '' }}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        
 
                     <!-- Notes Section -->
                     <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">

@@ -5,10 +5,10 @@
                 {{ __('Crop Details') }}
             </h2>
             <div>
-                <a href="{{ route('admin.farm.crops.edit', $crop) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                <a href="{{ route('admin.crops.edit', $crop) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
                     Edit Crop
                 </a>
-                <a href="{{ route('admin.farm.crops.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                <a href="{{ route('admin.crops.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                     Back to List
                 </a>
             </div>

@@ -27,7 +27,13 @@ class cropController extends Controller
     public function create()
     {
         $fields = Field::all();
-        return view('admin.farm.crops.create', compact('fields'));
+        // Set default values for the form
+        $defaults = [
+            'growth_duration' => 30, // Default growth duration in days
+            'status' => 'Planned',   // Default status
+            'quantity_planted' => 1,  // Default quantity
+        ];
+        return view('admin.farm.crops.create', compact('fields', 'defaults'));
     }
 
     /**
@@ -43,19 +49,33 @@ class cropController extends Controller
             'field_id' => 'nullable|exists:fields,id'
         ]);
 
+        // Set default values if not provided
+        $validated['growth_duration'] = $validated['growth_duration'] ?? 30;
+        $validated['conditions'] = $validated['conditions'] ?? 'Standard growing conditions';
+        
+        // Set default field if none selected
+        if (empty($validated['field_id'])) {
+            // Get the first available field or create a default one
+            $defaultField = Field::first() ?? Field::create([
+                'name' => 'Default Field',
+                'location' => 'Main Farm',
+                'size' => 100,
+                'status' => 'Active'
+            ]);
+            $validated['field_id'] = $defaultField->id;
+        }
+
         $crop = Crop::create($validated);
 
-        // Optionally create a planting schedule if field is selected
-        if ($request->filled('field_id')) {
-            PlantingSchedule::create([
-                'field_id' => $request->field_id,
-                'crop_id' => $crop->id,
-                'planting_date' => now(),
-                'expected_harvest_date' => now()->addDays($crop->growth_duration),
-                'quantity_planted' => 1,
-                'status' => 'Planned',
-            ]);
-        }
+        // Create a planting schedule with the field (now we always have a field)
+        PlantingSchedule::create([
+            'field_id' => $validated['field_id'],
+            'crop_id' => $crop->id,
+            'planting_date' => now(),
+            'expected_harvest_date' => now()->addDays((int) $crop->growth_duration),
+            'quantity_planted' => 1,
+            'status' => 'Planned',
+        ]);
 
         return redirect()->route('admin.crops.index')
             ->with('success', 'Crop created successfully.');
@@ -76,7 +96,13 @@ class cropController extends Controller
     public function edit(Crop $crop)
     {
         $fields = Field::all();
-        return view('admin.farm.crops.edit', compact('crop', 'fields'));
+        // Set default values for the form
+        $defaults = [
+            'growth_duration' => 30,
+            'status' => 'Planned',
+            'quantity_planted' => 1,
+        ];
+        return view('admin.farm.crops.edit', compact('crop', 'fields', 'defaults'));
     }
 
     /**
@@ -92,21 +118,35 @@ class cropController extends Controller
             'field_id' => 'nullable|exists:fields,id'
         ]);
 
+        // Set default values if not provided
+        $validated['growth_duration'] = $validated['growth_duration'] ?? 30;
+        $validated['conditions'] = $validated['conditions'] ?? 'Standard growing conditions';
+        
+        // Set default field if none selected
+        if (empty($validated['field_id'])) {
+            // Get the first available field or create a default one
+            $defaultField = Field::first() ?? Field::create([
+                'name' => 'Default Field',
+                'location' => 'Main Farm',
+                'size' => 100,
+                'status' => 'Active'
+            ]);
+            $validated['field_id'] = $defaultField->id;
+        }
+
         $crop->update($validated);
 
-        // Optionally update or create a planting schedule if field is changed
-        if ($request->filled('field_id') && $request->field_id != $crop->field_id) {
-            PlantingSchedule::updateOrCreate(
-                ['crop_id' => $crop->id],
-                [
-                    'field_id' => $request->field_id,
-                    'planting_date' => now(),
-                    'expected_harvest_date' => now()->addDays($crop->growth_duration),
-                    'quantity_planted' => 1,
-                    'status' => 'Planned',
-                ]
-            );
-        }
+        // Update or create planting schedule with the field
+        PlantingSchedule::updateOrCreate(
+            ['crop_id' => $crop->id],
+            [
+                'field_id' => $validated['field_id'],
+                'planting_date' => now(),
+                'expected_harvest_date' => now()->addDays((int) $crop->growth_duration),
+                'quantity_planted' => 1,
+                'status' => 'Planned',
+            ]
+        );
 
         return redirect()->route('admin.crops.index')
             ->with('success', 'Crop updated successfully.');

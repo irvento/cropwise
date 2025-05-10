@@ -16,29 +16,61 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Name -->
                             <div>
-                                <x-input-label for="name" :value="__('Crop Name')" />
-                                <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $crop->name)" required autofocus />
-                                <x-input-error class="mt-2" :messages="$errors->get('name')" />
+                                <label for="name" class="block font-medium text-sm text-gray-700 dark:text-gray-300">
+                                    {{ __('Crop Name') }}
+                                </label>
+                                <input type="text" 
+                                       name="name" 
+                                       id="name" 
+                                       class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                       value="{{ old('name', $crop->name) }}" 
+                                       required 
+                                       autofocus>
+                                @error('name')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <!-- Variety -->
                             <div>
-                                <x-input-label for="variety" :value="__('Variety')" />
-                                <x-text-input id="variety" name="variety" type="text" class="mt-1 block w-full" :value="old('variety', $crop->variety)" required />
-                                <x-input-error class="mt-2" :messages="$errors->get('variety')" />
+                                <label for="variety" class="block font-medium text-sm text-gray-700 dark:text-gray-300">
+                                    {{ __('Variety') }}
+                                </label>
+                                <input type="text" 
+                                       name="variety" 
+                                       id="variety" 
+                                       class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                       value="{{ old('variety', $crop->variety) }}" 
+                                       required>
+                                @error('variety')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <!-- Growth Duration -->
                             <div>
-                                <x-input-label for="growth_duration" :value="__('Growth Duration (days)')" />
-                                <x-text-input id="growth_duration" name="growth_duration" type="number" class="mt-1 block w-full" :value="old('growth_duration', $crop->growth_duration)" required />
-                                <x-input-error class="mt-2" :messages="$errors->get('growth_duration')" />
+                                <label for="growth_duration" class="block font-medium text-sm text-gray-700 dark:text-gray-300">
+                                    {{ __('Growth Duration (days)') }}
+                                </label>
+                                <input type="number" 
+                                       name="growth_duration" 
+                                       id="growth_duration" 
+                                       class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                       value="{{ old('growth_duration', $crop->growth_duration) }}" 
+                                       required>
+                                @error('growth_duration')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <!-- Field -->
                             <div>
-                                <x-input-label for="field_id" :value="__('Field')" />
-                                <select id="field_id" name="field_id" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                                <label for="field_id" class="block font-medium text-sm text-gray-700 dark:text-gray-300">
+                                    {{ __('Field') }}
+                                </label>
+                                <select name="field_id" 
+                                        id="field_id" 
+                                        class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                     <option value="">Select a field</option>
                                     @foreach($fields as $field)
                                         <option value="{{ $field->id }}" {{ old('field_id', $crop->field_id) == $field->id ? 'selected' : '' }}>
@@ -46,24 +78,36 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <x-input-error class="mt-2" :messages="$errors->get('field_id')" />
+                                @error('field_id')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <!-- Conditions -->
                             <div class="md:col-span-2">
-                                <x-input-label for="conditions" :value="__('Growing Conditions')" />
-                                <textarea id="conditions" name="conditions" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" rows="3">{{ old('conditions', $crop->conditions) }}</textarea>
-                                <x-input-error class="mt-2" :messages="$errors->get('conditions')" />
+                                <label for="conditions" class="block font-medium text-sm text-gray-700 dark:text-gray-300">
+                                    {{ __('Growing Conditions') }}
+                                </label>
+                                <textarea name="conditions" 
+                                          id="conditions" 
+                                          rows="3" 
+                                          class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{ old('conditions', $crop->conditions) }}</textarea>
+                                @error('conditions')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
 
                         <div class="flex items-center justify-end mt-6">
-                            <x-secondary-button onclick="window.history.back()" type="button" class="mr-3">
+                            <button type="button" 
+                                    onclick="window.history.back()" 
+                                    class="mr-3 inline-flex items-center px-4 py-2 bg-gray-300 dark:bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest hover:bg-gray-400 dark:hover:bg-gray-600 focus:bg-gray-400 dark:focus:bg-gray-600 active:bg-gray-500 dark:active:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                 {{ __('Cancel') }}
-                            </x-secondary-button>
-                            <x-primary-button>
+                            </button>
+                            <button type="submit" 
+                                    class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                 {{ __('Update Crop') }}
-                            </x-primary-button>
+                            </button>
                         </div>
                     </form>
                 </div>
