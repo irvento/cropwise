@@ -92,6 +92,19 @@
                             </div>
                         </div>
 
+                        <!-- Fields Card (standalone) -->
+                        <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-sm rounded-lg mt-6">
+                            <div class="p-6 flex flex-col items-center">
+                                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4 text-center">Fields</h3>
+                                <a href="{{ route('admin.fields.index') }}" class="group">
+                                    <div class="w-24 h-24 rounded-full bg-blue-500 border-2 border-black shadow-lg flex items-center justify-center transform transition-transform duration-200 group-hover:scale-105 overflow-hidden">
+                                        <img src="https://cdn-icons-png.flaticon.com/128/9923/9923298.png" alt="Fields" class="w-14 h-14 object-contain">
+                                    </div>
+                                    <p class="text-center mt-2 text-gray-700 dark:text-gray-300">Fields</p>
+                                </a>
+                            </div>
+                        </div>
+
                         <!-- Finances Card -->
                         <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-sm rounded-lg">
                             <div class="p-6">
