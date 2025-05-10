@@ -24,7 +24,7 @@ class InventoryTransaction extends Model
         'total_amount' => 'decimal:2',
     ];
 
-    public function inventory()
+    public function item()
     {
         return $this->belongsTo(Inventory::class, 'item_id');
     }
