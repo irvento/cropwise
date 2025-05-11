@@ -34,6 +34,6 @@ class Task extends Model
      */
     public function employee(): BelongsTo
     {
-        return $this->belongsTo(HR::class, 'assigned_to');
+        return $this->belongsTo(Employee::class, 'assigned_to');
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
-use App\Models\HR;
+use App\Models\Employee;
 use App\Models\PlantingSchedule;
 use App\Models\Field;
 use App\Models\Crop;
@@ -34,7 +34,7 @@ class ScheduleController extends Controller
                 'type' => 'task',
                 'color' => $this->getPriorityColor($task->priority),
                 'description' => $task->description,
-                'assigned_to' => $task->employee ? $task->employee->name : 'Unassigned',
+                'assigned_to' => $task->employee ? $task->employee->first_name . ' ' . $task->employee->last_name : 'Unassigned',
                 'status' => $task->status
             ];
         }
@@ -62,7 +62,7 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-        $employees = HR::all();
+        $employees = Employee::all();
         $fields = Field::all();
         $crops = Crop::all();
         return view('admin.schedule.create', compact('employees', 'fields', 'crops'));
@@ -77,7 +77,7 @@ class ScheduleController extends Controller
             'type' => 'required|in:task,planting',
             'title' => 'required_if:type,task|string|max:255',
             'description' => 'nullable|string',
-            'assigned_to' => 'required_if:type,task|exists:hr,id',
+            'assigned_to' => 'required_if:type,task|exists:employees,id',
             'due_date' => 'required_if:type,task|date',
             'priority' => 'required_if:type,task|in:low,medium,high',
             'field_id' => 'required_if:type,planting|exists:fields,id',
@@ -122,7 +122,7 @@ class ScheduleController extends Controller
     {
         if ($type === 'task') {
             $item = Task::findOrFail($id);
-            $employees = HR::all();
+            $employees = Employee::all();
             return view('admin.schedule.edit', compact('item', 'employees', 'type'));
         } else {
             $item = PlantingSchedule::findOrFail($id);
@@ -142,7 +142,7 @@ class ScheduleController extends Controller
             $validator = Validator::make($request->all(), [
                 'title' => 'required|string|max:255',
                 'description' => 'nullable|string',
-                'assigned_to' => 'required|exists:hr,id',
+                'assigned_to' => 'required|exists:employees,id',
                 'due_date' => 'required|date',
                 'priority' => 'required|in:low,medium,high',
                 'status' => 'required|in:pending,in_progress,completed'
