@@ -12,10 +12,10 @@
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
                     <h3 class="text-lg font-semibold mb-4">Leave Requests</h3>
                     <div class="space-y-2">
-                        <a href="{{ route('hr.leave.create') }}" class="block w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center">
+                        <a href="{{ route('hr.leave-requests.create') }}" class="block w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center">
                             Create Leave Request
                         </a>
-                        <a href="{{ route('hr.leave.index') }}" class="block w-full bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded text-center">
+                        <a href="{{ route('hr.leave-requests.index') }}" class="block w-full bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded text-center">
                             View All Requests
                         </a>
                     </div>
@@ -51,7 +51,7 @@
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-semibold">Recent Leave Requests</h3>
-                        <a href="{{ route('hr.leave.index') }}" class="text-blue-500 hover:text-blue-700">View All</a>
+                        <a href="{{ route('hr.leave-requests.index') }}" class="text-blue-500 hover:text-blue-700">View All</a>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -66,7 +66,7 @@
                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                 @foreach($recentLeaveRequests as $request)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $request->employee->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $request->employee->first_name }} {{ $request->employee->last_name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ ucfirst($request->leave_type) }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             {{ $request->start_date->format('M d') }} - {{ $request->end_date->format('M d, Y') }}
@@ -107,7 +107,7 @@
                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                 @foreach($todayAttendance as $attendance)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $attendance->employee->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $attendance->employee->first_name }} {{ $attendance->employee->last_name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $attendance->time_in ? $attendance->time_in->format('H:i:s') : '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $attendance->time_out ? $attendance->time_out->format('H:i:s') : '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
@@ -147,7 +147,7 @@
                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                 @foreach($recentPayrolls as $payroll)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $payroll->employee->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $payroll->employee->first_name }} {{ $payroll->employee->last_name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">${{ number_format($payroll->basic_salary, 2) }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $payroll->payment_date->format('M d, Y') }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">

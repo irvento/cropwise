@@ -24,7 +24,7 @@
                                 <option value="">Select Employee</option>
                                 @foreach($employees as $employee)
                                     <option value="{{ $employee->id }}" {{ (old('employee_id', $leaveRequest->employee_id) == $employee->id) ? 'selected' : '' }}>
-                                        {{ $employee->name }}
+                                        {{ $employee->first_name }} {{ $employee->last_name }}
                                     </option>
                                 @endforeach
                             </select>

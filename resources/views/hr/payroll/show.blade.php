@@ -26,7 +26,7 @@
                             <div class="space-y-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Employee Name</label>
-                                    <p class="mt-1 text-sm text-gray-900 dark:text-gray-100">{{ $payroll->employee->name }}</p>
+                                    <p class="mt-1 text-sm text-gray-900 dark:text-gray-100">{{ $payroll->employee->first_name }} {{ $payroll->employee->last_name }}</p>
                                 </div>
                             </div>
                         </div>

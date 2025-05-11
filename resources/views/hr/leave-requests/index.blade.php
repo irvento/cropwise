@@ -35,8 +35,8 @@
                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                 @foreach($leaveRequests as $request)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $request->employee->name }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $request->leave_type }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $request->employee->first_name }} {{ $request->employee->last_name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ ucfirst($request->leave_type) }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $request->start_date->format('Y-m-d') }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $request->end_date->format('Y-m-d') }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">

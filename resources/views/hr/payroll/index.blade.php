@@ -39,7 +39,7 @@
                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                 @foreach($payrolls as $payroll)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $payroll->employee->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $payroll->employee->first_name }} {{ $payroll->employee->last_name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">${{ number_format($payroll->basic_salary, 2) }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $payroll->payment_date->format('Y-m-d') }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">

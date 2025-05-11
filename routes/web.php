@@ -53,13 +53,13 @@ Route::prefix('hr')->name('hr.')->group(function () {
     Route::get('/', [hrController::class, 'index'])->name('index');
     
     // Leave Management
-    Route::get('/leave', [hrController::class, 'leaveindex'])->name('leave.index');
-    Route::get('/leave/create', [LeaveRequestController::class, 'create'])->name('leave.create');
-    Route::post('/leave', [LeaveRequestController::class, 'store'])->name('leave.store');
-    Route::get('/leave/{leaveRequest}', [LeaveRequestController::class, 'show'])->name('leave.show');
-    Route::get('/leave/{leaveRequest}/edit', [LeaveRequestController::class, 'edit'])->name('leave.edit');
-    Route::put('/leave/{leaveRequest}', [LeaveRequestController::class, 'update'])->name('leave.update');
-    Route::delete('/leave/{leaveRequest}', [LeaveRequestController::class, 'destroy'])->name('leave.destroy');
+    Route::get('/leave-requests', [LeaveRequestController::class, 'index'])->name('leave-requests.index');
+    Route::get('/leave-requests/create', [LeaveRequestController::class, 'create'])->name('leave-requests.create');
+    Route::post('/leave-requests', [LeaveRequestController::class, 'store'])->name('leave-requests.store');
+    Route::get('/leave-requests/{leaveRequest}', [LeaveRequestController::class, 'show'])->name('leave-requests.show');
+    Route::get('/leave-requests/{leaveRequest}/edit', [LeaveRequestController::class, 'edit'])->name('leave-requests.edit');
+    Route::put('/leave-requests/{leaveRequest}', [LeaveRequestController::class, 'update'])->name('leave-requests.update');
+    Route::delete('/leave-requests/{leaveRequest}', [LeaveRequestController::class, 'destroy'])->name('leave-requests.destroy');
 
     // Attendance
     Route::get('/attendance', [hrController::class, 'attendanceindex'])->name('attendance.index');

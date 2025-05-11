@@ -14,7 +14,7 @@ class HRController extends Controller
     public function index()
     {
         // Get recent leave requests (last 5)
-        $recentLeaveRequests = LeaveRequest::with('employee')
+        $recentLeaveRequests = LeaveRequest::with(['employee', 'approver'])
             ->latest()
             ->take(5)
             ->get();
@@ -39,25 +39,25 @@ class HRController extends Controller
 
     public function employeesindex()
     {
-        $employees = Employee::latest()->paginate(10);
+        $employees = Employee::with('hr')->latest()->paginate(10);
         return view('admin.hr.employees.index', compact('employees'));
     }
 
     public function payrollindex()
     {
-        $payrolls = Payroll::with('employee')->latest()->paginate(10);
+        $payrolls = Payroll::with(['employee', 'hr'])->latest()->paginate(10);
         return view('admin.hr.payroll.index', compact('payrolls'));
     }
 
     public function attendanceindex()
     {
-        $attendances = Attendance::with('employee')->latest()->paginate(10);
+        $attendances = Attendance::with(['employee', 'hr'])->latest()->paginate(10);
         return view('admin.hr.attendance.index', compact('attendances'));
     }
 
-    public function leaveindex()
+    public function leaveRequestsIndex()
     {
-        $leaveRequests = LeaveRequest::with('employee')->latest()->paginate(10);
-        return view('admin.hr.leave.index', compact('leaveRequests'));
+        $leaveRequests = LeaveRequest::with(['employee', 'approver', 'hr'])->latest()->paginate(10);
+        return view('admin.hr.leave-requests.index', compact('leaveRequests'));
     }
 }

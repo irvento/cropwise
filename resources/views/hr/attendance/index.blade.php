@@ -43,7 +43,7 @@
                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                 @foreach($attendances as $attendance)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $attendance->employee->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $attendance->employee->first_name }} {{ $attendance->employee->last_name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $attendance->date->format('Y-m-d') }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $attendance->time_in ? $attendance->time_in->format('H:i:s') : '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $attendance->time_out ? $attendance->time_out->format('H:i:s') : '-' }}</td>
@@ -90,7 +90,7 @@
                         <select name="employee_id" id="employee_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
                             <option value="">Select Employee</option>
                             @foreach($employees as $employee)
-                                <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                                <option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -118,7 +118,7 @@
                         <select name="employee_id" id="employee_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
                             <option value="">Select Employee</option>
                             @foreach($employees as $employee)
-                                <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                                <option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
                             @endforeach
                         </select>
                     </div>

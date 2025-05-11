@@ -12,19 +12,38 @@ class LeaveRequest extends Model
         'leave_type',
         'start_date',
         'end_date',
+        'total_days',
         'reason',
         'status',
-        'approved_at'
+        'approved_by',
+        'approved_at',
+        'rejection_reason',
+        'attachment_path'
     ];
 
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
-        'approved_at' => 'datetime'
+        'approved_at' => 'datetime',
+        'total_days' => 'integer'
+    ];
+
+    protected $attributes = [
+        'status' => 'pending'
     ];
 
     public function employee(): BelongsTo
     {
         return $this->belongsTo(Employee::class);
+    }
+
+    public function hr(): BelongsTo
+    {
+        return $this->belongsTo(HR::class);
+    }
+
+    public function approver(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'approved_by');
     }
 } 

@@ -11,17 +11,30 @@ class Payroll extends Model
     protected $fillable = [
         'employee_id',
         'basic_salary',
+        'allowances',
+        'deductions',
+        'net_salary',
+        'payment_date',
+        'payment_method',
         'status',
-        'payment_date'
+        'remarks'
     ];
 
     protected $casts = [
         'payment_date' => 'date',
-        'basic_salary' => 'decimal:2'
+        'basic_salary' => 'decimal:2',
+        'allowances' => 'decimal:2',
+        'deductions' => 'decimal:2',
+        'net_salary' => 'decimal:2'
     ];
 
     public function employee(): BelongsTo
     {
         return $this->belongsTo(Employee::class);
+    }
+
+    public function hr(): BelongsTo
+    {
+        return $this->belongsTo(HR::class);
     }
 } 
