@@ -16,7 +16,8 @@ class Admin extends Seeder
     {
         DB::table('users')->insert([
             'id' => 1,
-            'name' => 'Admin',
+            'role_id' => 1, // Assuming 1 is the role ID for 'admin'
+            'name' => 'Admin ',
             'email' => 'admin@example.com',
             'email_verified_at' => now(),
             'password' => Hash::make('admin@example.com'), // Replace 'password' with a secure password

@@ -19,6 +19,10 @@ use App\Http\Controllers\FullCalenderController;
 use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\PayrollController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\dashboardController;
+use App\Http\Controllers\EmployeeRegistrationController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -29,8 +33,9 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', [App\Http\Controllers\dashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [dashboardController::class, 'index'])->name('dashboard');
 });
+
 
 //WEATHER
 Route::get('/weather/{city}', [WeatherController::class, 'show'])->name('weather.show');
@@ -124,4 +129,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 Route::controller(FullCalenderController::class)->group(function(){
     Route::get('fullcalender', 'index')->name('fullcalender');
     Route::post('fullcalenderAjax', 'ajax')->name('fullcalenderAjax');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/employee/register', [EmployeeController::class, 'create'])->name('employee.register');
+    Route::post('/employee/register', [EmployeeController::class, 'store'])->name('employee.store');
+    Route::get('/employee/check', [EmployeeController::class, 'check'])->name('employee.check');
 });
