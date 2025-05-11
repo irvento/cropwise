@@ -22,6 +22,7 @@ use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\EmployeeRegistrationController;
+use App\Http\Controllers\livestockController;
 
 
 Route::get('/', function () {
@@ -42,8 +43,6 @@ Route::get('/weather/{city}', [WeatherController::class, 'show'])->name('weather
 
 //FARM
 Route::get('/farm', [farmController::class, 'index'])->name('farm.index');
-
-Route::get('/farm/livestocks', [farmController::class, 'livestocksindex'])->name('admin.farm.livestocks.index');
 
 Route::get('/hr', [hrController::class, 'index'])->name('hr.index');
 
@@ -122,6 +121,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         Route::get('/{id}/{type}/edit', [ScheduleController::class, 'edit'])->name('edit');
         Route::put('/{id}/{type}', [ScheduleController::class, 'update'])->name('update');
         Route::delete('/{id}/{type}', [ScheduleController::class, 'destroy'])->name('destroy');
+    });
+
+    // Farm Management Routes
+    Route::prefix('farm')->name('farm.')->group(function () {
+        // Livestock Management
+        Route::resource('livestock', livestockController::class);
     });
 });
 

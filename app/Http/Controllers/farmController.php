@@ -29,7 +29,8 @@ class farmController extends Controller
 
     public function livestocksindex()
     {
-        return view('admin.farm.livestock.index');
+        $livestock = \App\Models\Livestock::latest()->paginate(10);
+        return view('admin.farm.livestock.index', compact('livestock'));
     }
 
 } 
