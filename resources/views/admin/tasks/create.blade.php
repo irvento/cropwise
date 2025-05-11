@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Create New Task') }}
-            </h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Create New Task') }}
+        </h2>
             <a href="{{ route('admin.schedule.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                 Back to List
             </a>
@@ -13,9 +13,9 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6">
-                <form action="{{ route('admin.tasks.store') }}" method="POST">
-                    @csrf
-                    
+                    <form action="{{ route('admin.tasks.store') }}" method="POST">
+                        @csrf
+
                     <div class="space-y-4">
                         <div>
                             <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Task Title</label>
@@ -50,14 +50,14 @@
                                 <option value="high">High</option>
                             </select>
                         </div>
-                    </div>
+                        </div>
 
                     <div class="mt-6">
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Create Task
                         </button>
-                    </div>
-                </form>
+                        </div>
+                    </form>
             </div>
         </div>
     </div>

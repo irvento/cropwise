@@ -16,6 +16,9 @@ use App\Http\Controllers\inventorytransactionController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\FullCalenderController;
+use App\Http\Controllers\LeaveRequestController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\PayrollController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -38,6 +41,43 @@ Route::get('/farm', [farmController::class, 'index'])->name('farm.index');
 Route::get('/farm/livestocks', [farmController::class, 'livestocksindex'])->name('admin.farm.livestocks.index');
 
 Route::get('/hr', [hrController::class, 'index'])->name('hr.index');
+
+// HR Routes
+Route::prefix('hr')->name('hr.')->group(function () {
+    // Dashboard
+    Route::get('/', [hrController::class, 'index'])->name('index');
+    
+    // Leave Management
+    Route::get('/leave', [hrController::class, 'leaveindex'])->name('leave.index');
+    Route::get('/leave/create', [LeaveRequestController::class, 'create'])->name('leave.create');
+    Route::post('/leave', [LeaveRequestController::class, 'store'])->name('leave.store');
+    Route::get('/leave/{leaveRequest}', [LeaveRequestController::class, 'show'])->name('leave.show');
+    Route::get('/leave/{leaveRequest}/edit', [LeaveRequestController::class, 'edit'])->name('leave.edit');
+    Route::put('/leave/{leaveRequest}', [LeaveRequestController::class, 'update'])->name('leave.update');
+    Route::delete('/leave/{leaveRequest}', [LeaveRequestController::class, 'destroy'])->name('leave.destroy');
+
+    // Attendance
+    Route::get('/attendance', [hrController::class, 'attendanceindex'])->name('attendance.index');
+    Route::get('/attendance/create', [AttendanceController::class, 'create'])->name('attendance.create');
+    Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
+    Route::get('/attendance/{attendance}', [AttendanceController::class, 'show'])->name('attendance.show');
+    Route::get('/attendance/{attendance}/edit', [AttendanceController::class, 'edit'])->name('attendance.edit');
+    Route::put('/attendance/{attendance}', [AttendanceController::class, 'update'])->name('attendance.update');
+    Route::delete('/attendance/{attendance}', [AttendanceController::class, 'destroy'])->name('attendance.destroy');
+
+    // Payroll
+    Route::get('/payroll', [hrController::class, 'payrollindex'])->name('payroll.index');
+    Route::get('/payroll/create', [PayrollController::class, 'create'])->name('payroll.create');
+    Route::post('/payroll', [PayrollController::class, 'store'])->name('payroll.store');
+    Route::get('/payroll/{payroll}', [PayrollController::class, 'show'])->name('payroll.show');
+    Route::get('/payroll/{payroll}/edit', [PayrollController::class, 'edit'])->name('payroll.edit');
+    Route::put('/payroll/{payroll}', [PayrollController::class, 'update'])->name('payroll.update');
+    Route::delete('/payroll/{payroll}', [PayrollController::class, 'destroy'])->name('payroll.destroy');
+    Route::post('/payroll/generate-monthly', [PayrollController::class, 'generateMonthly'])->name('payroll.generate-monthly');
+
+    // Employees
+    Route::get('/employees', [hrController::class, 'employeesindex'])->name('employees.index');
+});
 
 // Task management routes
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {

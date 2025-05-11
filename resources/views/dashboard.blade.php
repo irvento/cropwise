@@ -80,10 +80,10 @@
                             <i class="fas fa-tractor text-4xl text-white mb-4"></i>
                             <h3 class="text-xl font-semibold text-white">Farm Overview</h3>
                             <p class="text-white/80 mt-2">Manage fields, crops, and livestock</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-
+                    </a>
+                    
                 <!-- Schedule Management -->
                 <a href="{{ route('admin.schedule.index') }}" class="block overflow-hidden rounded-xl shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
                     <div class="relative bg-gradient-to-br from-blue-500 to-blue-600 p-6 text-center">
@@ -93,10 +93,10 @@
                             <h3 class="text-xl font-semibold text-white">Schedule Management</h3>
                             <p class="text-white/80 mt-2">Tasks and planting schedules</p>
                         </div>
-                    </div>
-                </a>
+                        </div>
+                    </a>
 
-                <!-- Weather -->
+                    <!-- Weather -->
                 <a href="{{ route('weather.show', $currentCity ?? 'Manolo Fortich') }}" class="block overflow-hidden rounded-xl shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
                     <div class="relative bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 text-center">
                         <div class="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
@@ -105,8 +105,8 @@
                             <h3 class="text-xl font-semibold text-white">Weather</h3>
                             <p class="text-white/80 mt-2">Current weather and forecasts</p>
                         </div>
-                    </div>
-                </a>
+                        </div>
+                    </a>
 
                 <!-- Human Resources -->
                 <a href="{{ route('hr.index') }}" class="block overflow-hidden rounded-xl shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
@@ -117,8 +117,8 @@
                             <h3 class="text-xl font-semibold text-white">Human Resources</h3>
                             <p class="text-white/80 mt-2">Manage employees and tasks</p>
                         </div>
-                    </div>
-                </a>
+                        </div>
+                    </a>
 
                 <!-- Inventory -->
                 <a href="{{ route('admin.inventory.index') }}" class="block overflow-hidden rounded-xl shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
@@ -129,8 +129,8 @@
                             <h3 class="text-xl font-semibold text-white">Inventory</h3>
                             <p class="text-white/80 mt-2">Manage supplies and equipment</p>
                         </div>
-                    </div>
-                </a>
+                        </div>
+                    </a>
 
                 <!-- Finance -->
                 <a href="{{ route('admin.finance.index') }}" class="block overflow-hidden rounded-xl shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
@@ -141,8 +141,8 @@
                             <h3 class="text-xl font-semibold text-white">Finance</h3>
                             <p class="text-white/80 mt-2">Track income and expenses</p>
                         </div>
-                    </div>
-                </a>
+                        </div>
+                    </a>
             </div>
 
             <!-- Recent Schedules Section -->
@@ -246,7 +246,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+                        </div>
 
             <!-- Weather Section -->
             @if($weather)
