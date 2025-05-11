@@ -13,7 +13,6 @@ return new class extends Migration {
             $table->decimal('weight', 8, 2)->nullable()->after('age');
             $table->string('health_status')->nullable()->after('weight');
             $table->string('location')->nullable()->after('health_status');
-            $table->foreignId('owner_id')->nullable()->constrained('users')->after('location');
         });
     }
 
@@ -21,8 +20,7 @@ return new class extends Migration {
     {
         Schema::table('livestock', function (Blueprint $table) {
             $table->dropColumn(['growthduration', 'age', 'weight', 'health_status', 'location']);
-            $table->dropForeign(['owner_id']);
-            $table->dropColumn('owner_id');
+
         });
     }
 };

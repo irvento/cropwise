@@ -54,7 +54,7 @@ class FullCalenderController extends Controller
                     'className' => ['planting-schedule', $schedule->status]
                 ];
             }
-            
+  
             return response()->json($events);
         }
   
@@ -69,41 +69,41 @@ class FullCalenderController extends Controller
     public function ajax(Request $request): JsonResponse
     {
         switch ($request->type) {
-            case 'add':
-                $event = Event::create([
-                    'title' => $request->title,
-                    'start' => $request->start,
-                    'end' => $request->end,
-                ]);
+           case 'add':
+              $event = Event::create([
+                  'title' => $request->title,
+                  'start' => $request->start,
+                  'end' => $request->end,
+              ]);
  
-                return response()->json($event);
-                break;
+              return response()->json($event);
+             break;
   
-            case 'update':
+           case 'update':
                 $event = Event::find($request->id);
                 if ($event) {
                     $event->update([
-                        'title' => $request->title,
-                        'start' => $request->start,
-                        'end' => $request->end,
-                    ]);
+                  'title' => $request->title,
+                  'start' => $request->start,
+                  'end' => $request->end,
+              ]);
                 }
  
-                return response()->json($event);
-                break;
+              return response()->json($event);
+             break;
   
-            case 'delete':
+           case 'delete':
                 $event = Event::find($request->id);
                 if ($event) {
                     $event->delete();
                 }
   
                 return response()->json(['success' => true]);
-                break;
+             break;
              
-            default:
+           default:
                 return response()->json(['error' => 'Invalid request type'], 400);
-                break;
+             break;
         }
     }
 

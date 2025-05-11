@@ -17,7 +17,7 @@ return new class extends Migration {
 
         // Alter Users Table
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('role_id')->after('id')->nullable();
+            $table->unsignedBigInteger('role_id')->after('id')->nullable()->default(2);;
             $table->string('contact_number')->nullable();
             $table->string('address')->nullable();
             $table->foreign('role_id')->references('id')->on('roles');
@@ -243,6 +243,16 @@ return new class extends Migration {
             $table->timestamp('recorded_at')->useCurrent();
             $table->timestamps();
         });
+
+        Schema::create('events', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('planting_schedule_id')->nullable()->constrained('planting_schedules')->onDelete('cascade');
+    $table->foreignId('task_id')->nullable()->constrained('tasks')->onDelete('cascade');
+    $table->string('event_name');
+    $table->text('description')->nullable();
+    $table->date('event_date');
+    $table->timestamps();
+});
     }
 
     public function down(): void
@@ -267,6 +277,7 @@ return new class extends Migration {
         Schema::dropIfExists('inventory_items');
         Schema::dropIfExists('suppliers');
         Schema::dropIfExists('inventory_categories');
+        Schema::dropIfExists('events');
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign(['role_id']);
             $table->dropColumn(['role_id', 'contact_number', 'address']);

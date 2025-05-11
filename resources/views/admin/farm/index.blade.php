@@ -82,7 +82,7 @@
                                     </a>
 
                                     <!-- Livestock Circle -->
-                                    <a href="{{ route('admin.farm.livestocks.index') }}" class="group">
+                                    <a href="{{ route('admin.farm.livestock.index') }}" class="group">
                                         <div class="w-24 h-24 rounded-full bg-yellow-500 border-2 border-black shadow-lg flex items-center justify-center transform transition-transform duration-200 group-hover:scale-105 overflow-hidden">
                                             <img src="https://cdn-icons-png.flaticon.com/128/3397/3397478.png" alt="Livestock" class="w-14 h-14 object-contain">
                                         </div>
