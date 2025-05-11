@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
-use App\Models\HR;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,7 +23,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $employees = HR::select('id', 'first_name', 'last_name')->get();
+        $employees = Employee::select('id', 'first_name', 'last_name')->get();
         return view('admin.tasks.create', compact('employees'));
     }
 
@@ -67,7 +67,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        $employees = HR::select('id', 'first_name', 'last_name')->get();
+        $employees = Employee::select('id', 'first_name', 'last_name')->get();
         return view('admin.tasks.edit', compact('task', 'employees'));
     }
 

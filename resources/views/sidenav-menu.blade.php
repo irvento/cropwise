@@ -18,21 +18,21 @@
             </a>
 
             <!-- Schedules -->
-            <a href="{{ route('schedule.index') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-purple-500 dark:hover:text-purple-400 transition-all duration-200 px-4 py-3 rounded-md hover:bg-purple-50 dark:hover:bg-gray-800 hover:shadow-sm">
+            <a href="{{ route('admin.schedule.index') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-purple-500 dark:hover:text-purple-400 transition-all duration-200 px-4 py-3 rounded-md hover:bg-purple-50 dark:hover:bg-gray-800 hover:shadow-sm">
                 <i class="fas fa-calendar-alt text-purple-500 text-xl transform group-hover:scale-110 transition-transform"></i>
                 <span class="font-medium ml-3 group-hover:font-semibold">Schedules</span>
                 <i class="fas fa-chevron-right ml-auto text-xs text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
             </a>
 
             <!-- Inventory -->
-            <a href="{{ route('inventory.index') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-amber-500 dark:hover:text-amber-400 transition-all duration-200 px-4 py-3 rounded-md hover:bg-amber-50 dark:hover:bg-gray-800 hover:shadow-sm">
+            <a href="{{ route('admin.inventory.index') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-amber-500 dark:hover:text-amber-400 transition-all duration-200 px-4 py-3 rounded-md hover:bg-amber-50 dark:hover:bg-gray-800 hover:shadow-sm">
                 <i class="fas fa-warehouse text-amber-500 text-xl transform group-hover:scale-110 transition-transform"></i>
                 <span class="font-medium ml-3 group-hover:font-semibold">Inventory</span>
                 <i class="fas fa-chevron-right ml-auto text-xs text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
             </a>
 
             <!-- Financial Reports -->
-            <a href="{{ route('finance.index') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-emerald-500 dark:hover:text-emerald-400 transition-all duration-200 px-4 py-3 rounded-md hover:bg-emerald-50 dark:hover:bg-gray-800 hover:shadow-sm">
+            <a href="{{ route('admin.finance.index') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-emerald-500 dark:hover:text-emerald-400 transition-all duration-200 px-4 py-3 rounded-md hover:bg-emerald-50 dark:hover:bg-gray-800 hover:shadow-sm">
                 <i class="fas fa-chart-line text-emerald-500 text-xl transform group-hover:scale-110 transition-transform"></i>
                 <span class="font-medium ml-3 group-hover:font-semibold">Financial Reports</span>
                 <i class="fas fa-chevron-right ml-auto text-xs text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>

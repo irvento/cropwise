@@ -25,14 +25,12 @@ class farmController extends Controller
         ]);
     }
 
-    public function cropsindex()
-    {
-        return view('admin.farm.crop.index');
-    }
+  
 
     public function livestocksindex()
     {
-        return view('admin.farm.livestock.index');
+        $livestock = \App\Models\Livestock::latest()->paginate(10);
+        return view('admin.farm.livestock.index', compact('livestock'));
     }
 
 } 
