@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PlantingSchedule extends Model
 {
@@ -23,15 +24,21 @@ class PlantingSchedule extends Model
     protected $casts = [
         'planting_date' => 'datetime',
         'expected_harvest_date' => 'datetime',
-        'quantity_planted' => 'float'
+        'quantity_planted' => 'decimal:2'
     ];
 
-    public function field()
+    /**
+     * Get the field where the crop is planted.
+     */
+    public function field(): BelongsTo
     {
         return $this->belongsTo(Field::class);
     }
 
-    public function crop()
+    /**
+     * Get the crop being planted.
+     */
+    public function crop(): BelongsTo
     {
         return $this->belongsTo(Crop::class);
     }

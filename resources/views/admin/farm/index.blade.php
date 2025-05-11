@@ -11,7 +11,7 @@
                 <div class="p-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <!-- Task Management Card -->
-                        <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-sm rounded-lg">
+                        <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-sm rounded-lg  border border-black">
                             <div class="p-6">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 bg-blue-500 rounded-md p-3">
@@ -33,7 +33,7 @@
                         </div>
 
                         <!-- Date Card -->
-                        <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-sm rounded-lg">
+                        <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-lg rounded-lg  border border-black">
                             <div class="p-6">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
@@ -50,7 +50,7 @@
                         </div>
 
                         <!-- Weather Card -->
-                        <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-sm rounded-lg">
+                        <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-lg rounded-lg border border-black">
                             <div class="p-6">
                                 <div class="text-center">
                                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Weather in Manolo Fortich</h3>
@@ -69,7 +69,7 @@
                         </div>
 
                         <!-- Farm Management Card -->
-                        <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-sm rounded-lg">
+                        <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-lg rounded-lg  border border-black">
                             <div class="p-6">
                                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4 text-center">Farm Management</h3>
                                 <div class="flex justify-center space-x-8">
@@ -93,7 +93,7 @@
                         </div>
 
                         <!-- Fields Card (standalone) -->
-                        <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-sm rounded-lg mt-6">
+                        <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-lg rounded-lg mt-6  border border-black">
                             <div class="p-6 flex flex-col items-center">
                                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4 text-center">Fields</h3>
                                 <a href="{{ route('admin.fields.index') }}" class="group">
@@ -106,7 +106,7 @@
                         </div>
 
                         <!-- Finances Card -->
-                        <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-sm rounded-lg">
+                        <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-lg rounded-lg  border border-black">
                             <div class="p-6">
                                 <a href="{{ route('admin.finance.index') }}" class="group block">
                                 <h4 class="text-lg font-semibold text-white flex items-center"><img src="https://cdn-icons-png.flaticon.com/128/781/781760.png" alt="finance" style="width: 20px; height: 20px;"> Finances</h4>
@@ -124,7 +124,7 @@
                         </div>
 
                         <!-- Inventory Card -->
-                        <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-sm rounded-lg">
+                        <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-lg rounded-lg  border border-black">
                             <div class="p-6">
                                 <a href="{{ route('admin.inventory.index') }}" class="group block">
 

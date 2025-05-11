@@ -24,9 +24,9 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Summary Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 ">
                 <!-- Total Items Card -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg p-6">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg p-6  border border-black">
                     <div class="flex items-center">
                         <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900">
                             <svg class="h-8 w-8 text-blue-600 dark:text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -41,7 +41,7 @@
                 </div>
 
                 <!-- Low Stock Items Card -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg p-6">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg p-6  border border-black">
                     <div class="flex items-center">
                         <div class="p-3 rounded-full bg-red-100 dark:bg-red-900">
                             <svg class="h-8 w-8 text-red-600 dark:text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,7 +56,7 @@
                 </div>
 
                 <!-- Total Categories Card -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg p-6">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg p-6  border border-black">
                     <div class="flex items-center">
                         <div class="p-3 rounded-full bg-green-100 dark:bg-green-900">
                             <svg class="h-8 w-8 text-green-600 dark:text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -72,7 +72,7 @@
                 </div>
 
                 <!-- Total Value Card -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg p-6">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg p-6  border border-black">
                     <div class="flex items-center">
                         <div class="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900">
                             <svg class="h-8 w-8 text-yellow-600 dark:text-yellow-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,7 +90,7 @@
             <!-- Recent Transactions and Low Stock Items -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 <!-- Recent Transactions -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg  border border-black">
                     <div class="p-6">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Recent Transactions</h3>
@@ -113,7 +113,7 @@
                 </div>
 
                 <!-- Low Stock Items -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg  border border-black">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">Low Stock Items</h3>
                         <div class="space-y-4">
@@ -134,7 +134,7 @@
             </div>
 
             <!-- Inventory Items Table -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg  border border-black">
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">Recent Inventory Items</h3>
                     <div class="overflow-x-auto">

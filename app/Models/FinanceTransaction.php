@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class FinanceTransaction extends Model
 {
-    protected $table = 'finance';
+    protected $table = 'finance_transactions';
+
     protected $fillable = [
+        'id',
         'account_id',
         'type',
         'category',
@@ -15,9 +17,6 @@ class FinanceTransaction extends Model
         'date',
         'description',
         'reference_number',
-        'recorded_by',
-        'related_entity_type',
-        'related_entity_id',
     ];
 
     protected $casts = [

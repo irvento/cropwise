@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Finance;
+use App\Models\FinanceTransaction;
 use Illuminate\Http\Request;
 
 class financeController extends Controller
@@ -36,7 +37,12 @@ class financeController extends Controller
 
     public function show(Finance $finance)
     {
-        return view('admin.finance.show', compact('finance'));
+        $transactions = FinanceTransaction::where('account_id', $finance->id)
+            ->latest()
+            ->take(10)
+            ->get();
+            
+        return view('admin.finance.show', compact('finance', 'transactions'));
     }
 
     public function edit(Finance $finance)

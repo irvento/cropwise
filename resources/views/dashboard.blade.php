@@ -26,7 +26,7 @@
                     </a>
                     
                     <!-- Task -->
-                    <a href="{{ route('schedule.index') }}" class="block sm:rounded-lg p-1 shadow-md border border-black">
+                    <a href="{{ route('admin.schedule.index') }}" class="block sm:rounded-lg p-1 shadow-md border border-black">
                         <div class="bg-gray-100 dark:bg-gray-700 p-6 text-center rounded shadow">
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Task</h3>
                             <p class="text-sm text-gray-600 dark:text-gray-300">Task info</p>
@@ -40,7 +40,7 @@
                         </div>
                     </a>
                     <!-- schedules -->
-                    <a href="{{ route('schedule.index') }}" class="block sm:rounded-lg p-1 shadow-md border border-black">
+                    <a href="{{ route('admin.schedule.index') }}" class="block sm:rounded-lg p-1 shadow-md border border-black">
                         <div class="bg-gray-100 dark:bg-gray-700 p-6 text-center rounded shadow">
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Schedules</h3>
                             <p class="text-sm text-gray-600 dark:text-gray-300">Tables</p>

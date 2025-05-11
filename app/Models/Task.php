@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
@@ -28,7 +29,10 @@ class Task extends Model
         'updated_at' => 'datetime'
     ];
 
-    public function employee()
+    /**
+     * Get the employee that the task is assigned to.
+     */
+    public function employee(): BelongsTo
     {
         return $this->belongsTo(HR::class, 'assigned_to');
     }

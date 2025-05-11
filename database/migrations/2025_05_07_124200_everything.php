@@ -93,7 +93,6 @@ return new class extends Migration {
             $table->date('date');
             $table->text('description')->nullable();
             $table->string('reference_number')->nullable();
-            $table->foreignId('recorded_by')->constrained('users');
             $table->string('related_entity_type')->nullable();
             $table->unsignedBigInteger('related_entity_id')->nullable();
             $table->timestamps();

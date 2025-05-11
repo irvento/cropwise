@@ -10,7 +10,7 @@ class InventoryTransactionController extends Controller
 {
     public function index()
     {
-        $transactions = InventoryTransaction::with(['item', 'user'])
+        $transactions = InventoryTransaction::with(['item'])
             ->latest()
             ->paginate(10);
         return view('admin.inventory_transactions.index', compact('transactions'));

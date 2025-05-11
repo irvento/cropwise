@@ -14,8 +14,7 @@ class InventoryTransaction extends Model
         'quantity',
         'unit_price',
         'total_amount',
-        'notes',
-        'user_id'
+        'notes'
     ];
 
     protected $casts = [
