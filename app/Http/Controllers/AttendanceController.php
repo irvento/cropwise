@@ -74,40 +74,52 @@ class AttendanceController extends Controller
 
     public function timeIn(Request $request)
     {
-        $employee = Employee::findOrFail($request->employee_id);
-        
-        $attendance = Attendance::create([
-            'employee_id' => $employee->id,
-            'date' => Carbon::today(),
-            'time_in' => Carbon::now(),
-            'status' => 'present'
+        $request->validate([
+            'employee_id' => 'required|exists:employees,id',
         ]);
 
-        return response()->json([
-            'message' => 'Time in recorded successfully',
-            'attendance' => $attendance
+        $today = Carbon::today();
+        $existingAttendance = Attendance::where('employee_id', $request->employee_id)
+            ->whereDate('date', $today)
+            ->first();
+
+        if ($existingAttendance) {
+            return back()->with('error', 'Employee has already checked in today.');
+        }
+
+        $attendance = Attendance::create([
+            'employee_id' => $request->employee_id,
+            'date' => $today,
+            'check_in' => Carbon::now(),
+            'status' => Carbon::now()->hour > 9 ? 'late' : 'present'
         ]);
+
+        return back()->with('success', 'Time in recorded successfully.');
     }
 
     public function timeOut(Request $request)
     {
+        $request->validate([
+            'employee_id' => 'required|exists:employees,id',
+        ]);
+
+        $today = Carbon::today();
         $attendance = Attendance::where('employee_id', $request->employee_id)
-            ->whereDate('date', Carbon::today())
+            ->whereDate('date', $today)
             ->first();
 
-        if ($attendance) {
-            $attendance->update([
-                'time_out' => Carbon::now()
-            ]);
-
-            return response()->json([
-                'message' => 'Time out recorded successfully',
-                'attendance' => $attendance
-            ]);
+        if (!$attendance) {
+            return back()->with('error', 'No check-in record found for today.');
         }
 
-        return response()->json([
-            'message' => 'No time in record found for today'
-        ], 404);
+        if ($attendance->check_out) {
+            return back()->with('error', 'Employee has already checked out today.');
+        }
+
+        $attendance->update([
+            'check_out' => Carbon::now()
+        ]);
+
+        return back()->with('success', 'Time out recorded successfully.');
     }
 } 

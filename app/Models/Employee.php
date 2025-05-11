@@ -21,6 +21,11 @@ class Employee extends Model
         'status'
     ];
 
+    public function hr()
+    {
+        return $this->hasOne(HR::class);
+    }
+
     public function plantingSchedules()
     {
         return $this->hasMany(PlantingSchedule::class, 'responsible_employee_id');

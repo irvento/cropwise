@@ -68,6 +68,8 @@ Route::prefix('hr')->name('hr.')->group(function () {
     Route::get('/attendance/{attendance}/edit', [AttendanceController::class, 'edit'])->name('attendance.edit');
     Route::put('/attendance/{attendance}', [AttendanceController::class, 'update'])->name('attendance.update');
     Route::delete('/attendance/{attendance}', [AttendanceController::class, 'destroy'])->name('attendance.destroy');
+    Route::post('/attendance/time-in', [AttendanceController::class, 'timeIn'])->name('attendance.time-in');
+    Route::post('/attendance/time-out', [AttendanceController::class, 'timeOut'])->name('attendance.time-out');
 
     // Payroll
     Route::get('/payroll', [hrController::class, 'payrollindex'])->name('payroll.index');
@@ -81,6 +83,12 @@ Route::prefix('hr')->name('hr.')->group(function () {
 
     // Employees
     Route::get('/employees', [hrController::class, 'employeesindex'])->name('employees.index');
+    Route::get('/employees/create', [hrController::class, 'create'])->name('create');
+    Route::post('/employees', [hrController::class, 'store'])->name('store');
+    Route::get('/employees/{id}', [hrController::class, 'show'])->name('show');
+    Route::get('/employees/{id}/edit', [hrController::class, 'edit'])->name('edit');
+    Route::put('/employees/{id}', [hrController::class, 'update'])->name('update');
+    Route::delete('/employees/{id}', [hrController::class, 'destroy'])->name('destroy');
 });
 
 // Task management routes

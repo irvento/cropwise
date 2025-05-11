@@ -7,20 +7,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class HR extends Model
 {
-    protected $table = 'hr';
+    protected $table = 'employees';
     protected $fillable = [
-        'employee_id',
-        'department',
+        'user_id',
+        'first_name',
+        'last_name',
         'position',
-        'hire_date',
-        'employment_status',
-        'employment_type',
-        'created_at',
-        'updated_at'
-    ];
-
-    protected $casts = [
-        'hire_date' => 'date'
+        'salary',
+        'contact_number',
+        'address',
+        'status'
     ];
 
     public function employee()
@@ -30,16 +26,16 @@ class HR extends Model
 
     public function leaveRequests(): HasMany
     {
-        return $this->hasMany(LeaveRequest::class);
+        return $this->hasMany(LeaveRequest::class, 'employee_id');
     }
 
     public function attendances(): HasMany
     {
-        return $this->hasMany(Attendance::class);
+        return $this->hasMany(Attendance::class, 'employee_id');
     }
 
     public function payrolls(): HasMany
     {
-        return $this->hasMany(Payroll::class);
+        return $this->hasMany(Payroll::class, 'employee_id');
     }
 }
