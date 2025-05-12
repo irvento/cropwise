@@ -113,8 +113,10 @@ class TaskController extends Controller
      * Display a listing of the user's tasks.
      */
     public function userTasks()
+
+ 
     {
-        $employee = Employee::where('id', Auth::user()->id)->first();
+        $employee = Employee::where('user_id', Auth::user()->id)->first();
         $tasks = Task::where('assigned_to', $employee->id)
                     ->orderBy('due_date', 'asc')
                     ->paginate(10);

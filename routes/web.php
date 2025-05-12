@@ -154,6 +154,10 @@ Route::middleware(['auth'])->group(function () {
     // User Payroll Routes
     Route::get('/user/payroll', [App\Http\Controllers\User\PayrollController::class, 'index'])->name('user.payroll.index');
     Route::get('/user/payroll/{payroll}', [App\Http\Controllers\User\PayrollController::class, 'show'])->name('user.payroll.show');
+
+    // Dashboard attendance routes
+    Route::post('/dashboard/time-in', [DashboardController::class, 'timeIn'])->name('user.attendance.time-in');
+    Route::post('/dashboard/time-out', [DashboardController::class, 'timeOut'])->name('user.attendance.time-out');
 });
 
 // User Routes

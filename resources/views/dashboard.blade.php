@@ -84,7 +84,7 @@
                         </div>
                     </div>
                 </div>
-
+                    
                 <!-- Total Inventory -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
                     <div class="p-6">
@@ -97,7 +97,7 @@
                                 <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $totalInventory ?? 0 }}</p>
                             </div>
                         </div>
-                    </div>
+                        </div>
                 </div>
 
                 <!-- Total Leave Requests -->
@@ -112,7 +112,7 @@
                                 <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $totalLeaveRequests ?? 0 }}</p>
                             </div>
                         </div>
-                    </div>
+                        </div>
                 </div>
 
                 <!-- Total Attendance -->
@@ -127,7 +127,7 @@
                                 <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $totalAttendance ?? 0 }}</p>
                             </div>
                         </div>
-                    </div>
+                        </div>
                 </div>
 
                 <!-- Total Payrolls -->
@@ -142,7 +142,7 @@
                                 <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $totalPayrolls ?? 0 }}</p>
                             </div>
                         </div>
-                    </div>
+                        </div>
                 </div>
             </div>
 <!-- Main Grid -->
@@ -198,15 +198,15 @@
         <a href="{{ $card['route'] }}" class="block rounded-xl shadow-md border border-gray-300 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200 overflow-hidden">
             <div class="relative bg-gradient-to-br {{ $card['bg'] }} p-6 text-center">
                 <div class="absolute inset-0 bg-white/40 dark:bg-black/20 backdrop-blur-md rounded-xl"></div>
-                <div class="relative z-10">
+                        <div class="relative z-10">
                     <i class="{{ $card['icon'] }} text-4xl text-gray-800 dark:text-white mb-4"></i>
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ $card['title'] }}</h3>
                     <p class="text-gray-700 dark:text-gray-300 mt-2">{{ $card['desc'] }}</p>
-                </div>
-            </div>
-        </a>
+                        </div>
+                        </div>
+                    </a>
     @endforeach
-</div>
+            </div>
 
             <!-- Recent Schedules Section -->
             <div class="mt-6">
@@ -309,7 +309,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+                        </div>
 
             <!-- Recent Leave Requests Section -->
             <div class="mt-6">
@@ -480,9 +480,9 @@
                                 <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Today's Attendance</p>
                                 <div class="flex items-center mt-1">
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                        {{ $todayAttendanceStatus === 'present' ? 'bg-green-100 text-green-800' : 
-                                           ($todayAttendanceStatus === 'late' ? 'bg-yellow-100 text-yellow-800' : 
-                                           ($todayAttendanceStatus === 'absent' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800')) }}">
+                                        {{ $todayAttendanceStatus === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
+                                           ($todayAttendanceStatus === 'late' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
+                                           ($todayAttendanceStatus === 'absent' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400')) }}">
                                         {{ ucfirst(str_replace('_', ' ', $todayAttendanceStatus)) }}
                                     </span>
                                 </div>
@@ -490,14 +490,14 @@
                         </div>
                         <div class="mt-4">
                             @if($todayAttendanceStatus === 'not_checked_in')
-                                <form action="{{ route('user.attendance.time-in') }}" method="POST">
+                                <form action="{{ route('user.attendance.time-in') }}" method="POST" class="time-in-form">
                                     @csrf
                                     <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">
                                         Check In
                                     </button>
                                 </form>
                             @elseif($todayAttendanceStatus === 'present' || $todayAttendanceStatus === 'late')
-                                <form action="{{ route('user.attendance.time-out') }}" method="POST">
+                                <form action="{{ route('user.attendance.time-out') }}" method="POST" class="time-out-form">
                                     @csrf
                                     <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">
                                         Check Out
@@ -706,5 +706,55 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         })
         .catch(error => console.error('Error:', error));
+
+    // Handle time in form submission
+    const timeInForm = document.querySelector('.time-in-form');
+    if (timeInForm) {
+        timeInForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            fetch('{{ route("user.attendance.time-in") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    }
+
+    // Handle time out form submission
+    const timeOutForm = document.querySelector('.time-out-form');
+    if (timeOutForm) {
+        timeOutForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            fetch('{{ route("user.attendance.time-out") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    }
 });
 </script>

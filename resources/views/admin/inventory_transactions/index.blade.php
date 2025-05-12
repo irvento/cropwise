@@ -50,11 +50,11 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex space-x-3">
                                                 <a href="{{ route('admin.inventory-transactions.show', $transaction) }}"
-                                                    class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
+                                                   class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
                                                     View
                                                 </a>
                                                 <a href="{{ route('admin.inventory-transactions.edit', $transaction) }}"
-                                                    class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
+                                                   class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
                                                     Edit
                                                 </a>
                                                 <form action="{{ route('admin.inventory-transactions.destroy', $transaction) }}" method="POST" class="inline">

@@ -36,7 +36,19 @@ class DashboardController extends Controller
             $todayAttendance = Attendance::where('employee_id', $employee->id)
                 ->whereDate('date', $today)
                 ->first();
-            $todayAttendanceStatus = $todayAttendance ? $todayAttendance->status : 'not_checked_in';
+            
+            if ($todayAttendance) {
+                if ($todayAttendance->time_out) {
+                    $todayAttendanceStatus = 'present';
+                } else if ($todayAttendance->time_in) {
+                    $todayAttendanceStatus = 'present';
+                    // Check if late (after 9:00 AM)
+                    $timeIn = Carbon::parse($todayAttendance->time_in);
+                    if ($timeIn->hour >= 9 && $timeIn->minute > 0) {
+                        $todayAttendanceStatus = 'late';
+                    }
+                }
+            }
         }
 
         // Get overview statistics
@@ -60,11 +72,19 @@ class DashboardController extends Controller
         $recentSchedules = $this->getRecentSchedules();
 
         // Get upcoming tasks
-        $upcomingTasks = Task::with('employee')
-            ->where('due_date', '>=', Carbon::today())
-            ->orderBy('due_date')
-            ->take(5)
-            ->get();
+        $upcomingTasks = collect([]);
+        if ($employee) {
+            $upcomingTasks = Task::with('employee')
+                ->where('assigned_to', $employee->id)
+                ->where('due_date', '>=', Carbon::today())
+                ->where('status', '!=', 'completed')
+                ->orderBy('due_date')
+                ->take(5)
+                ->get();
+        }
+
+        // Get upcoming tasks count
+        $upcomingTasksCount = $upcomingTasks->count();
 
         // Get recent tasks for the user
         $recentTasks = collect([]);
@@ -127,6 +147,7 @@ class DashboardController extends Controller
             'totalPayrolls',
             'recentSchedules',
             'upcomingTasks',
+            'upcomingTasksCount',
             'recentTasks',
             'recentInventory',
             'financialSummary',
@@ -181,5 +202,72 @@ class DashboardController extends Controller
             // Return empty collection if there's an error
             return collect([]);
         }
+    }
+
+    public function timeIn()
+    {
+        $employee = Employee::where('id', Auth::user()->id)->first();
+        if (!$employee) {
+            return response()->json(['error' => 'Employee not found'], 404);
+        }
+
+        $today = Carbon::today();
+        $now = Carbon::now();
+
+        // Check if already checked in today
+        $existingAttendance = Attendance::where('employee_id', $employee->id)
+            ->whereDate('date', $today)
+            ->first();
+
+        if ($existingAttendance) {
+            return response()->json(['error' => 'Already checked in today'], 400);
+        }
+
+        // Create new attendance record
+        $attendance = new Attendance();
+        $attendance->employee_id = $employee->id;
+        $attendance->date = $today;
+        $attendance->time_in = $now;
+        
+        // Set status based on time
+        if ($now->hour >= 9 && $now->minute > 0) {
+            $attendance->status = 'late';
+        } else {
+            $attendance->status = 'present';
+        }
+        
+        $attendance->save();
+
+        return response()->json(['message' => 'Successfully checked in']);
+    }
+
+    public function timeOut()
+    {
+        $employee = Employee::where('id', Auth::user()->id)->first();
+        if (!$employee) {
+            return response()->json(['error' => 'Employee not found'], 404);
+        }
+
+        $today = Carbon::today();
+        $now = Carbon::now();
+
+        // Find today's attendance record
+        $attendance = Attendance::where('employee_id', $employee->id)
+            ->whereDate('date', $today)
+            ->first();
+
+        if (!$attendance) {
+            return response()->json(['error' => 'No check-in record found for today'], 400);
+        }
+
+        if ($attendance->time_out) {
+            return response()->json(['error' => 'Already checked out today'], 400);
+        }
+
+        // Update attendance record
+        $attendance->time_out = $now;
+        $attendance->save();
+
+        return response()->json(['message' => 'Successfully checked out']);
     }
 } 

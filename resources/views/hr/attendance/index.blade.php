@@ -49,10 +49,10 @@
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $attendance->time_out ? $attendance->time_out->format('H:i:s') : '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                {{ $attendance->status === 'present' ? 'bg-green-100 text-green-800' : 
-                                                   ($attendance->status === 'absent' ? 'bg-red-100 text-red-800' : 
-                                                    ($attendance->status === 'late' ? 'bg-yellow-100 text-yellow-800' : 
-                                                     'bg-blue-100 text-blue-800')) }}">
+                                                {{ $attendance->status === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
+                                                   ($attendance->status === 'absent' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' : 
+                                                    ($attendance->status === 'late' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
+                                                     'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400')) }}">
                                                 {{ ucfirst($attendance->status) }}
                                             </span>
                                         </td>
@@ -86,12 +86,14 @@
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Time In</h3>
                 <form id="timeInForm" class="space-y-4">
                     <div>
-                        <label for="employee_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Employee</label>
-                        <select name="employee_id" id="employee_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                        <label for="time_in_employee_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Employee</label>
+                        <select name="employee_id" id="time_in_employee_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
                             <option value="">Select Employee</option>
-                            @foreach($employees as $employee)
-                                <option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
-                            @endforeach
+                            @if(isset($employees) && $employees->count() > 0)
+                                @foreach($employees as $employee)
+                                    <option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                     <div class="flex justify-end space-x-2">
@@ -114,12 +116,14 @@
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Time Out</h3>
                 <form id="timeOutForm" class="space-y-4">
                     <div>
-                        <label for="employee_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Employee</label>
-                        <select name="employee_id" id="employee_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                        <label for="time_out_employee_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Employee</label>
+                        <select name="employee_id" id="time_out_employee_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
                             <option value="">Select Employee</option>
-                            @foreach($employees as $employee)
-                                <option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
-                            @endforeach
+                            @if(isset($employees) && $employees->count() > 0)
+                                @foreach($employees as $employee)
+                                    <option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                     <div class="flex justify-end space-x-2">
