@@ -21,7 +21,7 @@ class inventoryController extends Controller
         $categoriesCount = InventoryCategory::count();
         $totalValue = Inventory::sum(DB::raw('current_stock_level * purchase_price'));
         
-        $recentTransactions = InventoryTransaction::with('item')
+        $recentTransactions = InventoryTransaction::with('inventory')
             ->latest()
             ->take(5)
             ->get();

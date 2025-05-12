@@ -13,6 +13,10 @@ use App\Models\PlantingSchedule;
 use App\Models\Employee;
 use App\Models\Inventory;
 use App\Models\Finance;
+use App\Models\FinanceTransaction;
+use App\Models\LeaveRequest;
+use App\Models\Attendance;
+use App\Models\Payroll;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
@@ -20,18 +24,22 @@ class dashboardController extends Controller
 {
     public function index()
     {
-        try {
             // Get overview statistics
             $totalFields = Field::count();
-            $activeCrops = Crop::where('status', 'active')->count();
+            $activeCrops = Crop::count();
             $pendingTasks = Task::where('status', 'pending')->count();
             $totalLivestock = Livestock::count();
+            $totalEmployees = Employee::count();
+            $totalInventory = Inventory::count();
+            $totalLeaveRequests = LeaveRequest::count();
+            $totalAttendance = Attendance::count();
+            $totalPayrolls = Payroll::count();
 
             // Get recent schedules (tasks and planting schedules)
             $recentSchedules = $this->getRecentSchedules();
 
             // Get upcoming tasks
-            $upcomingTasks = Task::with('assignedTo')
+            $upcomingTasks = Task::with('employee')
                 ->where('due_date', '>=', Carbon::today())
                 ->orderBy('due_date')
                 ->take(5)
@@ -45,13 +53,31 @@ class dashboardController extends Controller
 
             // Get financial summary
             $financialSummary = [
-                'income' => Finance::where('type', 'income')
+                'income' => FinanceTransaction::where('type', 'income')
                     ->whereMonth('date', Carbon::now()->month)
                     ->sum('amount'),
-                'expenses' => Finance::where('type', 'expense')
+                'expenses' => FinanceTransaction::where('type', 'expense')
                     ->whereMonth('date', Carbon::now()->month)
                     ->sum('amount')
             ];
+
+            // Get recent leave requests
+            $recentLeaveRequests = LeaveRequest::with('employee')
+                ->latest()
+                ->take(5)
+                ->get();
+
+            // Get recent attendance records
+            $recentAttendance = Attendance::with('employee')
+                ->latest()
+                ->take(5)
+                ->get();
+
+            // Get recent payroll records
+            $recentPayrolls = Payroll::with('employee')
+                ->latest()
+                ->take(5)
+                ->get();
 
             // Get weather data
             $weatherService = app(WeatherService::class);
@@ -62,36 +88,27 @@ class dashboardController extends Controller
                 'activeCrops',
                 'pendingTasks',
                 'totalLivestock',
+                'totalEmployees',
+                'totalInventory',
+                'totalLeaveRequests',
+                'totalAttendance',
+                'totalPayrolls',
                 'recentSchedules',
                 'upcomingTasks',
                 'recentInventory',
                 'financialSummary',
+                'recentLeaveRequests',
+                'recentAttendance',
+                'recentPayrolls',
                 'weather'
             ));
-        } catch (\Exception $e) {
-            // If there's an error, return the view with empty collections
-            return view('dashboard', [
-                'totalFields' => 0,
-                'activeCrops' => 0,
-                'pendingTasks' => 0,
-                'totalLivestock' => 0,
-                'recentSchedules' => collect([]),
-                'upcomingTasks' => collect([]),
-                'recentInventory' => collect([]),
-                'financialSummary' => [
-                    'income' => 0,
-                    'expenses' => 0
-                ],
-                'weather' => null
-            ]);
-        }
     }
 
     private function getRecentSchedules(): Collection
     {
         try {
             // Get recent tasks
-            $recentTasks = Task::with('assignedTo')
+            $recentTasks = Task::with('employee')
                 ->latest()
                 ->take(5)
                 ->get()
@@ -100,7 +117,7 @@ class dashboardController extends Controller
                         'type' => 'task',
                         'icon' => 'fa-tasks',
                         'title' => $task->title,
-                        'description' => "Task assigned to " . ($task->assignedTo->name ?? 'Unassigned'),
+                        'description' => "Task assigned to " . ($task->employee->first_name . ' ' . $task->employee->last_name ?? 'Unassigned'),
                         'date' => $task->created_at,
                         'priority' => $task->priority
                     ];

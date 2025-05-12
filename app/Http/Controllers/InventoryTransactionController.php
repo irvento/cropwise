@@ -10,7 +10,7 @@ class InventoryTransactionController extends Controller
 {
     public function index()
     {
-        $transactions = InventoryTransaction::with(['item'])
+        $transactions = InventoryTransaction::with(['inventory', 'inventory.category'])
             ->latest()
             ->paginate(10);
         return view('admin.inventory_transactions.index', compact('transactions'));
@@ -18,51 +18,30 @@ class InventoryTransactionController extends Controller
 
     public function create()
     {
-        $inventoryItems = Inventory::all();
-        $transactionTypes = [
-            'purchase' => 'Purchase',
-            'sale' => 'Sale',
-            'adjustment' => 'Adjustment',
-            'initial' => 'Initial Stock'
-        ];
-        return view('admin.inventory_transactions.create', compact('inventoryItems', 'transactionTypes'));
+        $inventories = Inventory::with('category')->get();
+        return view('admin.inventory_transactions.create', compact('inventories'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'item_id' => 'required|exists:inventory_items,id',
-            'transaction_type' => 'required|in:purchase,sale,adjustment,initial',
             'quantity' => 'required|numeric|min:0.01',
-            'unit_price' => 'nullable|numeric|min:0',
             'notes' => 'nullable|string',
         ]);
 
-        // Calculate total amount
-        $total_amount = $validated['quantity'] * ($validated['unit_price'] ?? 0);
-
         $transaction = InventoryTransaction::create([
             'item_id' => $validated['item_id'],
-            'transaction_type' => $validated['transaction_type'],
             'quantity' => $validated['quantity'],
-            'unit_price' => $validated['unit_price'] ?? 0,
-            'total_amount' => $total_amount,
             'notes' => $validated['notes'],
         ]);
 
-        // Update inventory quantity based on transaction type
+        // Update inventory quantity
         $inventory = Inventory::findOrFail($validated['item_id']);
-        switch ($validated['transaction_type']) {
-            case 'purchase':
-            case 'initial':
-                $inventory->quantity += $validated['quantity'];
-                break;
-            case 'sale':
-                $inventory->quantity -= $validated['quantity'];
-                break;
-            case 'adjustment':
-                $inventory->quantity = $validated['quantity'];
-                break;
+        if ($validated['type'] === 'in') {
+            $inventory->current_stock_level += $validated['quantity'];
+        } else {
+            $inventory->current_stock_level -= $validated['quantity'];
         }
         $inventory->save();
 
@@ -71,51 +50,46 @@ class InventoryTransactionController extends Controller
             ->with('success', 'Transaction recorded successfully.');
     }
 
-    public function show(InventoryTransaction $inventoryTransaction)
+    public function show(InventoryTransaction $inventory_transaction)
     {
-        $inventoryTransaction->load(['item', 'user']);
-        return view('admin.inventory_transactions.show', compact('inventoryTransaction'));
+        $inventory_transaction->load(['inventory', 'inventory.category', 'user']);
+        return view('admin.inventory_transactions.show', compact('inventory_transaction'));
     }
 
-    public function edit(InventoryTransaction $inventoryTransaction)
+    public function edit(InventoryTransaction $inventory_transaction)
     {
-        $inventoryItems = Inventory::all();
-        return view('admin.inventory_transactions.edit', compact('inventoryTransaction', 'inventoryItems'));
+        $inventories = Inventory::with('category')->get();
+        return view('admin.inventory_transactions.edit', compact('inventory_transaction', 'inventories'));
     }
 
-    public function update(Request $request, InventoryTransaction $inventoryTransaction)
+    public function update(Request $request, InventoryTransaction $inventory_transaction)
     {
         $validated = $request->validate([
-            'inventory_id' => 'required|exists:inventory,id',
-            'type' => 'required|in:in,out',
+            'item_id' => 'required|exists:inventory_items,id',
             'quantity' => 'required|numeric|min:0.01',
             'notes' => 'nullable|string',
         ]);
 
         // Revert the old transaction's effect on inventory
-        $oldInventory = Inventory::findOrFail($inventoryTransaction->inventory_id);
-        if ($inventoryTransaction->type === 'in') {
-            $oldInventory->quantity -= $inventoryTransaction->quantity;
+        $oldInventory = Inventory::findOrFail($inventory_transaction->item_id);
+        if ($inventory_transaction->type === 'in') {
+            $oldInventory->current_stock_level -= $inventory_transaction->quantity;
         } else {
-            $oldInventory->quantity += $inventoryTransaction->quantity;
+            $oldInventory->current_stock_level += $inventory_transaction->quantity;
         }
         $oldInventory->save();
 
         // Apply the new transaction
-        $inventoryTransaction->update([
-            'inventory_id' => $validated['inventory_id'],
-            'type' => $validated['type'],
+        $inventory_transaction->update([
+            'item_id' => $validated['item_id'],
             'quantity' => $validated['quantity'],
             'notes' => $validated['notes'],
         ]);
 
         // Update the new inventory quantity
-        $newInventory = Inventory::findOrFail($validated['inventory_id']);
-        if ($validated['type'] === 'in') {
-            $newInventory->quantity += $validated['quantity'];
-        } else {
-            $newInventory->quantity -= $validated['quantity'];
-        }
+        $newInventory = Inventory::findOrFail($validated['item_id']);
+            $newInventory->current_stock_level -= $validated['quantity'];
+
         $newInventory->save();
 
         return redirect()
@@ -123,18 +97,18 @@ class InventoryTransactionController extends Controller
             ->with('success', 'Transaction updated successfully.');
     }
 
-    public function destroy(InventoryTransaction $inventoryTransaction)
+    public function destroy(InventoryTransaction $inventory_transaction)
     {
         // Revert the transaction's effect on inventory
-        $inventory = Inventory::findOrFail($inventoryTransaction->inventory_id);
-        if ($inventoryTransaction->type === 'in') {
-            $inventory->quantity -= $inventoryTransaction->quantity;
+        $inventory = Inventory::findOrFail($inventory_transaction->item_id);
+        if ($inventory_transaction->type === 'in') {
+            $inventory->current_stock_level -= $inventory_transaction->quantity;
         } else {
-            $inventory->quantity += $inventoryTransaction->quantity;
+            $inventory->current_stock_level += $inventory_transaction->quantity;
         }
         $inventory->save();
 
-        $inventoryTransaction->delete();
+        $inventory_transaction->delete();
 
         return redirect()
             ->route('admin.inventory-transactions.index')

@@ -100,7 +100,7 @@
                             @forelse($recentTransactions as $transaction)
                                 <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                                     <div>
-                                        <p class="font-medium text-gray-900 dark:text-white">{{ $transaction->item->name }}</p>
+                                        <p class="font-medium text-gray-900 dark:text-white">{{ $transaction->inventory->name }}</p>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">{{ $transaction->type }} - {{ $transaction->quantity }} units</p>
                                     </div>
                                     <span class="text-sm text-gray-500 dark:text-gray-400">{{ $transaction->created_at->diffForHumans() }}</span>

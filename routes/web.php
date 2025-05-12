@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\cropController;
 use App\Http\Controllers\PlantingScheduleController;    
 use App\Http\Controllers\inventorycategoryController;
-use App\Http\Controllers\inventorytransactionController;
+use App\Http\Controllers\InventoryTransactionController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\FullCalenderController;
@@ -23,7 +23,6 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\EmployeeRegistrationController;
 use App\Http\Controllers\livestockController;
-
 
 Route::get('/', function () {
     return view('welcome');
@@ -118,7 +117,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'destroy' => 'planting-schedules.destroy',
     ]);
     Route::resource('inventory-category', inventorycategoryController::class);
-    Route::resource('inventory-transactions', inventorytransactionController::class);
+    Route::resource('inventory-transactions', InventoryTransactionController::class);
     Route::resource('supplier', SupplierController::class);
 
     // Schedule Routes
