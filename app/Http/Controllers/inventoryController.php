@@ -46,8 +46,7 @@ class inventoryController extends Controller
     {
         $categories = InventoryCategory::all();
         $suppliers = Supplier::all();
-        $financeAccounts = Finance::where('type', 'asset')->get();
-        return view('admin.inventory.create', compact('categories', 'suppliers', 'financeAccounts'));
+        return view('admin.inventory.create', compact('categories', 'suppliers'));
     }
 
     public function store(Request $request)
