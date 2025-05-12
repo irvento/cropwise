@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class HR extends Model
 {
     protected $table = 'employees';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'user_id',
         'first_name',
@@ -18,11 +19,6 @@ class HR extends Model
         'address',
         'status'
     ];
-
-    public function employee()
-    {
-        return $this->belongsTo(Employee::class);
-    }
 
     public function leaveRequests(): HasMany
     {

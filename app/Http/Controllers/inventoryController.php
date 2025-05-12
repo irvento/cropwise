@@ -77,7 +77,6 @@ class inventoryController extends Controller
             'unit_price' => $validated['purchase_price'],
             'total_amount' => $total_amount,
             'notes' => 'Initial stock',
-            'user_id' => auth()->id(),
         ]);
 
         return redirect()
