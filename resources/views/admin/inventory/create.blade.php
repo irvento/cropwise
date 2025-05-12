@@ -37,12 +37,33 @@
                             <div>
                                 <label for="supplier_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier</label>
                                 <select name="supplier_id" id="supplier_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
-                                    <option value="">Select a supplier</option>
+                                    <option value="">Select Supplier</option>
                                     @foreach($suppliers as $supplier)
-                                        <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
+                                        <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
+                                            {{ $supplier->name }}
+                                        </option>
                                     @endforeach
                                 </select>
+                                @error('supplier_id')
+                                    <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                @enderror
                             </div>
+
+                            <div>
+                                <label for="finance_account_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Financial Account</label>
+                                <select name="finance_account_id" id="finance_account_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                                    <option value="">Select Financial Account</option>
+                                    @foreach($financeAccounts as $account)
+                                        <option value="{{ $account->id }}" {{ old('finance_account_id') == $account->id ? 'selected' : '' }}>
+                                            {{ $account->name }} (₱{{ number_format($account->balance, 2) }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('finance_account_id')
+                                    <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                @enderror
+                            </div>
+
                             <div>
                                 <label for="transaction_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Transaction Type</label>
                                 <select name="transaction_type" id="transaction_type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>

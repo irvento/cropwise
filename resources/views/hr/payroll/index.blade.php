@@ -53,17 +53,18 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <a href="{{ route('hr.payroll.show', $payroll) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-3">View</a>
                                             <a href="{{ route('hr.payroll.edit', $payroll) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3">Edit</a>
-                                            @if($payroll->status === 'pending')
+                                            @if($payroll->status !== 'paid')
                                                 <form action="{{ route('hr.payroll.mark-as-paid', $payroll) }}" method="POST" class="inline">
                                                     @csrf
-                                                    @method('PUT')
-                                                    <button type="submit" class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 mr-3">Mark as Paid</button>
+                                                    <button type="submit" class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 mr-3" onclick="return confirm('Are you sure you want to mark this payroll as paid?')">
+                                                        Mark as Paid
+                                                    </button>
                                                 </form>
                                             @endif
                                             <form action="{{ route('hr.payroll.destroy', $payroll) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300" onclick="return confirm('Are you sure you want to delete this payroll record?')">Delete</button>
+                                                <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300" onclick="return confirm('Are you sure you want to delete this payroll?')">Delete</button>
                                             </form>
                                         </td>
                                     </tr>

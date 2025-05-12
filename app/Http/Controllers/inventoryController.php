@@ -6,6 +6,7 @@ use App\Models\Inventory;
 use App\Models\InventoryCategory;
 use App\Models\Supplier;
 use App\Models\InventoryTransaction;
+use App\Models\Finance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -45,7 +46,8 @@ class inventoryController extends Controller
     {
         $categories = InventoryCategory::all();
         $suppliers = Supplier::all();
-        return view('admin.inventory.create', compact('categories', 'suppliers'));
+        $financeAccounts = Finance::where('type', 'asset')->get();
+        return view('admin.inventory.create', compact('categories', 'suppliers', 'financeAccounts'));
     }
 
     public function store(Request $request)
@@ -54,34 +56,49 @@ class inventoryController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'category_id' => 'required|exists:inventory_categories,id',
+            'supplier_id' => 'required|exists:suppliers,id',
+            'finance_account_id' => 'required|exists:financial_accounts,id',
             'quantity' => 'required|numeric|min:0',
             'unit_of_measurement' => 'required|string|max:50',
             'minimum_stock_level' => 'required|numeric|min:0',
-            'current_stock_level' => 'required|numeric|min:0',
-            'supplier_id' => 'required|exists:suppliers,id',
             'purchase_price' => 'required|numeric|min:0',
             'selling_price' => 'required|numeric|min:0',
             'expiry_date' => 'nullable|date',
-            'storage_location' => 'required|string|max:255',
+            'storage_location' => 'nullable|string|max:255',
         ]);
 
-        $inventory = Inventory::create($validated);
+        DB::beginTransaction();
+        try {
+            // Create the inventory item
+            $inventory = Inventory::create($validated);
 
-        // Calculate total amount for initial transaction
-        $total_amount = $validated['quantity'] * $validated['purchase_price'];
+            // Deduct from financial account
+            $financeAccount = Finance::findOrFail($validated['finance_account_id']);
+            $totalAmount = $validated['quantity'] * $validated['purchase_price'];
+            
+            if ($financeAccount->balance < $totalAmount) {
+                throw new \Exception('Insufficient funds in the selected financial account.');
+            }
 
-        // Create initial transaction record
-        $inventory->transactions()->create([
-            'transaction_type' => 'initial',
-            'quantity' => $validated['quantity'],
-            'unit_price' => $validated['purchase_price'],
-            'total_amount' => $total_amount,
-            'notes' => 'Initial stock',
-        ]);
+            $financeAccount->balance -= $totalAmount;
+            $financeAccount->save();
 
-        return redirect()
-            ->route('admin.inventory.index')
-            ->with('success', 'Inventory item created successfully.');
+            // Create a transaction record
+            $financeAccount->transactions()->create([
+                'type' => 'expense',
+                'amount' => $totalAmount,
+                'description' => "Purchase of {$validated['quantity']} {$validated['unit_of_measurement']} of {$validated['name']}",
+                'date' => now(),
+            ]);
+
+            DB::commit();
+            return redirect()->route('admin.inventory.index')
+                ->with('success', 'Inventory item created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withInput()
+                ->withErrors(['error' => 'Failed to create inventory item: ' . $e->getMessage()]);
+        }
     }
 
     public function show(Inventory $inventory)

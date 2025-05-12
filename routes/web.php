@@ -78,7 +78,10 @@ Route::prefix('hr')->name('hr.')->group(function () {
     Route::get('/payroll/{payroll}/edit', [PayrollController::class, 'edit'])->name('payroll.edit');
     Route::put('/payroll/{payroll}', [PayrollController::class, 'update'])->name('payroll.update');
     Route::delete('/payroll/{payroll}', [PayrollController::class, 'destroy'])->name('payroll.destroy');
-    Route::post('/payroll/generate-monthly', [PayrollController::class, 'generateMonthly'])->name('payroll.generate-monthly');
+    Route::match(['get', 'post'], '/payroll/generate-monthly', [PayrollController::class, 'generateMonthly'])
+        ->name('payroll.generate-monthly');
+    Route::post('/payroll/{payroll}/mark-as-paid', [PayrollController::class, 'markAsPaid'])
+        ->name('payroll.mark-as-paid');
 
     // Employees
     Route::get('/employees', [hrController::class, 'employeesindex'])->name('employees.index');

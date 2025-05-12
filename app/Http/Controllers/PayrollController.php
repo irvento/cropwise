@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Payroll;
 use App\Models\Employee;
+use App\Models\Payroll;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PayrollController extends Controller
 {
@@ -72,13 +73,26 @@ class PayrollController extends Controller
 
     public function markAsPaid(Payroll $payroll)
     {
-        $payroll->update([
-            'status' => 'paid',
-            'payment_date' => Carbon::now()
-        ]);
+        if ($payroll->status === 'paid') {
+            return redirect()->route('hr.payroll.index')
+                ->with('error', 'This payroll has already been marked as paid.');
+        }
 
-        return redirect()->route('hr.payroll.index')
-            ->with('success', 'Payroll marked as paid successfully.');
+        DB::beginTransaction();
+        try {
+            $payroll->update([
+                'status' => 'paid',
+                'payment_date' => now()
+            ]);
+
+            DB::commit();
+            return redirect()->route('hr.payroll.index')
+                ->with('success', 'Payroll marked as paid successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('hr.payroll.index')
+                ->with('error', 'Failed to mark payroll as paid: ' . $e->getMessage());
+        }
     }
 
     public function generateMonthlyPayroll(Request $request)
@@ -101,5 +115,54 @@ class PayrollController extends Controller
 
         return redirect()->route('hr.payroll.index')
             ->with('success', 'Monthly payroll generated successfully.');
+    }
+
+    public function generateMonthly(Request $request)
+    {
+        // If it's a GET request, show the form
+        if ($request->isMethod('get')) {
+            return view('hr.payroll.generate-monthly');
+        }
+
+        // If it's a POST request, process the generation
+        // Get all active employees
+        $employees = Employee::where('status', 'active')->get();
+        
+        // Get current month and year
+        $currentMonth = now()->format('m');
+        $currentYear = now()->format('Y');
+        
+        // Check if payroll for this month already exists
+        $existingPayroll = Payroll::whereMonth('payment_date', $currentMonth)
+            ->whereYear('payment_date', $currentYear)
+            ->exists();
+            
+        if ($existingPayroll) {
+            return redirect()->route('hr.payroll.index')
+                ->with('error', 'Payroll for this month has already been generated.');
+        }
+        
+        DB::beginTransaction();
+        try {
+            foreach ($employees as $employee) {
+                // Create payroll record for each employee
+                Payroll::create([
+                    'employee_id' => $employee->id,
+                    'basic_salary' => $employee->salary,
+                    'payment_date' => now(),
+                    'status' => 'pending',
+                    'month' => $currentMonth,
+                    'year' => $currentYear
+                ]);
+            }
+            
+            DB::commit();
+            return redirect()->route('hr.payroll.index')
+                ->with('success', 'Monthly payroll has been generated successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('hr.payroll.index')
+                ->with('error', 'Failed to generate monthly payroll: ' . $e->getMessage());
+        }
     }
 } 
