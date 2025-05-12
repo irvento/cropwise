@@ -150,4 +150,37 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/employee/register', [EmployeeController::class, 'create'])->name('employee.register');
     Route::post('/employee/register', [EmployeeController::class, 'store'])->name('employee.store');
     Route::get('/employee/check', [EmployeeController::class, 'check'])->name('employee.check');
+
+    // User Payroll Routes
+    Route::get('/user/payroll', [App\Http\Controllers\User\PayrollController::class, 'index'])->name('user.payroll.index');
+    Route::get('/user/payroll/{payroll}', [App\Http\Controllers\User\PayrollController::class, 'show'])->name('user.payroll.show');
+});
+
+// User Routes
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Attendance Routes
+    Route::post('/attendance/time-in', [App\Http\Controllers\AttendanceController::class, 'timeIn'])
+        ->name('user.attendance.time-in');
+    Route::post('/attendance/time-out', [App\Http\Controllers\AttendanceController::class, 'timeOut'])
+        ->name('user.attendance.time-out');
+    Route::get('/attendance', [App\Http\Controllers\AttendanceController::class, 'index'])
+        ->name('user.attendance.index');
+
+    // User Tasks Routes
+    Route::get('/tasks', [App\Http\Controllers\taskController::class, 'userTasks'])
+        ->name('user.tasks.index');
+    Route::get('/tasks/{task}', [App\Http\Controllers\taskController::class, 'userShow'])
+        ->name('user.tasks.show');
+    Route::put('/tasks/{task}/status', [App\Http\Controllers\taskController::class, 'updateStatus'])
+        ->name('user.tasks.update-status');
+
+    // User Leave Requests Routes
+    Route::get('/leave-requests', [App\Http\Controllers\LeaveRequestController::class, 'userIndex'])
+        ->name('user.leave-requests.index');
+    Route::get('/leave-requests/create', [App\Http\Controllers\LeaveRequestController::class, 'userCreate'])
+        ->name('user.leave-requests.create');
+    Route::post('/leave-requests', [App\Http\Controllers\LeaveRequestController::class, 'userStore'])
+        ->name('user.leave-requests.store');
+    Route::get('/leave-requests/{leaveRequest}', [App\Http\Controllers\LeaveRequestController::class, 'userShow'])
+        ->name('user.leave-requests.show');
 });

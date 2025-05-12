@@ -5,6 +5,7 @@
         </h2>
     </x-slot>
 
+    @if(auth()->user()->role_id === 1)
     <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Overview Cards -->
@@ -401,7 +402,7 @@
                                                 {{ $payroll->employee->first_name }} {{ $payroll->employee->last_name }}
                                             </p>
                                             <p class="text-sm text-gray-600 dark:text-gray-300">
-                                                {{ $payroll->date->format('M d, Y') }}
+                                                {{ $payroll->date ? $payroll->date->format('M d, Y') : 'N/A' }}
                                             </p>
                                         </div>
                                     </div>
@@ -446,6 +447,201 @@
             @endif
         </div>
     </div>
+    @endif
+
+    @if(auth()->user()->role_id === 2)
+    <div class="py-4">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                <!-- Pending Tasks -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30">
+                                <i class="fas fa-tasks text-2xl text-blue-600 dark:text-blue-400"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Pending Tasks</p>
+                                <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $pendingTasks }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Today's Attendance -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/30">
+                                <i class="fas fa-clipboard-check text-2xl text-green-600 dark:text-green-400"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Today's Attendance</p>
+                                <div class="flex items-center mt-1">
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full 
+                                        {{ $todayAttendanceStatus === 'present' ? 'bg-green-100 text-green-800' : 
+                                           ($todayAttendanceStatus === 'late' ? 'bg-yellow-100 text-yellow-800' : 
+                                           ($todayAttendanceStatus === 'absent' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800')) }}">
+                                        {{ ucfirst(str_replace('_', ' ', $todayAttendanceStatus)) }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            @if($todayAttendanceStatus === 'not_checked_in')
+                                <form action="{{ route('user.attendance.time-in') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">
+                                        Check In
+                                    </button>
+                                </form>
+                            @elseif($todayAttendanceStatus === 'present' || $todayAttendanceStatus === 'late')
+                                <form action="{{ route('user.attendance.time-out') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">
+                                        Check Out
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leave Requests -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900/30">
+                                <i class="fas fa-calendar-times text-2xl text-purple-600 dark:text-purple-400"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Leave Requests</p>
+                                <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $leaveRequestsCount }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Tasks -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900/30">
+                                <i class="fas fa-calendar-alt text-2xl text-yellow-600 dark:text-yellow-400"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Upcoming Tasks</p>
+                                <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $upcomingTasks->count() }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activities -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Recent Tasks -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Tasks</h3>
+                            <a href="{{ route('user.tasks.index') }}" class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">View All</a>
+                        </div>
+                        <div class="space-y-4">
+                            @forelse($recentTasks as $task)
+                                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <p class="font-medium text-gray-900 dark:text-gray-100">{{ $task->title }}</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                                Due: {{ $task->due_date->format('M d, Y') }}
+                                            </p>
+                                        </div>
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full 
+                                            {{ $task->status === 'completed' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
+                                               ($task->status === 'in_progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
+                                               'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400') }}">
+                                            {{ ucfirst($task->status) }}
+                                        </span>
+                                    </div>
+                                </div>
+                            @empty
+                                <p class="text-gray-500 dark:text-gray-400 text-center py-4">No recent tasks</p>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Leave Requests -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Leave Requests</h3>
+                            <a href="{{ route('user.leave-requests.index') }}" class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">View All</a>
+                        </div>
+                        <div class="space-y-4">
+                            @forelse($recentLeaveRequests as $request)
+                                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <p class="font-medium text-gray-900 dark:text-gray-100">{{ $request->leave_type }}</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                                {{ $request->start_date->format('M d') }} - {{ $request->end_date->format('M d, Y') }}
+                                            </p>
+                                        </div>
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full 
+                                            {{ $request->status === 'approved' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
+                                               ($request->status === 'pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
+                                               'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400') }}">
+                                            {{ ucfirst($request->status) }}
+                                        </span>
+                                    </div>
+                                </div>
+                            @empty
+                                <p class="text-gray-500 dark:text-gray-400 text-center py-4">No recent leave requests</p>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Tasks Section -->
+            <div class="mt-6">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Upcoming Tasks</h3>
+                            <a href="{{ route('user.tasks.index') }}" class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">View All</a>
+                        </div>
+                        <div class="space-y-4">
+                            @forelse($upcomingTasks as $task)
+                                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <p class="font-medium text-gray-900 dark:text-gray-100">{{ $task->title }}</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                                Due: {{ $task->due_date->format('M d, Y') }}
+                                            </p>
+                                        </div>
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full 
+                                            {{ $task->priority === 'high' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' : 
+                                               ($task->priority === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
+                                               'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400') }}">
+                                            {{ ucfirst($task->priority) }}
+                                        </span>
+                                    </div>
+                                </div>
+                            @empty
+                                <p class="text-gray-500 dark:text-gray-400 text-center py-4">No upcoming tasks</p>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 </x-app-layout>
 
 <!-- Simple Employee Registration Modal -->

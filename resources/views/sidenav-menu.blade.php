@@ -3,6 +3,8 @@
     <!-- Sidebar -->
     <aside class="w-64 min-h-screen bg-lime-100 dark:bg-gray-900 shadow-lg p-6 border-r border-black dark:border-gray-700 transition-all duration-300">
         <nav class="space-y-2">
+            @if(auth()->user()->role_id === 1)
+            <!-- Admin Menu Items -->
             <!-- Dashboard -->
             <a href="{{ route('dashboard') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 transition-all duration-200 px-4 py-3 rounded-md hover:bg-blue-50 dark:hover:bg-gray-800 hover:shadow-sm">
                 <i class="fas fa-tachometer-alt text-blue-500 text-xl transform group-hover:scale-110 transition-transform"></i>
@@ -45,8 +47,47 @@
                 <i class="fas fa-chevron-right ml-auto text-xs text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
             </a>
 
+            @elseif(auth()->user()->role_id === 2)
+            <!-- Employee Menu Items -->
+            <!-- Dashboard -->
+            <a href="{{ route('dashboard') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 transition-all duration-200 px-4 py-3 rounded-md hover:bg-blue-50 dark:hover:bg-gray-800 hover:shadow-sm">
+                <i class="fas fa-tachometer-alt text-blue-500 text-xl transform group-hover:scale-110 transition-transform"></i>
+                <span class="font-medium ml-3 group-hover:font-semibold">Dashboard</span>
+                <i class="fas fa-chevron-right ml-auto text-xs text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+            </a>
+
+            <!-- My Tasks -->
+            <a href="{{ route('user.tasks.index') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-green-500 dark:hover:text-green-400 transition-all duration-200 px-4 py-3 rounded-md hover:bg-green-50 dark:hover:bg-gray-800 hover:shadow-sm">
+                <i class="fas fa-tasks text-green-500 text-xl transform group-hover:scale-110 transition-transform"></i>
+                <span class="font-medium ml-3 group-hover:font-semibold">My Tasks</span>
+                <i class="fas fa-chevron-right ml-auto text-xs text-green-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+            </a>
+
+            <!-- My Attendance -->
+            <a href="{{ route('user.attendance.index') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-purple-500 dark:hover:text-purple-400 transition-all duration-200 px-4 py-3 rounded-md hover:bg-purple-50 dark:hover:bg-gray-800 hover:shadow-sm">
+                <i class="fas fa-clipboard-check text-purple-500 text-xl transform group-hover:scale-110 transition-transform"></i>
+                <span class="font-medium ml-3 group-hover:font-semibold">My Attendance</span>
+                <i class="fas fa-chevron-right ml-auto text-xs text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+            </a>
+
+            <!-- My Leave Requests -->
+            <a href="{{ route('user.leave-requests.index') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-amber-500 dark:hover:text-amber-400 transition-all duration-200 px-4 py-3 rounded-md hover:bg-amber-50 dark:hover:bg-gray-800 hover:shadow-sm">
+                <i class="fas fa-calendar-times text-amber-500 text-xl transform group-hover:scale-110 transition-transform"></i>
+                <span class="font-medium ml-3 group-hover:font-semibold">My Leave Requests</span>
+                <i class="fas fa-chevron-right ml-auto text-xs text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+            </a>
+
+            <!-- My Payroll -->
+            <a href="{{ route('user.payroll.index') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-emerald-500 dark:hover:text-emerald-400 transition-all duration-200 px-4 py-3 rounded-md hover:bg-emerald-50 dark:hover:bg-gray-800 hover:shadow-sm">
+                <i class="fas fa-money-bill-wave text-emerald-500 text-xl transform group-hover:scale-110 transition-transform"></i>
+                <span class="font-medium ml-3 group-hover:font-semibold">My Payroll</span>
+                <i class="fas fa-chevron-right ml-auto text-xs text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+            </a>
+            @endif
+
             <div class="border-t border-gray-300 dark:border-gray-600 my-4"></div>
 
+            <!-- Common Menu Items for All Users -->
             <!-- My Profile -->
             <a href="{{ route('profile.show') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-pink-500 dark:hover:text-pink-400 transition-all duration-200 px-4 py-3 rounded-md hover:bg-pink-50 dark:hover:bg-gray-800 hover:shadow-sm">
                 <i class="fas fa-user text-pink-500 text-xl transform group-hover:scale-110 transition-transform"></i>
@@ -65,5 +106,4 @@
             </form>
         </nav>
     </aside>
-    
 </div>

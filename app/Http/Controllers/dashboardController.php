@@ -18,90 +18,124 @@ use App\Models\LeaveRequest;
 use App\Models\Attendance;
 use App\Models\Payroll;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 
-class dashboardController extends Controller
+
+class DashboardController extends Controller
 {
     public function index()
     {
-            // Get overview statistics
-            $totalFields = Field::count();
-            $activeCrops = Crop::count();
-            $pendingTasks = Task::where('status', 'pending')->count();
-            $totalLivestock = Livestock::count();
-            $totalEmployees = Employee::count();
-            $totalInventory = Inventory::count();
-            $totalLeaveRequests = LeaveRequest::count();
-            $totalAttendance = Attendance::count();
-            $totalPayrolls = Payroll::count();
+        $employee = Employee::where('id', Auth::user()->id)->first();
+        $today = Carbon::today();
+        $user = Auth::user();
 
-            // Get recent schedules (tasks and planting schedules)
-            $recentSchedules = $this->getRecentSchedules();
+        // Get today's attendance status
+        $todayAttendanceStatus = 'not_checked_in';
+        if ($user->employee) {
+            $todayAttendance = Attendance::where('employee_id', $employee->id)
+                ->whereDate('date', $today)
+                ->first();
+            $todayAttendanceStatus = $todayAttendance ? $todayAttendance->status : 'not_checked_in';
+        }
 
-            // Get upcoming tasks
-            $upcomingTasks = Task::with('employee')
-                ->where('due_date', '>=', Carbon::today())
-                ->orderBy('due_date')
-                ->take(5)
-                ->get();
+        // Get overview statistics
+        $totalFields = Field::count();
+        $activeCrops = Crop::count();
+        $pendingTasks = Task::where('status', 'pending')->count();
+        $totalLivestock = Livestock::count();
+        $totalEmployees = Employee::count();
+        $totalInventory = Inventory::count();
+        $totalLeaveRequests = LeaveRequest::count();
+        $totalAttendance = Attendance::count();
+        $totalPayrolls = Payroll::count();
 
-            // Get recent inventory changes
-            $recentInventory = Inventory::with('category')
+        // Get user's leave requests count
+        $leaveRequestsCount = 0;
+        if ($employee) {
+            $leaveRequestsCount = LeaveRequest::where('employee_id', $employee->id)->count();
+        }
+
+        // Get recent schedules (tasks and planting schedules)
+        $recentSchedules = $this->getRecentSchedules();
+
+        // Get upcoming tasks
+        $upcomingTasks = Task::with('employee')
+            ->where('due_date', '>=', Carbon::today())
+            ->orderBy('due_date')
+            ->take(5)
+            ->get();
+
+        // Get recent tasks for the user
+        $recentTasks = collect([]);
+        if ($employee) {
+            $recentTasks = Task::with('employee')
+                ->where('assigned_to', $employee->id)
                 ->latest()
                 ->take(5)
                 ->get();
+        }
 
-            // Get financial summary
-            $financialSummary = [
-                'income' => FinanceTransaction::where('type', 'income')
-                    ->whereMonth('date', Carbon::now()->month)
-                    ->sum('amount'),
-                'expenses' => FinanceTransaction::where('type', 'expense')
-                    ->whereMonth('date', Carbon::now()->month)
-                    ->sum('amount')
-            ];
+        // Get recent inventory changes
+        $recentInventory = Inventory::with('category')
+            ->latest()
+            ->take(5)
+            ->get();
 
-            // Get recent leave requests
-            $recentLeaveRequests = LeaveRequest::with('employee')
-                ->latest()
-                ->take(5)
-                ->get();
+        // Get financial summary
+        $financialSummary = [
+            'income' => FinanceTransaction::where('type', 'income')
+                ->whereMonth('date', Carbon::now()->month)
+                ->sum('amount'),
+            'expenses' => FinanceTransaction::where('type', 'expense')
+                ->whereMonth('date', Carbon::now()->month)
+                ->sum('amount')
+        ];
 
-            // Get recent attendance records
-            $recentAttendance = Attendance::with('employee')
-                ->latest()
-                ->take(5)
-                ->get();
+        // Get recent leave requests
+        $recentLeaveRequests = LeaveRequest::with('employee')
+            ->latest()
+            ->take(5)
+            ->get();
 
-            // Get recent payroll records
-            $recentPayrolls = Payroll::with('employee')
-                ->latest()
-                ->take(5)
-                ->get();
+        // Get recent attendance records
+        $recentAttendance = Attendance::with('employee')
+            ->latest()
+            ->take(5)
+            ->get();
 
-            // Get weather data
-            $weatherService = app(WeatherService::class);
-            $weather = $weatherService->getCurrentWeather('Manolo Fortich');
+        // Get recent payroll records
+        $recentPayrolls = Payroll::with('employee')
+            ->latest()
+            ->take(5)
+            ->get();
 
-            return view('dashboard', compact(
-                'totalFields',
-                'activeCrops',
-                'pendingTasks',
-                'totalLivestock',
-                'totalEmployees',
-                'totalInventory',
-                'totalLeaveRequests',
-                'totalAttendance',
-                'totalPayrolls',
-                'recentSchedules',
-                'upcomingTasks',
-                'recentInventory',
-                'financialSummary',
-                'recentLeaveRequests',
-                'recentAttendance',
-                'recentPayrolls',
-                'weather'
-            ));
+        // Get weather data
+        $weatherService = app(WeatherService::class);
+        $weather = $weatherService->getCurrentWeather('Manolo Fortich');
+
+        return view('dashboard', compact(
+            'todayAttendanceStatus',
+            'totalFields',
+            'activeCrops',
+            'pendingTasks',
+            'totalLivestock',
+            'totalEmployees',
+            'totalInventory',
+            'totalLeaveRequests',
+            'totalAttendance',
+            'totalPayrolls',
+            'recentSchedules',
+            'upcomingTasks',
+            'recentTasks',
+            'recentInventory',
+            'financialSummary',
+            'recentLeaveRequests',
+            'recentAttendance',
+            'recentPayrolls',
+            'weather',
+            'leaveRequestsCount'
+        ));
     }
 
     private function getRecentSchedules(): Collection
