@@ -83,7 +83,7 @@ class LeaveRequestController extends Controller
      */
     public function userIndex()
     {
-        $employee = Employee::where('id', Auth::user()->id)->first();
+        $employee = Employee::where('user_id', Auth::user()->id)->first();
         $leaveRequests = LeaveRequest::where('employee_id', $employee->id)
             ->orderBy('created_at', 'desc')
             ->paginate(10);

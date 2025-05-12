@@ -1,4 +1,4 @@
-<x-user-layout>
+<x-app-layout>
     <x-slot name="header">
         {{ __('My Leave Requests') }}
     </x-slot>
@@ -72,4 +72,4 @@
             </div>
         </div>
     </div>
-</x-user-layout> 
+</x-app-layout> 
