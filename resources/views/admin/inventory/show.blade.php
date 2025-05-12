@@ -71,11 +71,11 @@
                         </div>
                         <div class="py-2 flex justify-between">
                             <dt class="font-medium text-gray-600 dark:text-gray-300">Purchase Price</dt>
-                            <dd class="text-gray-900 dark:text-gray-100">${{ number_format($inventory->purchase_price, 2) }}</dd>
+                            <dd class="text-gray-900 dark:text-gray-100">₱{{ number_format($inventory->purchase_price, 2) }}</dd>
                         </div>
                         <div class="py-2 flex justify-between">
                             <dt class="font-medium text-gray-600 dark:text-gray-300">Selling Price</dt>
-                            <dd class="text-gray-900 dark:text-gray-100">${{ number_format($inventory->selling_price, 2) }}</dd>
+                            <dd class="text-gray-900 dark:text-gray-100">₱{{ number_format($inventory->selling_price, 2) }}</dd>
                         </div>
                     </dl>
                 </div>
@@ -113,8 +113,8 @@
                                     <td class="px-4 py-2">{{ $transaction->created_at->format('Y-m-d') }}</td>
                                     <td class="px-4 py-2 capitalize">{{ $transaction->transaction_type }}</td>
                                     <td class="px-4 py-2">{{ $transaction->quantity }}</td>
-                                    <td class="px-4 py-2">${{ number_format($transaction->unit_price, 2) }}</td>
-                                    <td class="px-4 py-2">${{ number_format($transaction->total_amount, 2) }}</td>
+                                    <td class="px-4 py-2">₱{{ number_format($transaction->unit_price, 2) }}</td>
+                                    <td class="px-4 py-2">₱{{ number_format($transaction->total_amount, 2) }}</td>
                                     <td class="px-4 py-2">{{ $transaction->notes }}</td>
                                 </tr>
                             @empty
