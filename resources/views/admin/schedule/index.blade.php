@@ -18,31 +18,7 @@
                 </div>
             @endif
 
-            <!-- Calendar View -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6 mb-6">
-                <div class="mb-4">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Calendar View</h3>
-                    <div class="flex space-x-2 mb-4">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                            <span class="w-2 h-2 mr-1 bg-red-500 rounded-full"></span>
-                            High Priority
-                        </span>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                            <span class="w-2 h-2 mr-1 bg-yellow-500 rounded-full"></span>
-                            Medium Priority
-                        </span>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            <span class="w-2 h-2 mr-1 bg-green-500 rounded-full"></span>
-                            Low Priority
-                        </span>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            <span class="w-2 h-2 mr-1 bg-blue-500 rounded-full"></span>
-                            Planting Schedule
-                        </span>
-                    </div>
-                </div>
-                <div id="calendar"></div>
-            </div>
+           
 
             <!-- Schedule Lists -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -75,7 +51,7 @@
                                     </div>
                                 </div>
                                 <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                    Due: {{ $task->due_date->format('M d, Y') }} | Assigned to: {{ $task->employee ? $task->employee->name : 'Unassigned' }}
+                                    Due: {{ $task->due_date->format('M d, Y') }} | Assigned to: {{ $task->employee ? $task->employee->first_name . ' ' . $task->employee->last_name : 'Unassigned' }}
                                 </div>
                             </div>
                         @empty
