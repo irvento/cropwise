@@ -6,6 +6,7 @@ use App\Models\LeaveRequest;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class LeaveRequestController extends Controller
 {
@@ -75,5 +76,76 @@ class LeaveRequestController extends Controller
 
         return redirect()->route('hr.leave-requests.index')
             ->with('success', 'Leave request deleted successfully.');
+    }
+
+    /**
+     * Display a listing of the user's leave requests.
+     */
+    public function userIndex()
+    {
+        $employee = Employee::where('user_id', Auth::user()->id)->first();
+        $leaveRequests = LeaveRequest::where('employee_id', $employee->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('user.leave-requests.index', compact('leaveRequests'));
+    }
+
+    /**
+     * Show the form for creating a new leave request.
+     */
+    public function userCreate()
+    {
+        $employee = Employee::where('user_id', Auth::id())->first();
+        
+        if (!$employee) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Employee record not found. Please contact HR to link your account.');
+        }
+
+        $leaveTypes = [
+            'vacation' => 'Vacation Leave',
+            'sick' => 'Sick Leave',
+            'emergency' => 'Emergency Leave',
+            'personal' => 'Personal Leave'
+        ];
+
+        return view('user.leave-requests.create', compact('leaveTypes'));
+    }
+
+    /**
+     * Store a newly created leave request.
+     */
+    public function userStore(Request $request)
+    {
+        $employee = Employee::where('id', Auth::user()->id)->first();
+        
+        $validated = $request->validate([
+            'leave_type' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'reason' => 'required|string',
+        ]);
+
+        $validated['employee_id'] = $employee->id;
+        $validated['status'] = 'pending';
+
+        LeaveRequest::create($validated);
+
+        return redirect()->route('user.leave-requests.index')
+            ->with('success', 'Leave request submitted successfully.');
+    }
+
+    /**
+     * Display the specified leave request.
+     */
+    public function userShow(LeaveRequest $leaveRequest)
+    {
+        $employee = Employee::where('id', Auth::user()->id)->first();
+        if ($leaveRequest->employee_id !== $employee->id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('user.leave-requests.show', compact('leaveRequest'));
     }
 } 

@@ -51,6 +51,8 @@
                                         <p><span class="font-medium">Position:</span> {{ $employee->position }}</p>
                                         <p><span class="font-medium">Contact:</span> {{ $employee->contact_number }}</p>
                                         <p><span class="font-medium">Address:</span> {{ $employee->address }}</p>
+                                        <p><span class="font-medium">Hire Date:</span> {{ $employee->hire_date ? $employee->hire_date->format('M d, Y') : 'N/A' }}</p>
+                                        <p><span class="font-medium">Birth Date:</span> {{ $employee->birth_date ? $employee->birth_date->format('M d, Y') : 'N/A' }}</p>
                                     </div>
 
                                     <div class="mt-4 flex justify-end space-x-2">
@@ -88,7 +90,8 @@
                                                 {{ $request->employee->first_name }} {{ $request->employee->last_name }}
                                             </p>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">
-                                                {{ $request->start_date->format('M d') }} - {{ $request->end_date->format('M d, Y') }}
+                                                {{ $request->start_date ? $request->start_date->format('M d') : 'N/A' }} - 
+                                                {{ $request->end_date ? $request->end_date->format('M d, Y') : 'N/A' }}
                                             </p>
                                         </div>
                                         <span class="px-2 py-1 text-xs font-semibold rounded-full 
@@ -154,7 +157,7 @@
                                                 {{ $payroll->employee->first_name }} {{ $payroll->employee->last_name }}
                                             </p>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">
-                                                {{ $payroll->payroll_date->format('M d, Y') }}
+                                                {{ $payroll->payroll_date ? $payroll->payroll_date->format('M d, Y') : 'N/A' }}
                                             </p>
                                         </div>
                                         <span class="text-sm font-medium text-gray-900 dark:text-gray-100">

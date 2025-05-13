@@ -13,85 +13,158 @@ use App\Models\PlantingSchedule;
 use App\Models\Employee;
 use App\Models\Inventory;
 use App\Models\Finance;
+use App\Models\FinanceTransaction;
+use App\Models\LeaveRequest;
+use App\Models\Attendance;
+use App\Models\Payroll;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
-class dashboardController extends Controller
+
+class DashboardController extends Controller
 {
     public function index()
     {
-        try {
-            // Get overview statistics
-            $totalFields = Field::count();
-            $activeCrops = Crop::where('status', 'active')->count();
-            $pendingTasks = Task::where('status', 'pending')->count();
-            $totalLivestock = Livestock::count();
+        $employee = Employee::where('id', Auth::user()->id)->first();
+        $today = Carbon::today();
+        $user = Auth::user();
 
-            // Get recent schedules (tasks and planting schedules)
-            $recentSchedules = $this->getRecentSchedules();
+        // Get today's attendance status
+        $todayAttendanceStatus = 'not_checked_in';
+        if ($user->employee) {
+            $todayAttendance = Attendance::where('employee_id', $employee->id)
+                ->whereDate('date', $today)
+                ->first();
+            
+            if ($todayAttendance) {
+                if ($todayAttendance->time_out) {
+                    $todayAttendanceStatus = 'checked_out';
+                } else if ($todayAttendance->time_in) {
+                    $todayAttendanceStatus = 'present';
+                    // Check if late (after 9:00 AM)
+                    $timeIn = Carbon::parse($todayAttendance->time_in);
+                    if ($timeIn->hour >= 9 && $timeIn->minute > 0) {
+                        $todayAttendanceStatus = 'late';
+                    }
+                }
+            }
+        }
 
-            // Get upcoming tasks
-            $upcomingTasks = Task::with('assignedTo')
+        // Get overview statistics
+        $totalFields = Field::count();
+        $activeCrops = Crop::count();
+        $pendingTasks = Task::where('status', 'pending')->count();
+        $totalLivestock = Livestock::count();
+        $totalEmployees = Employee::count();
+        $totalInventory = Inventory::count();
+        $totalLeaveRequests = LeaveRequest::count();
+        $totalAttendance = Attendance::count();
+        $totalPayrolls = Payroll::count();
+
+        // Get user's leave requests count
+        $leaveRequestsCount = 0;
+        if ($employee) {
+            $leaveRequestsCount = LeaveRequest::where('employee_id', $employee->id)->count();
+        }
+
+        // Get recent schedules (tasks and planting schedules)
+        $recentSchedules = $this->getRecentSchedules();
+
+        // Get upcoming tasks
+        $upcomingTasks = collect([]);
+        if ($employee) {
+            $upcomingTasks = Task::with('employee')
+                ->where('assigned_to', $employee->id)
                 ->where('due_date', '>=', Carbon::today())
+                ->where('status', '!=', 'completed')
                 ->orderBy('due_date')
                 ->take(5)
                 ->get();
+        }
 
-            // Get recent inventory changes
-            $recentInventory = Inventory::with('category')
+        // Get upcoming tasks count
+        $upcomingTasksCount = $upcomingTasks->count();
+
+        // Get recent tasks for the user
+        $recentTasks = collect([]);
+        if ($employee) {
+            $recentTasks = Task::with('employee')
+                ->where('assigned_to', $employee->id)
                 ->latest()
                 ->take(5)
                 ->get();
-
-            // Get financial summary
-            $financialSummary = [
-                'income' => Finance::where('type', 'income')
-                    ->whereMonth('date', Carbon::now()->month)
-                    ->sum('amount'),
-                'expenses' => Finance::where('type', 'expense')
-                    ->whereMonth('date', Carbon::now()->month)
-                    ->sum('amount')
-            ];
-
-            // Get weather data
-            $weatherService = app(WeatherService::class);
-            $weather = $weatherService->getCurrentWeather('Manolo Fortich');
-
-            return view('dashboard', compact(
-                'totalFields',
-                'activeCrops',
-                'pendingTasks',
-                'totalLivestock',
-                'recentSchedules',
-                'upcomingTasks',
-                'recentInventory',
-                'financialSummary',
-                'weather'
-            ));
-        } catch (\Exception $e) {
-            // If there's an error, return the view with empty collections
-            return view('dashboard', [
-                'totalFields' => 0,
-                'activeCrops' => 0,
-                'pendingTasks' => 0,
-                'totalLivestock' => 0,
-                'recentSchedules' => collect([]),
-                'upcomingTasks' => collect([]),
-                'recentInventory' => collect([]),
-                'financialSummary' => [
-                    'income' => 0,
-                    'expenses' => 0
-                ],
-                'weather' => null
-            ]);
         }
+
+        // Get recent inventory changes
+        $recentInventory = Inventory::with('category')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // Get financial summary
+        $financialSummary = [
+            'income' => FinanceTransaction::where('type', 'income')
+                ->whereMonth('date', Carbon::now()->month)
+                ->sum('amount'),
+            'expenses' => FinanceTransaction::where('type', 'expense')
+                ->whereMonth('date', Carbon::now()->month)
+                ->sum('amount')
+        ];
+
+        // Get recent leave requests
+        $recentLeaveRequests = LeaveRequest::with('employee')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // Get recent attendance records
+        $recentAttendance = Attendance::with('employee')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // Get recent payroll records
+        $recentPayrolls = Payroll::with('employee')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // Get weather data
+        $weatherService = app(WeatherService::class);
+        $weather = $weatherService->getCurrentWeather('Manolo Fortich');
+
+        return view('dashboard', compact(
+            'todayAttendanceStatus',
+            'totalFields',
+            'activeCrops',
+            'pendingTasks',
+            'totalLivestock',
+            'totalEmployees',
+            'totalInventory',
+            'totalLeaveRequests',
+            'totalAttendance',
+            'totalPayrolls',
+            'recentSchedules',
+            'upcomingTasks',
+            'upcomingTasksCount',
+            'recentTasks',
+            'recentInventory',
+            'financialSummary',
+            'recentLeaveRequests',
+            'recentAttendance',
+            'recentPayrolls',
+            'weather',
+            'leaveRequestsCount'
+        ));
     }
 
     private function getRecentSchedules(): Collection
     {
         try {
             // Get recent tasks
-            $recentTasks = Task::with('assignedTo')
+            $recentTasks = Task::with('employee')
                 ->latest()
                 ->take(5)
                 ->get()
@@ -100,7 +173,7 @@ class dashboardController extends Controller
                         'type' => 'task',
                         'icon' => 'fa-tasks',
                         'title' => $task->title,
-                        'description' => "Task assigned to " . ($task->assignedTo->name ?? 'Unassigned'),
+                        'description' => "Task assigned to " . ($task->employee->first_name . ' ' . $task->employee->last_name ?? 'Unassigned'),
                         'date' => $task->created_at,
                         'priority' => $task->priority
                     ];
@@ -130,5 +203,106 @@ class dashboardController extends Controller
             // Return empty collection if there's an error
             return collect([]);
         }
+    }
+
+
+    public function timeIn()
+    {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'Please log in to check in'], 401);
+        }
+
+        $employee = Employee::where('user_id', Auth::id())->first();
+        
+        if (!$employee) {
+            return response()->json(['error' => 'Employee record not found. Please contact HR to link your account.'], 404);
+        }
+
+        $today = Carbon::today();
+        $now = Carbon::now();
+
+        // Check if already checked in today
+        $existingAttendance = Attendance::where('employee_id', $employee->id)
+            ->whereDate('date', $today)
+            ->first();
+
+        if ($existingAttendance) {
+            return response()->json(['error' => 'You have already checked in today at ' . Carbon::parse($existingAttendance->time_in)->format('h:i A')], 400);
+        }
+
+            // Create new attendance record
+            $attendance = new Attendance();
+            $attendance->employee_id = $employee->id;
+            $attendance->date = $today;
+            $attendance->time_in = $now;
+
+            
+            // Set status based on time
+            if ($now->hour >= 9 && $now->minute > 0) {
+                $attendance->status = 'late';
+            } else {
+                $attendance->status = 'present';
+            }
+            $attendance->save();
+
+            return response()->json([
+                'message' => 'Successfully checked in',
+                'status' => $attendance->status,
+                'time' => $now->format('h:i A')
+            ]);
+
+    }
+
+
+
+    public function timeOut()
+    {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'Please log in to check out'], 401);
+        }
+
+        $employee = Employee::where('user_id', Auth::id())->first();
+        if (!$employee) {
+            return response()->json(['error' => 'Employee not found'], 404);
+        }
+
+        $today = Carbon::today();
+        $now = Carbon::now();
+
+
+            // Find today's attendance record
+            $attendance = Attendance::where('employee_id', $employee->id)
+                ->whereDate('date', $today)
+                ->first();
+
+            if (!$attendance) {
+                return response()->json(['error' => 'No check-in record found for today'], 400);
+            }
+
+            if ($attendance->time_out) {
+                return response()->json(['error' => 'Already checked out today'], 400);
+            }
+
+            // Calculate work hours
+            $timeIn = Carbon::parse($attendance->time_in);
+            $workHours = $now->diffInMinutes($timeIn) / 60;
+            
+            // Calculate overtime (if work hours > 8)
+            $overtimeHours = max(0, $workHours - 8);
+            
+            // Update attendance record
+            $attendance->time_out = $now;
+
+            
+
+            
+            $attendance->save();
+
+            return response()->json([
+                'message' => 'Successfully checked out',
+                'work_hours' => round($workHours, 2),
+                'overtime_hours' => round($overtimeHours, 2)
+            ]);
+
     }
 } 

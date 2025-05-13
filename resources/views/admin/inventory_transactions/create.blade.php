@@ -17,9 +17,9 @@
                             <select name="item_id" id="item_id" required
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="">Select Item</option>
-                                @foreach($inventoryItems as $item)
+                                @foreach($inventories as $item)
                                     <option value="{{ $item->id }}" {{ old('item_id') == $item->id ? 'selected' : '' }}>
-                                        {{ $item->name }} ({{ $item->unit_of_measurement }})
+                                        {{ $item->name }} ({{ $item->category->name ?? 'Uncategorized' }})
                                     </option>
                                 @endforeach
                             </select>
@@ -29,34 +29,24 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="transaction_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Transaction Type</label>
-                            <select name="transaction_type" id="transaction_type" required
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                <option value="">Select Transaction Type</option>
-                                <option value="purchase" {{ old('transaction_type') == 'purchase' ? 'selected' : '' }}>Purchase</option>
-                                <option value="sale" {{ old('transaction_type') == 'sale' ? 'selected' : '' }}>Sale</option>
-                                <option value="adjustment" {{ old('transaction_type') == 'adjustment' ? 'selected' : '' }}>Adjustment</option>
-                                <option value="initial" {{ old('transaction_type') == 'initial' ? 'selected' : '' }}>Initial Stock</option>
+                            <label for="type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Transaction Type</label>
+                            <select name="type" id="type" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="">Select Type</option>
+                                <option value="in" {{ old('type') == 'in' ? 'selected' : '' }}>Stock In</option>
+                                <option value="out" {{ old('type') == 'out' ? 'selected' : '' }}>Stock Out</option>
                             </select>
-                            @error('transaction_type')
+                            @error('type')
                                 <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div class="mb-4">
                             <label for="quantity" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quantity</label>
-                            <input type="number" step="0.01" min="0" name="quantity" id="quantity" value="{{ old('quantity') }}"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
-                            @error('quantity')
-                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="unit_price" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Unit Price ($)</label>
-                            <input type="number" step="0.01" min="0" name="unit_price" id="unit_price" value="{{ old('unit_price') }}"
+                            <input type="number" name="quantity" id="quantity" step="0.01" min="0.01" required
+                                value="{{ old('quantity') }}"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                            @error('unit_price')
+                            @error('quantity')
                                 <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
@@ -70,14 +60,14 @@
                             @enderror
                         </div>
 
-                        <div class="flex items-center justify-end mt-4">
+                        <div class="flex justify-end gap-4">
                             <a href="{{ route('admin.inventory-transactions.index') }}"
-                               class="mr-4 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300">
+                                class="inline-flex items-center px-4 py-2 bg-gray-300 dark:bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest hover:bg-gray-400 dark:hover:bg-gray-600 focus:bg-gray-400 dark:focus:bg-gray-600 active:bg-gray-500 dark:active:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                                 Cancel
                             </a>
                             <button type="submit"
-                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                Record Transaction
+                                class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                Create Transaction
                             </button>
                         </div>
                     </form>
@@ -85,25 +75,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const transactionTypeSelect = document.getElementById('transaction_type');
-        const unitPriceField = document.getElementById('unit_price').closest('.mb-4');
-        
-        function toggleFields() {
-            const type = transactionTypeSelect.value;
-            // Show unit price for purchase and sale, hide for others
-            if (type === 'purchase' || type === 'sale') {
-                unitPriceField.style.display = 'block';
-            } else {
-                unitPriceField.style.display = 'none';
-            }
-        }
-
-        transactionTypeSelect.addEventListener('change', toggleFields);
-        // Run on page load
-        toggleFields();
-    });
-    </script>
 </x-app-layout>

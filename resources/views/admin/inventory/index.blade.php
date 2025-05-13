@@ -81,7 +81,7 @@
                         </div>
                         <div class="ml-4">
                             <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Total Value</h3>
-                            <p class="text-2xl font-bold text-gray-900 dark:text-white">${{ number_format($totalValue, 2) }}</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">₱{{ number_format($totalValue, 2) }}</p>
                         </div>
                     </div>
                 </div>
@@ -100,7 +100,7 @@
                             @forelse($recentTransactions as $transaction)
                                 <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                                     <div>
-                                        <p class="font-medium text-gray-900 dark:text-white">{{ $transaction->item->name }}</p>
+                                        <p class="font-medium text-gray-900 dark:text-white">{{ $transaction->inventory->name }}</p>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">{{ $transaction->type }} - {{ $transaction->quantity }} units</p>
                                     </div>
                                     <span class="text-sm text-gray-500 dark:text-gray-400">{{ $transaction->created_at->diffForHumans() }}</span>

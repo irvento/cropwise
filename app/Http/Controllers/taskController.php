@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -106,5 +107,57 @@ class TaskController extends Controller
 
         return redirect()->route('admin.tasks.index')
             ->with('success', 'Task deleted successfully.');
+    }
+
+    /**
+     * Display a listing of the user's tasks.
+     */
+    public function userTasks()
+
+ 
+    {
+        $employee = Employee::where('user_id', Auth::user()->id)->first();
+        $tasks = Task::where('assigned_to', $employee->id)
+                    ->orderBy('due_date', 'asc')
+                    ->paginate(10);
+        return view('user.tasks.index', compact('tasks'));
+    }
+
+    /**
+     * Display the specified task for a user.
+     */
+    public function userShow(Task $task)
+    {
+        $employee = Employee::where('id', Auth::user()->id)->first();
+        if ($task->assigned_to !== $employee->id) {
+            abort(403, 'Unauthorized action.');
+        }
+        return view('user.tasks.show', compact('task'));
+    }
+
+    /**
+     * Update the status of a task.
+     */
+    public function updateStatus(Request $request, Task $task)
+    {
+        $employee = Employee::where('id', Auth::user()->id)->first();
+        if ($task->assigned_to !== $employee->id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|in:pending,in_progress,completed'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $task->update($request->only('status'));
+
+        return redirect()->route('user.tasks.show', $task)
+            ->with('success', 'Task status updated successfully.');
     }
 }

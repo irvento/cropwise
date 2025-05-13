@@ -9,8 +9,8 @@ class Employee extends Model
 {
 
     protected $table = 'employees';
+    protected $primaryKey = 'id';
     protected $fillable = [
-        
         'user_id',
         'first_name',
         'last_name',
@@ -21,10 +21,6 @@ class Employee extends Model
         'status'
     ];
 
-    public function hr()
-    {
-        return $this->hasOne(HR::class);
-    }
 
     public function plantingSchedules()
     {

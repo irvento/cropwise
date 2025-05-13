@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\cropController;
 use App\Http\Controllers\PlantingScheduleController;    
 use App\Http\Controllers\inventorycategoryController;
-use App\Http\Controllers\inventorytransactionController;
+use App\Http\Controllers\InventoryTransactionController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\FullCalenderController;
@@ -23,7 +23,6 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\EmployeeRegistrationController;
 use App\Http\Controllers\livestockController;
-
 
 Route::get('/', function () {
     return view('welcome');
@@ -79,7 +78,10 @@ Route::prefix('hr')->name('hr.')->group(function () {
     Route::get('/payroll/{payroll}/edit', [PayrollController::class, 'edit'])->name('payroll.edit');
     Route::put('/payroll/{payroll}', [PayrollController::class, 'update'])->name('payroll.update');
     Route::delete('/payroll/{payroll}', [PayrollController::class, 'destroy'])->name('payroll.destroy');
-    Route::post('/payroll/generate-monthly', [PayrollController::class, 'generateMonthly'])->name('payroll.generate-monthly');
+    Route::match(['get', 'post'], '/payroll/generate-monthly', [PayrollController::class, 'generateMonthly'])
+        ->name('payroll.generate-monthly');
+    Route::post('/payroll/{payroll}/mark-as-paid', [PayrollController::class, 'markAsPaid'])
+        ->name('payroll.mark-as-paid');
 
     // Employees
     Route::get('/employees', [hrController::class, 'employeesindex'])->name('employees.index');
@@ -118,7 +120,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'destroy' => 'planting-schedules.destroy',
     ]);
     Route::resource('inventory-category', inventorycategoryController::class);
-    Route::resource('inventory-transactions', inventorytransactionController::class);
+    Route::resource('inventory-transactions', InventoryTransactionController::class);
     Route::resource('supplier', SupplierController::class);
 
     // Schedule Routes
@@ -148,4 +150,41 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/employee/register', [EmployeeController::class, 'create'])->name('employee.register');
     Route::post('/employee/register', [EmployeeController::class, 'store'])->name('employee.store');
     Route::get('/employee/check', [EmployeeController::class, 'check'])->name('employee.check');
+
+    // User Payroll Routes
+    Route::get('/user/payroll', [App\Http\Controllers\User\PayrollController::class, 'index'])->name('user.payroll.index');
+    Route::get('/user/payroll/{payroll}', [App\Http\Controllers\User\PayrollController::class, 'show'])->name('user.payroll.show');
+
+    // Dashboard routes
+    Route::post('/dashboard/time-in', [DashboardController::class, 'timeIn'])->name('dashboard.time-in');
+    Route::post('/dashboard/time-out', [DashboardController::class, 'timeOut'])->name('dashboard.time-out');
+});
+
+// User Routes
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Attendance Routes
+    Route::post('/attendance/time-in', [App\Http\Controllers\AttendanceController::class, 'timeIn'])
+        ->name('user.attendance.time-in');
+    Route::post('/attendance/time-out', [App\Http\Controllers\AttendanceController::class, 'timeOut'])
+        ->name('user.attendance.time-out');
+    Route::get('/attendance', [App\Http\Controllers\AttendanceController::class, 'index'])
+        ->name('user.attendance.index');
+
+    // User Tasks Routes
+    Route::get('/tasks', [App\Http\Controllers\taskController::class, 'userTasks'])
+        ->name('user.tasks.index');
+    Route::get('/tasks/{task}', [App\Http\Controllers\taskController::class, 'userShow'])
+        ->name('user.tasks.show');
+    Route::put('/tasks/{task}/status', [App\Http\Controllers\taskController::class, 'updateStatus'])
+        ->name('user.tasks.update-status');
+
+    // User Leave Requests Routes
+    Route::get('/leave-requests', [App\Http\Controllers\LeaveRequestController::class, 'userIndex'])
+        ->name('user.leave-requests.index');
+    Route::get('/leave-requests/user/create', [App\Http\Controllers\LeaveRequestController::class, 'userCreate'])
+        ->name('user.leave-requests.create');
+    Route::post('/leave-requests', [App\Http\Controllers\LeaveRequestController::class, 'userStore'])
+        ->name('user.leave-requests.store');
+    Route::get('/leave-requests/{leaveRequest}', [App\Http\Controllers\LeaveRequestController::class, 'userShow'])
+        ->name('user.leave-requests.show');
 });
