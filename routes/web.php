@@ -181,7 +181,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // User Leave Requests Routes
     Route::get('/leave-requests', [App\Http\Controllers\LeaveRequestController::class, 'userIndex'])
         ->name('user.leave-requests.index');
-    Route::get('/leave-requests/create', [App\Http\Controllers\LeaveRequestController::class, 'userCreate'])
+    Route::get('/leave-requests/user/create', [App\Http\Controllers\LeaveRequestController::class, 'userCreate'])
         ->name('user.leave-requests.create');
     Route::post('/leave-requests', [App\Http\Controllers\LeaveRequestController::class, 'userStore'])
         ->name('user.leave-requests.store');

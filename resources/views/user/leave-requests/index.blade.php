@@ -1,14 +1,19 @@
 <x-app-layout>
-    <x-slot name="header">
-        {{ __('My Leave Requests') }}
-    </x-slot>
+<x-slot name="header">
+    <div class="mx-auto flex justify-between items-center gap-4">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">
+            {{ __('My Leave Requests') }}
+        </h2>
 
-    <div class="mb-6">
         <a href="{{ route('user.leave-requests.create') }}" 
-            class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-900 text-black border border-black rounded-md text-xs font-semibold uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
             Request Leave
         </a>
     </div>
+</x-slot>
+
+
+   
 
     @if (session('success'))
         <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">

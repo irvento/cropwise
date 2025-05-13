@@ -96,7 +96,21 @@ class LeaveRequestController extends Controller
      */
     public function userCreate()
     {
-        return view('user.leave-requests.create');
+        $employee = Employee::where('user_id', Auth::id())->first();
+        
+        if (!$employee) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Employee record not found. Please contact HR to link your account.');
+        }
+
+        $leaveTypes = [
+            'vacation' => 'Vacation Leave',
+            'sick' => 'Sick Leave',
+            'emergency' => 'Emergency Leave',
+            'personal' => 'Personal Leave'
+        ];
+
+        return view('user.leave-requests.create', compact('leaveTypes'));
     }
 
     /**
