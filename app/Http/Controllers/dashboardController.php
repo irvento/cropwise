@@ -40,7 +40,7 @@ class DashboardController extends Controller
             
             if ($todayAttendance) {
                 if ($todayAttendance->time_out) {
-                    $todayAttendanceStatus = 'present';
+                    $todayAttendanceStatus = 'checked_out';
                 } else if ($todayAttendance->time_in) {
                     $todayAttendanceStatus = 'present';
                     // Check if late (after 9:00 AM)

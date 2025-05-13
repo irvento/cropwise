@@ -503,6 +503,11 @@
                                         Check Out
                                     </button>
                                 </form>
+                            @elseif($todayAttendanceStatus === 'checked_out')
+                                <div class="text-center text-gray-600 dark:text-gray-400">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    Checked Out
+                                </div>
                             @endif
                         </div>
                     </div>
