@@ -490,14 +490,14 @@
                         </div>
                         <div class="mt-4">
                             @if($todayAttendanceStatus === 'not_checked_in')
-                                <form action="{{ route('user.attendance.time-in') }}" method="POST" class="time-in-form">
+                                <form action="{{ route('dashboard.time-in') }}" method="POST" class="time-in-form">
                                     @csrf
                                     <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">
                                         Check In
                                     </button>
                                 </form>
                             @elseif($todayAttendanceStatus === 'present' || $todayAttendanceStatus === 'late')
-                                <form action="{{ route('user.attendance.time-out') }}" method="POST" class="time-out-form">
+                                <form action="{{ route('dashboard.time-out') }}" method="POST" class="time-out-form">
                                     @csrf
                                     <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">
                                         Check Out
@@ -713,21 +713,47 @@ document.addEventListener('DOMContentLoaded', function() {
         timeInForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            fetch('{{ route("user.attendance.time-in") }}', {
+            // Disable the button to prevent double submission
+            const submitButton = this.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.innerHTML = 'Checking in...';
+            
+            fetch(this.action, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin'
             })
             .then(response => response.json())
             .then(data => {
-                if (data.message) {
-                    window.location.reload();
+                if (data.error) {
+                    throw new Error(data.error);
                 }
+                
+                // Show success message
+                const statusElement = document.querySelector('.attendance-status');
+                if (statusElement) {
+                    statusElement.textContent = data.status.charAt(0).toUpperCase() + data.status.slice(1);
+                    statusElement.className = 'px-2 py-1 text-xs font-semibold rounded-full ' + 
+                        (data.status === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
+                         'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400');
+                }
+                
+                // Reload after a short delay to show the success state
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
             })
             .catch(error => {
                 console.error('Error:', error);
+                alert(error.message || 'An error occurred while checking in');
+                
+                // Re-enable the button
+                submitButton.disabled = false;
+                submitButton.innerHTML = 'Check In';
             });
         });
     }
@@ -738,21 +764,33 @@ document.addEventListener('DOMContentLoaded', function() {
         timeOutForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            fetch('{{ route("user.attendance.time-out") }}', {
+            const submitButton = this.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.innerHTML = 'Checking out...';
+            
+            fetch(this.action, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin'
             })
             .then(response => response.json())
             .then(data => {
-                if (data.message) {
-                    window.location.reload();
+                if (data.error) {
+                    throw new Error(data.error);
                 }
+                window.location.reload();
             })
             .catch(error => {
                 console.error('Error:', error);
+                alert(error.message || 'An error occurred while checking out');
+                
+                // Re-enable the button
+                submitButton.disabled = false;
+                submitButton.innerHTML = 'Check Out';
             });
         });
     }
