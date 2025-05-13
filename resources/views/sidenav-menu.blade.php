@@ -29,7 +29,7 @@
             <!-- Inventory -->
             <a href="{{ route('admin.inventory.index') }}" class="flex items-center group space-x-4 text-gray-800 dark:text-gray-200 hover:text-amber-500 dark:hover:text-amber-400 transition-all duration-200 px-4 py-3 rounded-md hover:bg-amber-50 dark:hover:bg-gray-800 hover:shadow-sm">
                 <i class="fas fa-warehouse text-amber-500 text-xl transform group-hover:scale-110 transition-transform"></i>
-                <span class="font-medium ml-3 group-hover:font-semibold">Inventory</span>
+                <span class="font-medium ml-3 group-hover:font-semibold">Inventory Management</span>
                 <i class="fas fa-chevron-right ml-auto text-xs text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
             </a>
 
