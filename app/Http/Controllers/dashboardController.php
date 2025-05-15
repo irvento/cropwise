@@ -11,9 +11,9 @@ use App\Models\Task;
 use App\Models\Livestock;
 use App\Models\PlantingSchedule;
 use App\Models\Employee;
-use App\Models\Inventory;
-use App\Models\Finance;
-use App\Models\FinanceTransaction;
+use App\Models\InventoryItem;
+use App\Models\FinancialAccount;
+use App\Models\FinancialTransaction;
 use App\Models\LeaveRequest;
 use App\Models\Attendance;
 use App\Models\Payroll;
@@ -58,7 +58,7 @@ class DashboardController extends Controller
         $pendingTasks = Task::where('status', 'pending')->count();
         $totalLivestock = Livestock::count();
         $totalEmployees = Employee::count();
-        $totalInventory = Inventory::count();
+        $totalInventory = InventoryItem::count();
         $totalLeaveRequests = LeaveRequest::count();
         $totalAttendance = Attendance::count();
         $totalPayrolls = Payroll::count();
@@ -98,17 +98,17 @@ class DashboardController extends Controller
         }
 
         // Get recent inventory changes
-        $recentInventory = Inventory::with('category')
+        $recentInventory = InventoryItem::with('category')
             ->latest()
             ->take(5)
             ->get();
 
         // Get financial summary
         $financialSummary = [
-            'income' => FinanceTransaction::where('type', 'income')
+            'income' => FinancialTransaction::where('type', 'income')
                 ->whereMonth('date', Carbon::now()->month)
                 ->sum('amount'),
-            'expenses' => FinanceTransaction::where('type', 'expense')
+            'expenses' => FinancialTransaction::where('type', 'expense')
                 ->whereMonth('date', Carbon::now()->month)
                 ->sum('amount')
         ];
@@ -132,10 +132,21 @@ class DashboardController extends Controller
             ->get();
 
         // Get weather data
-        $weatherService = app(WeatherService::class);
-        $weather = $weatherService->getCurrentWeather('Manolo Fortich');
+        try {
+            $weatherService = app(WeatherService::class);
+            $weather = $weatherService->getCurrentWeather('Manolo Fortich');
+            
+            // Get detailed weather data
+            $detailedWeather = $weatherService->getWeatherByCity('Manolo Fortich');
 
-        return view('dashboard', compact(
+            // Get two-month forecast
+            $weatherForecast = $weatherService->getTwoMonthForecast('Manolo Fortich');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Weather API Error: ' . $e->getMessage());
+            $weather = null;
+            $detailedWeather = null;
+            $weatherForecast = null;
+        }        return view('dashboard', compact(
             'todayAttendanceStatus',
             'totalFields',
             'activeCrops',
@@ -156,6 +167,8 @@ class DashboardController extends Controller
             'recentAttendance',
             'recentPayrolls',
             'weather',
+            'detailedWeather',
+            'weatherForecast',
             'leaveRequestsCount'
         ));
     }

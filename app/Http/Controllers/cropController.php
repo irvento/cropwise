@@ -8,7 +8,7 @@ use App\Models\Field;
 use App\Models\PlantingSchedule;
 use Illuminate\Http\Request;
 
-class cropController extends Controller
+class CropController extends Controller
 {
     /**
      * Display a listing of the crops.

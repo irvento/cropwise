@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Inventory;
+use App\Models\InventoryItem;
 use App\Models\InventoryCategory;
 use App\Models\Supplier;
 use App\Models\InventoryTransaction;
-use App\Models\Finance;
+use App\Models\FinancialAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class inventoryController extends Controller
+class InventoryController extends Controller
 {
     public function index()
     {
-        $query = Inventory::with(['category', 'supplier']);
+        $query = InventoryItem::with(['category', 'supplier']);
 
         // Handle search
         if (request()->has('search') && !empty(request('search'))) {
@@ -34,16 +34,16 @@ class inventoryController extends Controller
 
         $items = $query->latest()->paginate(10)->withQueryString();
 
-        $lowStockItems = Inventory::whereColumn('current_stock_level', '<=', 'minimum_stock_level')->count();
+        $lowStockItems = InventoryItem::whereColumn('current_stock_level', '<=', 'minimum_stock_level')->count();
         $categoriesCount = InventoryCategory::count();
-        $totalValue = Inventory::sum(DB::raw('current_stock_level * purchase_price'));
+        $totalValue = InventoryItem::sum(DB::raw('current_stock_level * purchase_price'));
         
         $recentTransactions = InventoryTransaction::with('inventory')
             ->latest()
             ->take(5)
             ->get();
         
-        $lowStockItemsList = Inventory::whereColumn('current_stock_level', '<=', 'minimum_stock_level')
+        $lowStockItemsList = InventoryItem::whereColumn('current_stock_level', '<=', 'minimum_stock_level')
             ->with('category')
             ->take(5)
             ->get();
@@ -62,7 +62,7 @@ class inventoryController extends Controller
     {
         $categories = InventoryCategory::all();
         $suppliers = Supplier::all();
-        $financeAccounts = Finance::all();
+        $financeAccounts = FinancialAccount::all();
         return view('admin.inventory.create', compact('categories', 'suppliers', 'financeAccounts'));
     }
 
@@ -89,7 +89,7 @@ class inventoryController extends Controller
             DB::beginTransaction();
 
             // Get the financial account
-            $financeAccount = Finance::findOrFail($validated['finance_account_id']);
+            $financeAccount = FinancialAccount::findOrFail($validated['finance_account_id']);
             
             // Calculate total amount
             $totalAmount = $validated['quantity'] * $validated['purchase_price'];
@@ -100,7 +100,7 @@ class inventoryController extends Controller
             }
 
             // Create the inventory item
-            $inventory = Inventory::create([
+            $inventory = InventoryItem::create([
                 'name' => $validated['name'],
                 'description' => $validated['description'],
                 'category_id' => $validated['category_id'],

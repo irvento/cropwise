@@ -6,7 +6,7 @@ use App\Models\Livestock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class livestockController extends Controller
+class LivestockController extends Controller
 {
     /**
      * Display a listing of the livestock.

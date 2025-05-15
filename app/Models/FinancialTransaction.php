@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FinanceTransaction extends Model
+class FinancialTransaction extends Model
 {
     protected $table = 'financial_transactions';
 
@@ -23,4 +23,8 @@ class FinanceTransaction extends Model
         'date' => 'date',
         'amount' => 'decimal:2',
     ];        
+    public function account()
+    {
+        return $this->belongsTo(FinancialAccount::class, 'account_id');
+    }
 }

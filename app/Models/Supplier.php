@@ -22,6 +22,6 @@ class Supplier extends Model
 
     public function inventoryItems()
     {
-        return $this->hasMany(Inventory::class, 'supplier_id');
+        return $this->hasMany(InventoryItem::class, 'supplier_id');
     }
 } 

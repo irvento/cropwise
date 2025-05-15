@@ -23,5 +23,8 @@ class Field extends Model
         'updated_at'
     ];
 
- 
+    public function plantingSchedules()
+    {
+        return $this->hasMany(PlantingSchedule::class);
+    }
 } 

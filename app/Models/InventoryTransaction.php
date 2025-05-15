@@ -26,12 +26,12 @@ class InventoryTransaction extends Model
 
     public function inventory()
     {
-        return $this->belongsTo(Inventory::class, 'item_id');
+        return $this->belongsTo(InventoryItem::class, 'item_id');
     }
 
     public function financeAccount()
     {
-        return $this->belongsTo(Finance::class, 'finance_account_id');
+        return $this->belongsTo(FinancialAccount::class, 'finance_account_id');
     }
 
     public function user()

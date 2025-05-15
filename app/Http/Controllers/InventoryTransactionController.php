@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Inventory;
+use App\Models\InventoryItem;
+use App\Models\FinancialAccount;
 use App\Models\InventoryTransaction;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class InventoryTransactionController extends Controller
 
     public function create()
     {
-        $inventories = Inventory::with('category')->get();
+        $inventories = InventoryItem::with('category')->get();
         return view('admin.inventory_transactions.create', compact('inventories'));
     }
 
@@ -37,7 +38,7 @@ class InventoryTransactionController extends Controller
         ]);
 
         // Update inventory quantity
-        $inventory = Inventory::findOrFail($validated['item_id']);
+        $inventory = InventoryItem::findOrFail($validated['item_id']);
         if ($validated['type'] === 'in') {
             $inventory->current_stock_level += $validated['quantity'];
         } else {
@@ -58,7 +59,7 @@ class InventoryTransactionController extends Controller
 
     public function edit(InventoryTransaction $inventory_transaction)
     {
-        $inventories = Inventory::with('category')->get();
+        $inventories = InventoryItem::with('category')->get();
         return view('admin.inventory_transactions.edit', compact('inventory_transaction', 'inventories'));
     }
 
@@ -71,7 +72,7 @@ class InventoryTransactionController extends Controller
         ]);
 
         // Revert the old transaction's effect on inventory
-        $oldInventory = Inventory::findOrFail($inventory_transaction->item_id);
+        $oldInventory = InventoryItem::findOrFail($inventory_transaction->item_id);
         if ($inventory_transaction->type === 'in') {
             $oldInventory->current_stock_level -= $inventory_transaction->quantity;
         } else {
@@ -87,7 +88,7 @@ class InventoryTransactionController extends Controller
         ]);
 
         // Update the new inventory quantity
-        $newInventory = Inventory::findOrFail($validated['item_id']);
+        $newInventory = InventoryItem::findOrFail($validated['item_id']);
             $newInventory->current_stock_level -= $validated['quantity'];
 
         $newInventory->save();

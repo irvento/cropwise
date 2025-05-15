@@ -37,10 +37,7 @@ class LeaveRequest extends Model
         return $this->belongsTo(Employee::class);
     }
 
-    public function hr(): BelongsTo
-    {
-        return $this->belongsTo(HR::class);
-    }
+
 
     public function approver(): BelongsTo
     {

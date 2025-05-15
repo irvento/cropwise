@@ -311,137 +311,136 @@
                 </div>
                         </div>
 
-            <!-- Recent Leave Requests Section -->
-            <div class="mt-6">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Leave Requests</h3>
-                        <div class="space-y-4">
-                            @forelse($recentLeaveRequests as $leaveRequest)
-                                <div class="flex items-center justify-between p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="flex-shrink-0">
-                                            <i class="fas fa-calendar-times text-lg text-pink-500 dark:text-pink-400"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-900 dark:text-white">
-                                                {{ $leaveRequest->employee->first_name }} {{ $leaveRequest->employee->last_name }}
-                                            </p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300">
-                                                {{ $leaveRequest->start_date->format('M d, Y') }} - {{ $leaveRequest->end_date->format('M d, Y') }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                        @if($leaveRequest->status === 'approved') bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400
-                                        @elseif($leaveRequest->status === 'pending') bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400
-                                        @else bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400
-                                        @endif">
-                                        {{ ucfirst($leaveRequest->status) }}
-                                    </span>
-                                </div>
-                            @empty
-                                <p class="text-gray-500 dark:text-gray-400">No recent leave requests</p>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Attendance Section -->
-            <div class="mt-6">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Attendance</h3>
-                        <div class="space-y-4">
-                            @forelse($recentAttendance as $attendance)
-                                <div class="flex items-center justify-between p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="flex-shrink-0">
-                                            <i class="fas fa-clipboard-check text-lg text-teal-500 dark:text-teal-400"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-900 dark:text-white">
-                                                {{ $attendance->employee->first_name }} {{ $attendance->employee->last_name }}
-                                            </p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300">
-                                                {{ $attendance->date->format('M d, Y') }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                        @if($attendance->status === 'present') bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400
-                                        @elseif($attendance->status === 'late') bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400
-                                        @else bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400
-                                        @endif">
-                                        {{ ucfirst($attendance->status) }}
-                                    </span>
-                                </div>
-                            @empty
-                                <p class="text-gray-500 dark:text-gray-400">No recent attendance records</p>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Payrolls Section -->
-            <div class="mt-6">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Payrolls</h3>
-                        <div class="space-y-4">
-                            @forelse($recentPayrolls as $payroll)
-                                <div class="flex items-center justify-between p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="flex-shrink-0">
-                                            <i class="fas fa-money-bill-wave text-lg text-orange-500 dark:text-orange-400"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-900 dark:text-white">
-                                                {{ $payroll->employee->first_name }} {{ $payroll->employee->last_name }}
-                                            </p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300">
-                                                {{ $payroll->date ? $payroll->date->format('M d, Y') : 'N/A' }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
-                                        ₱{{ number_format($payroll->amount, 2) }}
-                                    </span>
-                                </div>
-                            @empty
-                                <p class="text-gray-500 dark:text-gray-400">No recent payroll records</p>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Weather Section -->
-            @if($weather)
-            <div class="mt-6">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Current Weather</h3>
-                        <div class="flex items-center justify-between p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                            <div class="flex items-center space-x-4">
-                                <img src="http://openweathermap.org/img/wn/{{ $weather['icon'] }}@2x.png" alt="Weather icon">
-                                <div>
-                                    <p class="text-2xl font-semibold text-gray-900 dark:text-white">
-                                        {{ $weather['temperature'] }}°C
+            @if(isset($weather) && isset($detailedWeather))
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 mb-6 mt-6">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Current Weather</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Current Weather -->
+                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <img src="{{ $detailedWeather['icon'] ?? $weather['icon'] }}" alt="Weather icon" class="w-16 h-16">
+                                    <div>
+                                        <p class="text-3xl font-bold text-gray-900 dark:text-white">
+                                            {{ $detailedWeather['temp_c'] ?? $weather['temp_c'] }}°C
+                                        </p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 capitalize">
+                                            {{ $detailedWeather['condition'] ?? $weather['description'] }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-gray-600 dark:text-gray-300">
+                                        <i class="fas fa-map-marker-alt mr-1"></i>
+                                        {{ $detailedWeather['city'] ?? 'Manolo Fortich' }}
                                     </p>
-                                    <p class="text-sm text-gray-600 dark:text-gray-300 capitalize">
-                                        {{ $weather['description'] }}
+                                    <p class="text-sm text-gray-600 dark:text-gray-300">
+                                        {{ now()->format('F j, Y') }}
                                     </p>
                                 </div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-sm text-gray-600 dark:text-gray-300">Humidity: {{ $weather['humidity'] }}%</p>
-                                <p class="text-sm text-gray-600 dark:text-gray-300">Wind: {{ $weather['wind_speed'] }} m/s</p>
+                        </div>
+
+                        <!-- Weather Details -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-white dark:bg-gray-700/50 rounded-lg p-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30">
+                                        <i class="fas fa-wind text-blue-600 dark:text-blue-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">Wind Speed</p>
+                                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            {{ $detailedWeather['wind_kph'] ?? $weather['wind_speed'] }} km/h
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white dark:bg-gray-700/50 rounded-lg p-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30">
+                                        <i class="fas fa-tint text-blue-600 dark:text-blue-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">Humidity</p>
+                                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            {{ $detailedWeather['humidity'] ?? $weather['humidity'] }}%
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white dark:bg-gray-700/50 rounded-lg p-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30">
+                                        <i class="fas fa-temperature-high text-blue-600 dark:text-blue-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">Feels Like</p>
+                                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            {{ $detailedWeather['feelslike_c'] ?? $weather['temp_c'] }}°C
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white dark:bg-gray-700/50 rounded-lg p-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30">
+                                        <i class="fas fa-cloud text-blue-600 dark:text-blue-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">UV Index</p>
+                                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            {{ $detailedWeather['uv'] ?? '0' }}
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Two Month Forecast -->
+                    @if(isset($weatherForecast))
+                    <div class="mt-6">
+                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Month Forecast</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            @foreach($weatherForecast as $month => $forecast)
+                            <div class="bg-white dark:bg-gray-700/50 rounded-lg p-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $month }}</h5>
+                                    <span class="px-3 py-1 text-sm font-medium rounded-full 
+                                        {{ $forecast['season'] === 'Summer' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
+                                           ($forecast['season'] === 'Rainy' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' : 
+                                           'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400') }}">
+                                        {{ $forecast['season'] }}
+                                    </span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">Avg Temperature</p>
+                                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            {{ $forecast['avg_temp'] }}°C
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">Avg Rainfall</p>
+                                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            {{ $forecast['avg_rain'] }}mm
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <p class="text-sm text-gray-600 dark:text-gray-300">Most Common Condition</p>
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white capitalize">
+                                        {{ $forecast['most_common_condition'] }}
+                                    </p>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
             @endif
