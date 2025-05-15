@@ -16,10 +16,40 @@ class ScheduleController extends Controller
     /**
      * Display a listing of the schedules.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::with('employee')->get();
-        $plantingSchedules = PlantingSchedule::with(['field', 'crop'])->get();
+        $search = $request->input('search');
+
+        // Query for tasks
+        $tasksQuery = Task::with('employee');
+        if ($search) {
+            $tasksQuery->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('status', 'like', "%{$search}%")
+                  ->orWhere('priority', 'like', "%{$search}%")
+                  ->orWhereHas('employee', function($q) use ($search) {
+                      $q->where('first_name', 'like', "%{$search}%")
+                        ->orWhere('last_name', 'like', "%{$search}%");
+                  });
+            });
+        }
+        $tasks = $tasksQuery->get();
+
+        // Query for planting schedules
+        $plantingQuery = PlantingSchedule::with(['field', 'crop']);
+        if ($search) {
+            $plantingQuery->where(function($q) use ($search) {
+                $q->where('status', 'like', "%{$search}%")
+                  ->orWhereHas('crop', function($q) use ($search) {
+                      $q->where('name', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('field', function($q) use ($search) {
+                      $q->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+        $plantingSchedules = $plantingQuery->get();
         
         // Format data for calendar
         $events = [];
@@ -54,7 +84,7 @@ class ScheduleController extends Controller
             ];
         }
         
-        return view('admin.schedule.index', compact('events', 'tasks', 'plantingSchedules'));
+        return view('admin.schedule.index', compact('events', 'tasks', 'plantingSchedules', 'search'));
     }
 
     /**
