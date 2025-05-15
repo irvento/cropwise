@@ -243,18 +243,30 @@
                 <!-- Financial Summary -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
                     <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Financial Summary</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Storage Stock Info</h3>
                         <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-100 dark:border-green-800">
-                                <p class="text-sm font-medium text-green-800 dark:text-green-200">Income</p>
-                                <p class="text-2xl font-semibold text-green-600 dark:text-green-300">
-                                    ₱{{ number_format($financialSummary['income'], 2) }}
+                            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-100 dark:border-blue-800">
+                                <p class="text-sm font-medium text-blue-800 dark:text-blue-200">Total Items</p>
+                                <p class="text-2xl font-semibold text-blue-600 dark:text-blue-300">
+                                    {{ $inventoryStats['total_items'] }}
                                 </p>
                             </div>
-                            <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-100 dark:border-red-800">
-                                <p class="text-sm font-medium text-red-800 dark:text-red-200">Expenses</p>
-                                <p class="text-2xl font-semibold text-red-600 dark:text-red-300">
-                                    ₱{{ number_format($financialSummary['expenses'], 2) }}
+                            <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg border border-yellow-100 dark:border-yellow-800">
+                                <p class="text-sm font-medium text-yellow-800 dark:text-yellow-200">Low Stock Items</p>
+                                <p class="text-2xl font-semibold text-yellow-600 dark:text-yellow-300">
+                                    {{ $inventoryStats['low_stock'] }}
+                                </p>
+                            </div>
+                            <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-100 dark:border-green-800">
+                                <p class="text-sm font-medium text-green-800 dark:text-green-200">Total Value</p>
+                                <p class="text-2xl font-semibold text-green-600 dark:text-green-300">
+                                    ₱{{ number_format($inventoryStats['total_value'], 2) }}
+                                </p>
+                            </div>
+                            <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-100 dark:border-purple-800">
+                                <p class="text-sm font-medium text-purple-800 dark:text-purple-200">Categories</p>
+                                <p class="text-2xl font-semibold text-purple-600 dark:text-purple-300">
+                                    {{ $inventoryStats['categories'] }}
                                 </p>
                             </div>
                         </div>

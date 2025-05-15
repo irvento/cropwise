@@ -21,6 +21,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use App\Models\InventoryCategory;
 
 
 class DashboardController extends Controller
@@ -103,14 +105,12 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // Get financial summary
-        $financialSummary = [
-            'income' => FinanceTransaction::where('type', 'income')
-                ->whereMonth('date', Carbon::now()->month)
-                ->sum('amount'),
-            'expenses' => FinanceTransaction::where('type', 'expense')
-                ->whereMonth('date', Carbon::now()->month)
-                ->sum('amount')
+        // Get inventory statistics
+        $inventoryStats = [
+            'total_items' => Inventory::count(),
+            'low_stock' => Inventory::whereColumn('current_stock_level', '<=', 'minimum_stock_level')->count(),
+            'total_value' => Inventory::sum(DB::raw('current_stock_level * purchase_price')),
+            'categories' => InventoryCategory::count()
         ];
 
         // Get recent leave requests
@@ -151,7 +151,7 @@ class DashboardController extends Controller
             'upcomingTasksCount',
             'recentTasks',
             'recentInventory',
-            'financialSummary',
+            'inventoryStats',
             'recentLeaveRequests',
             'recentAttendance',
             'recentPayrolls',
