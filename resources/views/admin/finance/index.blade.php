@@ -49,6 +49,20 @@
 
                 <!-- Accounts Table -->
                 <div class="overflow-x-auto">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Finance Accounts</h3>
+                        <form action="{{ route('admin.finance.index') }}" method="GET" class="flex space-x-2">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name or type..." class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Search
+                            </button>
+                            @if(request('search'))
+                                <a href="{{ route('admin.finance.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                                    Clear
+                                </a>
+                            @endif
+                        </form>
+                    </div>
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead>
                             <tr>

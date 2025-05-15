@@ -10,7 +10,19 @@ class financeController extends Controller
 {
     public function index()
     {
-        $accounts = Finance::latest()->paginate(10);
+        $query = Finance::query();
+
+        // Handle search
+        if (request()->has('search') && !empty(request('search'))) {
+            $searchTerm = request('search');
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('name', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('type', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('description', 'LIKE', "%{$searchTerm}%");
+            });
+        }
+
+        $accounts = $query->latest()->paginate(10)->withQueryString();
         return view('admin.finance.index', compact('accounts'));
     }
 
