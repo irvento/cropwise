@@ -66,6 +66,21 @@
                                     <option value="initial" {{ old('transaction_type') == 'initial' ? 'selected' : '' }}>Initial Stock</option>
                                 </select>
                             </div>
+
+                            <div>
+                                <label for="finance_account_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Financial Account</label>
+                                <select name="finance_account_id" id="finance_account_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                                    <option value="">Select a Financial Account</option>
+                                    @foreach($financeAccounts as $account)
+                                        <option value="{{ $account->id }}" {{ old('finance_account_id') == $account->id ? 'selected' : '' }}>
+                                            {{ $account->name }} ({{ ucfirst($account->type) }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('finance_account_id')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
                         </div>
 
                         <!-- Stock Information -->
@@ -103,10 +118,7 @@
                                 <input type="number" name="selling_price" id="selling_price" step="0.01" value="{{ old('selling_price') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
                             </div>
 
-                            <div>
-                                <label for="unit_price" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Unit Price</label>
-                                <input type="number" name="unit_price" id="unit_price" step="0.01" value="{{ old('unit_price') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
-                            </div>
+                            
                         </div>
 
                         <!-- Additional Information -->

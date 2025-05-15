@@ -62,7 +62,8 @@ class inventoryController extends Controller
     {
         $categories = InventoryCategory::all();
         $suppliers = Supplier::all();
-        return view('admin.inventory.create', compact('categories', 'suppliers'));
+        $financeAccounts = Finance::all();
+        return view('admin.inventory.create', compact('categories', 'suppliers', 'financeAccounts'));
     }
 
     public function store(Request $request)
@@ -79,13 +80,24 @@ class inventoryController extends Controller
                 'current_stock_level' => 'required|numeric|min:0',
                 'purchase_price' => 'required|numeric|min:0',
                 'selling_price' => 'required|numeric|min:0',
-                'unit_price' => 'required|numeric|min:0',
                 'expiry_date' => 'nullable|date',
                 'storage_location' => 'required|string|max:255',
-                'transaction_type' => 'required|in:purchase,sale,adjustment,initial'
+                'transaction_type' => 'required|in:purchase,sale,adjustment,initial',
+                'finance_account_id' => 'required|exists:financial_accounts,id'
             ]);
 
             DB::beginTransaction();
+
+            // Get the financial account
+            $financeAccount = Finance::findOrFail($validated['finance_account_id']);
+            
+            // Calculate total amount
+            $totalAmount = $validated['quantity'] * $validated['purchase_price'];
+
+            // Check if account has sufficient balance
+            if ($financeAccount->balance < $totalAmount) {
+                throw new \Exception('Insufficient balance in the selected financial account.');
+            }
 
             // Create the inventory item
             $inventory = Inventory::create([
@@ -106,11 +118,17 @@ class inventoryController extends Controller
             // Create initial transaction record
             InventoryTransaction::create([
                 'item_id' => $inventory->id,
+                'finance_account_id' => $validated['finance_account_id'],
                 'transaction_type' => $validated['transaction_type'],
                 'quantity' => $validated['quantity'],
-                'unit_price' => $validated['unit_price'],
-                'total_amount' => $validated['quantity'] * $validated['unit_price'],
+                'unit_price' => $validated['purchase_price'],
+                'total_amount' => $totalAmount,
                 'notes' => "Initial stock entry for {$validated['name']}"
+            ]);
+
+            // Deduct from financial account balance
+            $financeAccount->update([
+                'balance' => $financeAccount->balance - $totalAmount
             ]);
 
             DB::commit();

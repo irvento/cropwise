@@ -10,6 +10,7 @@ class InventoryTransaction extends Model
 
     protected $fillable = [
         'item_id',
+        'finance_account_id',
         'transaction_type',
         'quantity',
         'notes',
@@ -26,6 +27,11 @@ class InventoryTransaction extends Model
     public function inventory()
     {
         return $this->belongsTo(Inventory::class, 'item_id');
+    }
+
+    public function financeAccount()
+    {
+        return $this->belongsTo(Finance::class, 'finance_account_id');
     }
 
     public function user()
