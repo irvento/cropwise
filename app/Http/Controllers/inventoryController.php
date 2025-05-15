@@ -51,51 +51,62 @@ class inventoryController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'category_id' => 'required|exists:inventory_categories,id',
-            'supplier_id' => 'required|exists:suppliers,id',
-            'finance_account_id' => 'required|exists:financial_accounts,id',
-            'quantity' => 'required|numeric|min:0',
-            'unit_of_measurement' => 'required|string|max:50',
-            'minimum_stock_level' => 'required|numeric|min:0',
-            'purchase_price' => 'required|numeric|min:0',
-            'selling_price' => 'required|numeric|min:0',
-            'expiry_date' => 'nullable|date',
-            'storage_location' => 'nullable|string|max:255',
-        ]);
-
-        DB::beginTransaction();
         try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'category_id' => 'required|exists:inventory_categories,id',
+                'supplier_id' => 'required|exists:suppliers,id',
+                'quantity' => 'required|numeric|min:0',
+                'unit_of_measurement' => 'required|string|max:50',
+                'minimum_stock_level' => 'required|numeric|min:0',
+                'current_stock_level' => 'required|numeric|min:0',
+                'purchase_price' => 'required|numeric|min:0',
+                'selling_price' => 'required|numeric|min:0',
+                'unit_price' => 'required|numeric|min:0',
+                'expiry_date' => 'nullable|date',
+                'storage_location' => 'required|string|max:255',
+                'transaction_type' => 'required|in:purchase,sale,adjustment,initial'
+            ]);
+
+            DB::beginTransaction();
+
             // Create the inventory item
-            $inventory = Inventory::create($validated);
+            $inventory = Inventory::create([
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'category_id' => $validated['category_id'],
+                'supplier_id' => $validated['supplier_id'],
+                'unit_of_measurement' => $validated['unit_of_measurement'],
+                'minimum_stock_level' => $validated['minimum_stock_level'],
+                'current_stock_level' => $validated['current_stock_level'],
+                'purchase_price' => $validated['purchase_price'],
+                'selling_price' => $validated['selling_price'],
+                'expiry_date' => $validated['expiry_date'],
+                'storage_location' => $validated['storage_location'],
+                'quantity' => $validated['quantity']
+            ]);
 
-            // Deduct from financial account
-            $financeAccount = Finance::findOrFail($validated['finance_account_id']);
-            $totalAmount = $validated['quantity'] * $validated['purchase_price'];
-            
-            if ($financeAccount->balance < $totalAmount) {
-                throw new \Exception('Insufficient funds in the selected financial account.');
-            }
-
-            $financeAccount->balance -= $totalAmount;
-            $financeAccount->save();
-
-            // Create a transaction record
-            $financeAccount->transactions()->create([
-                'type' => 'expense',
-                'amount' => $totalAmount,
-                'description' => "Purchase of {$validated['quantity']} {$validated['unit_of_measurement']} of {$validated['name']}",
-                'date' => now(),
+            // Create initial transaction record
+            InventoryTransaction::create([
+                'item_id' => $inventory->id,
+                'transaction_type' => $validated['transaction_type'],
+                'quantity' => $validated['quantity'],
+                'unit_price' => $validated['unit_price'],
+                'total_amount' => $validated['quantity'] * $validated['unit_price'],
+                'notes' => "Initial stock entry for {$validated['name']}"
             ]);
 
             DB::commit();
-            return redirect()->route('admin.inventory.index')
+
+            return redirect()
+                ->route('admin.inventory.index')
                 ->with('success', 'Inventory item created successfully.');
+
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->withInput()
+            return back()
+                ->withInput()
                 ->withErrors(['error' => 'Failed to create inventory item: ' . $e->getMessage()]);
         }
     }

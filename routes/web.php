@@ -95,7 +95,15 @@ Route::prefix('hr')->name('hr.')->group(function () {
 
 // Task management routes
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
-    Route::resource('inventory', inventoryController::class);
+    // Inventory Routes
+    Route::get('/inventory', [inventoryController::class, 'index'])->name('inventory.index');
+    Route::get('/inventory/create', [inventoryController::class, 'create'])->name('inventory.create');
+    Route::post('/inventory', [inventoryController::class, 'store'])->name('inventory.store');
+    Route::get('/inventory/{inventory}', [inventoryController::class, 'show'])->name('inventory.show');
+    Route::get('/inventory/{inventory}/edit', [inventoryController::class, 'edit'])->name('inventory.edit');
+    Route::put('/inventory/{inventory}', [inventoryController::class, 'update'])->name('inventory.update');
+    Route::delete('/inventory/{inventory}', [inventoryController::class, 'destroy'])->name('inventory.destroy');
+
     Route::resource('finance', financeController::class);
     Route::resource('crops', cropController::class);
     Route::get('crops/{crop}/schedules', [CropController::class, 'getPlantingSchedules'])->name('crops.schedules');
