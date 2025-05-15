@@ -14,9 +14,25 @@ class inventoryController extends Controller
 {
     public function index()
     {
-        $items = Inventory::with(['category', 'supplier'])
-            ->latest()
-            ->paginate(10);
+        $query = Inventory::with(['category', 'supplier']);
+
+        // Handle search
+        if (request()->has('search') && !empty(request('search'))) {
+            $searchTerm = request('search');
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('name', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('description', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('storage_location', 'LIKE', "%{$searchTerm}%")
+                  ->orWhereHas('category', function($q) use ($searchTerm) {
+                      $q->where('name', 'LIKE', "%{$searchTerm}%");
+                  })
+                  ->orWhereHas('supplier', function($q) use ($searchTerm) {
+                      $q->where('name', 'LIKE', "%{$searchTerm}%");
+                  });
+            });
+        }
+
+        $items = $query->latest()->paginate(10)->withQueryString();
 
         $lowStockItems = Inventory::whereColumn('current_stock_level', '<=', 'minimum_stock_level')->count();
         $categoriesCount = InventoryCategory::count();
