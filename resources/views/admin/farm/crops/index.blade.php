@@ -21,6 +21,25 @@
                     @endif
 
                     <div class="overflow-x-auto">
+                        <!-- Search Form -->
+                        <div class="mb-6 bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <form action="{{ route('admin.crops.index') }}" method="GET" class="flex gap-4">
+                                <div class="flex-1">
+                                    <input type="text" name="search" id="search" value="{{ request('search') }}" 
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
+                                        placeholder="Search by crop name, variety, conditions, or field...">
+                                </div>
+                                <div class="flex gap-2">
+                                    <a href="{{ route('admin.crops.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-300 dark:bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest hover:bg-gray-400 dark:hover:bg-gray-500 focus:bg-gray-400 dark:focus:bg-gray-500 active:bg-gray-500 dark:active:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                                        Reset
+                                    </a>
+                                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 dark:bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 dark:hover:bg-indigo-600 focus:bg-indigo-700 dark:focus:bg-indigo-600 active:bg-indigo-900 dark:active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                                        Search
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="bg-gray-50 dark:bg-gray-700">
                                 <tr>
