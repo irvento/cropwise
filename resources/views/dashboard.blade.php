@@ -454,20 +454,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Summary Cards -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-                <!-- Pending Tasks -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30">
-                                <i class="fas fa-tasks text-2xl text-blue-600 dark:text-blue-400"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Pending Tasks</p>
-                                <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $pendingTasks }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
 
                 <!-- Today's Attendance -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">

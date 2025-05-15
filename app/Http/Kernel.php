@@ -57,6 +57,5 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $routeMiddleware = [
-        'check.employee.registration' => \App\Http\Middleware\CheckEmployeeRegistration::class,
     ];
 }

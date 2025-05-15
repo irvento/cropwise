@@ -13,11 +13,39 @@ class TaskController extends Controller
     /**
      * Display a listing of the tasks.
      */
-    public function index()
-    {
-        $tasks = Task::with('employee')->latest()->paginate(10);
-        return view('admin.tasks.index', compact('tasks'));
+    public function index(Request $request)
+{
+    $search = $request->input('search');
+
+    $query = Task::with('employee');
+
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('title', 'like', "%{$search}%")
+              ->orWhere('description', 'like', "%{$search}%")
+              ->orWhereHas('employee', function ($q) use ($search) {
+                  $q->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%");
+              });
+        });
+
+        // Optional: prioritize title matches higher in results (basic relevance)
+        $query->orderByRaw("
+            CASE 
+                WHEN title LIKE ? THEN 1
+                WHEN description LIKE ? THEN 2
+                ELSE 3
+            END", ["%{$search}%", "%{$search}%"]);
+    } else {
+        $query->latest(); // Default sort by latest when no search
     }
+
+    // Paginate with search query appended
+    $tasks = $query->paginate(10)->appends(['search' => $search]);
+
+    return view('admin.tasks.index', compact('tasks'));
+}
+
 
     /**
      * Show the form for creating a new task.
@@ -113,8 +141,6 @@ class TaskController extends Controller
      * Display a listing of the user's tasks.
      */
     public function userTasks()
-
- 
     {
         $employee = Employee::where('user_id', Auth::user()->id)->first();
         $tasks = Task::where('assigned_to', $employee->id)
