@@ -27,24 +27,24 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $employee = Employee::where('id', Auth::user()->id)->first();
-        $today = Carbon::today();
         $user = Auth::user();
+        $employee = Employee::where('user_id', $user->id)->first();
+        $today = Carbon::today();
 
-        // Get today's attendance status
         $todayAttendanceStatus = 'not_checked_in';
-        if ($user->employee) {
+
+        if ($employee) {
             $todayAttendance = Attendance::where('employee_id', $employee->id)
                 ->whereDate('date', $today)
                 ->first();
-            
+
             if ($todayAttendance) {
                 if ($todayAttendance->time_out) {
                     $todayAttendanceStatus = 'checked_out';
-                } else if ($todayAttendance->time_in) {
-                    $todayAttendanceStatus = 'present';
-                    // Check if late (after 9:00 AM)
+                } elseif ($todayAttendance->time_in) {
                     $timeIn = Carbon::parse($todayAttendance->time_in);
+                    $todayAttendanceStatus = 'present';
+
                     if ($timeIn->hour >= 9 && $timeIn->minute > 0) {
                         $todayAttendanceStatus = 'late';
                     }
@@ -213,7 +213,7 @@ class DashboardController extends Controller
         }
 
         $employee = Employee::where('user_id', Auth::id())->first();
-        
+
         if (!$employee) {
             return response()->json(['error' => 'Employee record not found. Please contact HR to link your account.'], 404);
         }
@@ -230,27 +230,26 @@ class DashboardController extends Controller
             return response()->json(['error' => 'You have already checked in today at ' . Carbon::parse($existingAttendance->time_in)->format('h:i A')], 400);
         }
 
-            // Create new attendance record
-            $attendance = new Attendance();
-            $attendance->employee_id = $employee->id;
-            $attendance->date = $today;
-            $attendance->time_in = $now;
+        // Create new attendance record
+        $attendance = new Attendance();
+        $attendance->employee_id = $employee->id;
+        $attendance->date = $today;
+        $attendance->time_in = $now;
 
-            
-            // Set status based on time
-            if ($now->hour >= 9 && $now->minute > 0) {
-                $attendance->status = 'late';
-            } else {
-                $attendance->status = 'present';
-            }
-            $attendance->save();
 
-            return response()->json([
-                'message' => 'Successfully checked in',
-                'status' => $attendance->status,
-                'time' => $now->format('h:i A')
-            ]);
+        // Set status based on time
+        if ($now->hour >= 9 && $now->minute > 0) {
+            $attendance->status = 'late';
+        } else {
+            $attendance->status = 'present';
+        }
+        $attendance->save();
 
+        return response()->json([
+            'message' => 'Successfully checked in',
+            'status' => $attendance->status,
+            'time' => $now->format('h:i A')
+        ]);
     }
 
 
@@ -270,39 +269,38 @@ class DashboardController extends Controller
         $now = Carbon::now();
 
 
-            // Find today's attendance record
-            $attendance = Attendance::where('employee_id', $employee->id)
-                ->whereDate('date', $today)
-                ->first();
+        // Find today's attendance record
+        $attendance = Attendance::where('employee_id', $employee->id)
+            ->whereDate('date', $today)
+            ->first();
 
-            if (!$attendance) {
-                return response()->json(['error' => 'No check-in record found for today'], 400);
-            }
+        if (!$attendance) {
+            return response()->json(['error' => 'No check-in record found for today'], 400);
+        }
 
-            if ($attendance->time_out) {
-                return response()->json(['error' => 'Already checked out today'], 400);
-            }
+        if ($attendance->time_out) {
+            return response()->json(['error' => 'Already checked out today'], 400);
+        }
 
-            // Calculate work hours
-            $timeIn = Carbon::parse($attendance->time_in);
-            $workHours = $now->diffInMinutes($timeIn) / 60;
-            
-            // Calculate overtime (if work hours > 8)
-            $overtimeHours = max(0, $workHours - 8);
-            
-            // Update attendance record
-            $attendance->time_out = $now;
+        // Calculate work hours
+        $timeIn = Carbon::parse($attendance->time_in);
+        $workHours = $now->diffInMinutes($timeIn) / 60;
 
-            
+        // Calculate overtime (if work hours > 8)
+        $overtimeHours = max(0, $workHours - 8);
 
-            
-            $attendance->save();
+        // Update attendance record
+        $attendance->time_out = $now;
 
-            return response()->json([
-                'message' => 'Successfully checked out',
-                'work_hours' => round($workHours, 2),
-                'overtime_hours' => round($overtimeHours, 2)
-            ]);
 
+
+
+        $attendance->save();
+
+        return response()->json([
+            'message' => 'Successfully checked out',
+            'work_hours' => round($workHours, 2),
+            'overtime_hours' => round($overtimeHours, 2)
+        ]);
     }
-} 
+}
