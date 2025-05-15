@@ -133,13 +133,13 @@ class DashboardController extends Controller
 
         // Get weather data
         $weatherService = app(WeatherService::class);
-        $weather = $weatherService->getCurrentWeather('Manolo Fortich');
+        $weather = $weatherService->getCurrentWeather('manolo fortich');
         
         // Get detailed weather data
-        $detailedWeather = $weatherService->getWeatherByCity('Manolo Fortich');
+        $detailedWeather = $weatherService->getWeatherByCity('manolo fortich');
 
         // Get two-month forecast
-        $weatherForecast = $weatherService->getTwoMonthForecast('Manolo Fortich');
+        $weatherForecast = $weatherService->getTwoMonthForecast('manolo fortich');
 
         return view('dashboard', compact(
             'todayAttendanceStatus',

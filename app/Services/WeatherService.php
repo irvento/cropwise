@@ -59,17 +59,19 @@ class WeatherService
     protected function formatWeatherData(array $data): array
     {
         return [
-            'city' => $data['location']['name'],
-            'country' => $data['location']['country'],
-            'temp_c' => $data['current']['temp_c'],
-            'temp_f' => $data['current']['temp_f'],
-            'condition' => $data['current']['condition']['text'],
-            'icon' => $data['current']['condition']['icon'],
-            'humidity' => $data['current']['humidity'],
-            'wind_kph' => $data['current']['wind_kph'],
-            'feelslike_c' => $data['current']['feelslike_c'],
-            'last_updated' => $data['current']['last_updated'],
-        ];
+        'city' => $data['location']['name'] ?? '',
+        'country' => $data['location']['country'] ?? '',
+        'temp_c' => $data['current']['temp_c'] ?? null,
+        'temp_f' => $data['current']['temp_f'] ?? null,
+        'condition' => $data['current']['condition']['text'] ?? '',
+        'icon' => $data['current']['condition']['icon'] ?? '',
+        'humidity' => $data['current']['humidity'] ?? null,
+        'wind_kph' => $data['current']['wind_kph'] ?? null,
+        'feelslike_c' => $data['current']['feelslike_c'] ?? null,
+        'last_updated' => $data['current']['last_updated'] ?? '',
+        'uv' => $data['current']['uv'] ?? null,
+        'precip_mm' => $data['current']['precip_mm'] ?? 0
+    ];
     }
 
     public function getTwoMonthForecast(string $city): array
@@ -111,7 +113,7 @@ class WeatherService
                 'month' => $firstMonth,
                 'days' => [],
                 'avg_temp' => 0,
-                'avg_rain' => 0,
+                'avg_rain' => 0,'total_rain' => 0,
                 'most_common_condition' => '',
                 'season' => $this->determineSeason($currentDate)
             ];
@@ -120,7 +122,7 @@ class WeatherService
                 'month' => $secondMonth,
                 'days' => [],
                 'avg_temp' => 0,
-                'avg_rain' => 0,
+                'avg_rain' => 0,'total_rain' => 0,
                 'most_common_condition' => '',
                 'season' => $this->determineSeason($currentDate->copy()->addMonth())
             ];
@@ -129,7 +131,7 @@ class WeatherService
                 'month' => $thirdMonth,
                 'days' => [],
                 'avg_temp' => 0,
-                'avg_rain' => 0,
+                'avg_rain' => 0,'total_rain' => 0,
                 'most_common_condition' => '',
                 'season' => $this->determineSeason($currentDate->copy()->addMonths(2))
             ];
