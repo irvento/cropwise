@@ -18,30 +18,23 @@
                 </div>
             @endif
 
-            <!-- Calendar View -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6 mb-6">
-                <div class="mb-4">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Calendar View</h3>
-                    <div class="flex space-x-2 mb-4">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                            <span class="w-2 h-2 mr-1 bg-red-500 rounded-full"></span>
-                            High Priority
-                        </span>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                            <span class="w-2 h-2 mr-1 bg-yellow-500 rounded-full"></span>
-                            Medium Priority
-                        </span>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            <span class="w-2 h-2 mr-1 bg-green-500 rounded-full"></span>
-                            Low Priority
-                        </span>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            <span class="w-2 h-2 mr-1 bg-blue-500 rounded-full"></span>
-                            Planting Schedule
-                        </span>
+            <!-- Search Form -->
+            <div class="mb-6 bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                <form action="{{ route('admin.schedule.index') }}" method="GET" class="flex gap-4">
+                    <div class="flex-1">
+                        <input type="text" name="search" id="search" value="{{ request('search') }}" 
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
+                            placeholder="Search by task title, description, status, priority, employee name, crop name, or field name...">
                     </div>
-                </div>
-                <div id="calendar"></div>
+                    <div class="flex gap-2">
+                        <a href="{{ route('admin.schedule.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-300 dark:bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest hover:bg-gray-400 dark:hover:bg-gray-500 focus:bg-gray-400 dark:focus:bg-gray-500 active:bg-gray-500 dark:active:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                            Reset
+                        </a>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 dark:bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 dark:hover:bg-indigo-600 focus:bg-indigo-700 dark:focus:bg-indigo-600 active:bg-indigo-900 dark:active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                            Search
+                        </button>
+                    </div>
+                </form>
             </div>
 
             <!-- Schedule Lists -->
@@ -75,7 +68,7 @@
                                     </div>
                                 </div>
                                 <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                    Due: {{ $task->due_date->format('M d, Y') }} | Assigned to: {{ $task->employee ? $task->employee->name : 'Unassigned' }}
+                                    Due: {{ $task->due_date->format('M d, Y') }} | Assigned to: {{ $task->employee ? $task->employee->first_name . ' ' . $task->employee->last_name : 'Unassigned' }}
                                 </div>
                             </div>
                         @empty

@@ -90,7 +90,7 @@ class HRController extends Controller
 
     public function show($id)
     {
-        $employee = Employee::with('hr')->findOrFail($id);
+        $employee = Employee::findOrFail($id);;
         return view('admin.hr.show', compact('employee'));
     }
 

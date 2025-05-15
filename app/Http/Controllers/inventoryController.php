@@ -6,6 +6,7 @@ use App\Models\Inventory;
 use App\Models\InventoryCategory;
 use App\Models\Supplier;
 use App\Models\InventoryTransaction;
+use App\Models\Finance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,15 +14,31 @@ class inventoryController extends Controller
 {
     public function index()
     {
-        $items = Inventory::with(['category', 'supplier'])
-            ->latest()
-            ->paginate(10);
+        $query = Inventory::with(['category', 'supplier']);
+
+        // Handle search
+        if (request()->has('search') && !empty(request('search'))) {
+            $searchTerm = request('search');
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('name', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('description', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('storage_location', 'LIKE', "%{$searchTerm}%")
+                  ->orWhereHas('category', function($q) use ($searchTerm) {
+                      $q->where('name', 'LIKE', "%{$searchTerm}%");
+                  })
+                  ->orWhereHas('supplier', function($q) use ($searchTerm) {
+                      $q->where('name', 'LIKE', "%{$searchTerm}%");
+                  });
+            });
+        }
+
+        $items = $query->latest()->paginate(10)->withQueryString();
 
         $lowStockItems = Inventory::whereColumn('current_stock_level', '<=', 'minimum_stock_level')->count();
         $categoriesCount = InventoryCategory::count();
         $totalValue = Inventory::sum(DB::raw('current_stock_level * purchase_price'));
         
-        $recentTransactions = InventoryTransaction::with('item')
+        $recentTransactions = InventoryTransaction::with('inventory')
             ->latest()
             ->take(5)
             ->get();
@@ -50,39 +67,64 @@ class inventoryController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'category_id' => 'required|exists:inventory_categories,id',
-            'quantity' => 'required|numeric|min:0',
-            'unit_of_measurement' => 'required|string|max:50',
-            'minimum_stock_level' => 'required|numeric|min:0',
-            'current_stock_level' => 'required|numeric|min:0',
-            'supplier_id' => 'required|exists:suppliers,id',
-            'purchase_price' => 'required|numeric|min:0',
-            'selling_price' => 'required|numeric|min:0',
-            'expiry_date' => 'nullable|date',
-            'storage_location' => 'required|string|max:255',
-        ]);
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'category_id' => 'required|exists:inventory_categories,id',
+                'supplier_id' => 'required|exists:suppliers,id',
+                'quantity' => 'required|numeric|min:0',
+                'unit_of_measurement' => 'required|string|max:50',
+                'minimum_stock_level' => 'required|numeric|min:0',
+                'current_stock_level' => 'required|numeric|min:0',
+                'purchase_price' => 'required|numeric|min:0',
+                'selling_price' => 'required|numeric|min:0',
+                'unit_price' => 'required|numeric|min:0',
+                'expiry_date' => 'nullable|date',
+                'storage_location' => 'required|string|max:255',
+                'transaction_type' => 'required|in:purchase,sale,adjustment,initial'
+            ]);
 
-        $inventory = Inventory::create($validated);
+            DB::beginTransaction();
 
-        // Calculate total amount for initial transaction
-        $total_amount = $validated['quantity'] * $validated['purchase_price'];
+            // Create the inventory item
+            $inventory = Inventory::create([
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'category_id' => $validated['category_id'],
+                'supplier_id' => $validated['supplier_id'],
+                'unit_of_measurement' => $validated['unit_of_measurement'],
+                'minimum_stock_level' => $validated['minimum_stock_level'],
+                'current_stock_level' => $validated['current_stock_level'],
+                'purchase_price' => $validated['purchase_price'],
+                'selling_price' => $validated['selling_price'],
+                'expiry_date' => $validated['expiry_date'],
+                'storage_location' => $validated['storage_location'],
+                'quantity' => $validated['quantity']
+            ]);
 
-        // Create initial transaction record
-        $inventory->transactions()->create([
-            'transaction_type' => 'initial',
-            'quantity' => $validated['quantity'],
-            'unit_price' => $validated['purchase_price'],
-            'total_amount' => $total_amount,
-            'notes' => 'Initial stock',
-            'user_id' => auth()->id(),
-        ]);
+            // Create initial transaction record
+            InventoryTransaction::create([
+                'item_id' => $inventory->id,
+                'transaction_type' => $validated['transaction_type'],
+                'quantity' => $validated['quantity'],
+                'unit_price' => $validated['unit_price'],
+                'total_amount' => $validated['quantity'] * $validated['unit_price'],
+                'notes' => "Initial stock entry for {$validated['name']}"
+            ]);
 
-        return redirect()
-            ->route('admin.inventory.index')
-            ->with('success', 'Inventory item created successfully.');
+            DB::commit();
+
+            return redirect()
+                ->route('admin.inventory.index')
+                ->with('success', 'Inventory item created successfully.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()
+                ->withInput()
+                ->withErrors(['error' => 'Failed to create inventory item: ' . $e->getMessage()]);
+        }
     }
 
     public function show(Inventory $inventory)

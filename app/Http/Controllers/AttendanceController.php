@@ -9,10 +9,16 @@ use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $attendances = Attendance::with('employee')->latest()->paginate(10);
-        return view('hr.attendance.index', compact('attendances'));
+        $attendances = Attendance::with('employee')
+            ->orderBy('date', 'desc')
+            ->orderBy('id', 'desc')
+            ->paginate(10);
+
+        $employees = Employee::all();
+
+        return view('hr.attendance.index', compact('attendances', 'employees'));
     }
 
     public function create()
@@ -79,20 +85,33 @@ class AttendanceController extends Controller
         ]);
 
         $today = Carbon::today();
+        $now = Carbon::now();
+
+        // Check if already checked in today
         $existingAttendance = Attendance::where('employee_id', $request->employee_id)
             ->whereDate('date', $today)
             ->first();
 
         if ($existingAttendance) {
-            return back()->with('error', 'Employee has already checked in today.');
+            return back()->with('error', 'Employee has already checked in today at ' . Carbon::parse($existingAttendance->time_in)->format('h:i A'));
         }
 
-        $attendance = Attendance::create([
-            'employee_id' => $request->employee_id,
-            'date' => $today,
-            'check_in' => Carbon::now(),
-            'status' => Carbon::now()->hour > 9 ? 'late' : 'present'
-        ]);
+        // Create new attendance record
+        $attendance = new Attendance();
+        $attendance->employee_id = $request->employee_id;
+        $attendance->date = $today;
+        $attendance->time_in = $now;
+        
+        // Set status based on time
+        if ($now->hour >= 9 && $now->minute > 0) {
+            $attendance->status = 'late';
+            $attendance->late_minutes = $now->diffInMinutes($today->copy()->setHour(9)->setMinute(0));
+        } else {
+            $attendance->status = 'present';
+            $attendance->late_minutes = 0;
+        }
+        
+        $attendance->save();
 
         return back()->with('success', 'Time in recorded successfully.');
     }
@@ -104,6 +123,9 @@ class AttendanceController extends Controller
         ]);
 
         $today = Carbon::today();
+        $now = Carbon::now();
+
+        // Find today's attendance record
         $attendance = Attendance::where('employee_id', $request->employee_id)
             ->whereDate('date', $today)
             ->first();
@@ -112,13 +134,28 @@ class AttendanceController extends Controller
             return back()->with('error', 'No check-in record found for today.');
         }
 
-        if ($attendance->check_out) {
+        if ($attendance->time_out) {
             return back()->with('error', 'Employee has already checked out today.');
         }
 
-        $attendance->update([
-            'check_out' => Carbon::now()
-        ]);
+        // Calculate work hours
+        $timeIn = Carbon::parse($attendance->time_in);
+        $workHours = $now->diffInMinutes($timeIn) / 60;
+        
+        // Calculate overtime (if work hours > 8)
+        $overtimeHours = max(0, $workHours - 8);
+        
+        // Update attendance record
+        $attendance->time_out = $now;
+        $attendance->work_hours = round($workHours, 2);
+        $attendance->overtime_hours = round($overtimeHours, 2);
+        
+        // Check for early departure (before 5 PM)
+        if ($now->hour < 17) {
+            $attendance->early_departure_minutes = $now->diffInMinutes($today->copy()->setHour(17)->setMinute(0));
+        }
+        
+        $attendance->save();
 
         return back()->with('success', 'Time out recorded successfully.');
     }

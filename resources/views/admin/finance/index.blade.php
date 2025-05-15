@@ -24,31 +24,45 @@
                     <div class="bg-green-100 dark:bg-green-800 p-4 rounded-lg">
                         <h3 class="text-lg font-semibold text-green-800 dark:text-green-200">Total Income</h3>
                         <p class="text-2xl font-bold text-green-600 dark:text-green-300">
-                            ${{ number_format($accounts->where('type', 'income')->sum('balance'), 2) }}
+                            ₱{{ number_format($accounts->where('type', 'income')->sum('balance'), 2) }}
                         </p>
                     </div>
                     <div class="bg-red-100 dark:bg-red-800 p-4 rounded-lg">
                         <h3 class="text-lg font-semibold text-red-800 dark:text-red-200">Total Expenses</h3>
                         <p class="text-2xl font-bold text-red-600 dark:text-red-300">
-                            ${{ number_format($accounts->where('type', 'expense')->sum('balance'), 2) }}
+                            ₱{{ number_format($accounts->where('type', 'expense')->sum('balance'), 2) }}
                         </p>
                     </div>
                     <div class="bg-blue-100 dark:bg-blue-800 p-4 rounded-lg">
                         <h3 class="text-lg font-semibold text-blue-800 dark:text-blue-200">Total Assets</h3>
                         <p class="text-2xl font-bold text-blue-600 dark:text-blue-300">
-                            ${{ number_format($accounts->where('type', 'asset')->sum('balance'), 2) }}
+                            ₱{{ number_format($accounts->where('type', 'asset')->sum('balance'), 2) }}
                         </p>
                     </div>
                     <div class="bg-yellow-100 dark:bg-yellow-800 p-4 rounded-lg">
                         <h3 class="text-lg font-semibold text-yellow-800 dark:text-yellow-200">Total Liabilities</h3>
                         <p class="text-2xl font-bold text-yellow-600 dark:text-yellow-300">
-                            ${{ number_format($accounts->where('type', 'liability')->sum('balance'), 2) }}
+                            ₱{{ number_format($accounts->where('type', 'liability')->sum('balance'), 2) }}
                         </p>
                     </div>
                 </div>
 
                 <!-- Accounts Table -->
                 <div class="overflow-x-auto">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Finance Accounts</h3>
+                        <form action="{{ route('admin.finance.index') }}" method="GET" class="flex space-x-2">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name or type..." class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Search
+                            </button>
+                            @if(request('search'))
+                                <a href="{{ route('admin.finance.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                                    Clear
+                                </a>
+                            @endif
+                        </form>
+                    </div>
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead>
                             <tr>
@@ -72,7 +86,7 @@
                                             {{ ucfirst($account->type) }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">${{ number_format($account->balance, 2) }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">₱{{ number_format($account->balance, 2) }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $account->updated_at->format('M d, Y') }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <a href="{{ route('admin.finance.show', $account) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-3">View</a>

@@ -13,11 +13,32 @@ class cropController extends Controller
     /**
      * Display a listing of the crops.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $crops = Crop::with(['plantingSchedules', 'fields', 'mainField'])
-            ->latest()
-            ->paginate(10);
+        $search = $request->input('search');
+
+        $query = Crop::with(['plantingSchedules', 'fields', 'mainField']);
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('variety', 'like', "%{$search}%")
+                  ->orWhere('conditions', 'like', "%{$search}%")
+                  ->orWhereHas('mainField', function($q) use ($search) {
+                      $q->where('name', 'like', "%{$search}%");
+                  });
+            });
+
+            // Prioritize exact matches
+            $query->orderByRaw("
+                CASE 
+                    WHEN name = ? THEN 1
+                    WHEN variety = ? THEN 2
+                    ELSE 3
+                END", [$search, $search]);
+        }
+
+        $crops = $query->latest()->paginate(10)->appends(['search' => $search]);
         return view('admin.farm.crops.index', compact('crops'));
     }
 

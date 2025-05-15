@@ -36,7 +36,7 @@
                             <label for="basic_salary" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Basic Salary</label>
                             <div class="mt-1 relative rounded-md shadow-sm">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <span class="text-gray-500 sm:text-sm">$</span>
+                                    <span class="text-gray-500 sm:text-sm">₱</span>
                                 </div>
                                 <input type="number" name="basic_salary" id="basic_salary" value="{{ old('basic_salary') }}" step="0.01" min="0" class="pl-7 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
                             </div>
