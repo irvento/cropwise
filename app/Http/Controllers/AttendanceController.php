@@ -9,10 +9,16 @@ use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $attendances = Attendance::with('employee')->latest()->paginate(10);
-        return view('hr.attendance.index', compact('attendances'));
+        $attendances = Attendance::with('employee')
+            ->orderBy('date', 'desc')
+            ->orderBy('id', 'desc')
+            ->paginate(10);
+
+        $employees = Employee::all();
+
+        return view('hr.attendance.index', compact('attendances', 'employees'));
     }
 
     public function create()

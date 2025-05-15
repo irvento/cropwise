@@ -136,7 +136,20 @@
             <!-- Inventory Items Table -->
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg  border border-black">
                 <div class="p-6">
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">Recent Inventory Items</h3>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Recent Inventory Items</h3>
+                        <form action="{{ route('admin.inventory.index') }}" method="GET" class="flex space-x-2">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name or category..." class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Search
+                            </button>
+                            @if(request('search'))
+                                <a href="{{ route('admin.inventory.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                                    Clear
+                                </a>
+                            @endif
+                        </form>
+                    </div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead>
