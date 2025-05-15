@@ -82,6 +82,13 @@ To set up the Farm Management System locally, follow these steps:
    php artisan migrate
    
    ```
+    and configure your vite for the theme:
+
+   ```
+   npm run build
+   npm run dev
+   
+   ```
 6. **Start the development server**:
 
    ```
