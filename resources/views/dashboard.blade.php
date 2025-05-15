@@ -513,35 +513,106 @@
                     </div>
                 </div>
 
-                <!-- Leave Requests -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900/30">
-                                <i class="fas fa-calendar-times text-2xl text-purple-600 dark:text-purple-400"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Leave Requests</p>
-                                <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $leaveRequestsCount }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
 
-                <!-- Upcoming Tasks -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900/30">
-                                <i class="fas fa-calendar-alt text-2xl text-yellow-600 dark:text-yellow-400"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Upcoming Tasks</p>
-                                <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ $upcomingTasks->count() }}</p>
+            <!-- Feature Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 mb-6">
+                <!-- Upcoming Tasks Card -->
+                <a href="{{ route('user.tasks.index') }}" class="block">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30">
+                                        <i class="fas fa-calendar-alt text-2xl text-blue-600 dark:text-blue-400"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Upcoming Tasks</h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">View your upcoming tasks</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $upcomingTasks->count() }}</span>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Tasks</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
+
+                <!-- Leave Requests Card -->
+                <a href="{{ route('user.leave-requests.index') }}" class="block">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900/30">
+                                        <i class="fas fa-calendar-times text-2xl text-purple-600 dark:text-purple-400"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">My Leave Requests</h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">View and submit leave requests</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold text-purple-600 dark:text-purple-400">{{ $leaveRequestsCount }}</span>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Requests</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Payroll Card -->
+                <a href="{{ route('user.payroll.index') }}" class="block">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/30">
+                                        <i class="fas fa-money-bill-wave text-2xl text-green-600 dark:text-green-400"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">My Payroll</h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">View your salary and payment history</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold text-green-600 dark:text-green-400">₱{{ number_format($latestPayroll->net_salary ?? 0, 2) }}</span>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Latest Salary</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Attendance Card -->
+                <div class="block">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="p-3 rounded-full bg-teal-100 dark:bg-teal-900/30">
+                                        <i class="fas fa-clipboard-check text-2xl text-teal-600 dark:text-teal-400"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">My Attendance</h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">View your attendance records</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full 
+                                        {{ $todayAttendanceStatus === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
+                                           ($todayAttendanceStatus === 'late' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
+                                           ($todayAttendanceStatus === 'absent' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400')) }}">
+                                        {{ ucfirst(str_replace('_', ' ', $todayAttendanceStatus)) }}
+                                    </span>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Today's Status</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        </div>
             </div>
 
             <!-- Recent Activities -->

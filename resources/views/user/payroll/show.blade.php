@@ -15,7 +15,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <p class="text-sm text-gray-600 dark:text-gray-400">Payment Date</p>
-                                <p class="font-medium">{{ $payroll->date ? $payroll->date->format('M d, Y') : 'N/A' }}</p>
+                                <p class="font-medium">{{ $payroll->payment_date ? $payroll->payment_date->format('M d, Y') : 'N/A' }}</p>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-600 dark:text-gray-400">Status</p>
