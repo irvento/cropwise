@@ -230,6 +230,19 @@ return new class extends Migration {
             $table->timestamps();
         });
 
+        // Weather Data
+        Schema::create('weather_data', function (Blueprint $table) {
+            $table->id();
+            $table->date('date');
+            $table->decimal('temperature', 5, 2);
+            $table->decimal('humidity', 5, 2);
+            $table->decimal('rainfall', 5, 2);
+            $table->decimal('wind_speed', 5, 2);
+            $table->string('conditions')->nullable();
+            $table->string('source')->nullable();
+            $table->timestamp('recorded_at')->useCurrent();
+            $table->timestamps();
+        });
 
         Schema::create('events', function (Blueprint $table) {
     $table->id();
@@ -246,6 +259,7 @@ return new class extends Migration {
     {
         Schema::disableForeignKeyConstraints();
 
+        Schema::dropIfExists('weather_data');
         Schema::dropIfExists('tasks');
         Schema::dropIfExists('harvests');
         Schema::dropIfExists('planting_schedules');

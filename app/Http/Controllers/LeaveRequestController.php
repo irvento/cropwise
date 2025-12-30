@@ -118,12 +118,7 @@ class LeaveRequestController extends Controller
      */
     public function userStore(Request $request)
     {
-        $employee = Employee::where('user_id', Auth::id())->first();
-        
-        if (!$employee) {
-            return redirect()->route('dashboard')
-                ->with('error', 'Employee record not found. Please contact HR to link your account.');
-        }
+        $employee = Employee::where('id', Auth::user()->id)->first();
         
         $validated = $request->validate([
             'leave_type' => 'required|string|max:255',
