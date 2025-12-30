@@ -1,163 +1,149 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Task Management') }}
-            </h2>
-            <a href="{{ route('admin.tasks.create') }}"
-                class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md transition duration-150">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Create New Task
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h2 class="font-black text-3xl text-white tracking-tight mb-1">
+                    {{ __('Task Matrix') }}
+                </h2>
+                <p class="text-slate-500 text-xs font-bold uppercase tracking-[0.2em]">Operational Workflow & Protocol Dispatch</p>
+            </div>
+            <a href="{{ route('admin.tasks.create') }}" class="glass-button bg-primary-500 hover:bg-primary-600 px-6 py-3 rounded-xl text-white font-black uppercase tracking-widest text-[10px] shadow-xl shadow-primary-500/10 transition-all flex items-center justify-center">
+                <i class="fas fa-plus-circle mr-2"></i> Dispatch New Protocol
             </a>
         </div>
     </x-slot>
 
-
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="space-y-8">
         @if (session('success'))
-            <div
-                class="mb-4 bg-green-100 dark:bg-green-900 border-l-4 border-green-500 text-green-700 dark:text-green-300 p-4 rounded">
-                <p class="font-bold">Success!</p>
-                <p>{{ session('success') }}</p>
+            <div class="glass-card border-emerald-500/20 bg-emerald-500/5 p-4 flex items-center space-x-4">
+                <div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+                    <i class="fas fa-check text-xs"></i>
+                </div>
+                <p class="text-emerald-400 text-sm font-bold">{{ session('success') }}</p>
             </div>
         @endif
 
-        <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg">
-            <div class="p-6 text-gray-900 dark:text-gray-100 sm:rounded-lg">
-                <!-- Search Form -->
-                <div class="mb-6 bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                    <form action="{{ route('admin.tasks.index') }}" method="GET" class="flex gap-4">
-                        <div class="flex-1">
-                            <input type="text" name="search" id="search" value="{{ request('search') }}" 
-                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
-                                placeholder="Search by task title, description, or employee name...">
-                        </div>
-                        <div class="flex gap-2">
-                            <a href="{{ route('admin.tasks.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-300 dark:bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest hover:bg-gray-400 dark:hover:bg-gray-500 focus:bg-gray-400 dark:focus:bg-gray-500 active:bg-gray-500 dark:active:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                Reset
-                            </a>
-                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 dark:bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 dark:hover:bg-indigo-600 focus:bg-indigo-700 dark:focus:bg-indigo-600 active:bg-indigo-900 dark:active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                Search
-                            </button>
-                        </div>
-                    </form>
+        <!-- Priority Intelligence Filter -->
+        <div class="glass-card p-6">
+            <form action="{{ route('admin.tasks.index') }}" method="GET" class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1 relative group">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-primary-400"></i>
+                    <input type="text" name="search" value="{{ request('search') }}" 
+                        class="w-full bg-slate-900/50 border border-white/5 rounded-xl pl-12 pr-4 py-3 text-white text-xs font-bold focus:border-primary-500/50 outline-none transition-all placeholder-slate-700"
+                        placeholder="QUERY PROTOCOL BY TITLE, DESCRIPTION, OR PERSONNEL...">
                 </div>
+                <div class="flex gap-2">
+                    @if(request('search'))
+                        <a href="{{ route('admin.tasks.index') }}" class="px-6 py-3 bg-slate-800 text-slate-400 rounded-xl text-[10px] font-black uppercase tracking-widest hover:text-white border border-white/5 transition-all">TERMINATE QUERY</a>
+                    @endif
+                    <button type="submit" class="px-8 py-3 bg-primary-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-primary-600 transition-all shadow-lg shadow-primary-500/20">
+                        SCAN MATRIX
+                    </button>
+                </div>
+            </form>
+        </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
-                        <thead class="bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
-                            <tr>
-                                <th class="px-6 py-3 text-left uppercase font-medium">Task Details</th>
-                                <th class="px-6 py-3 text-left uppercase font-medium">Assigned To</th>
-                                <th class="px-6 py-3 text-left uppercase font-medium">Due Date</th>
-                                <th class="px-6 py-3 text-left uppercase font-medium">Priority</th>
-                                <th class="px-6 py-3 text-left uppercase font-medium">Status</th>
-                                <th class="px-6 py-3 text-left uppercase font-medium">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            @forelse ($tasks as $task)
-                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <!-- Task Info -->
-                                    <td class="px-6 py-4">
-                                        <div class="font-semibold text-gray-900 dark:text-gray-100">{{ $task->title }}
+        <!-- Matrix Grid -->
+        <div class="glass-card overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-white/[0.01]">
+                            <th class="px-8 py-5 text-left text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5">Protocol Identifier</th>
+                            <th class="px-8 py-5 text-left text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5">Assigned Unit</th>
+                            <th class="px-8 py-5 text-left text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5">Chronos Output</th>
+                            <th class="px-8 py-5 text-left text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5">Priority Level</th>
+                            <th class="px-8 py-5 text-left text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5">Operational Status</th>
+                            <th class="px-8 py-5 text-right text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5">Executables</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        @forelse ($tasks as $task)
+                            <tr class="group hover:bg-white/[0.01] transition-colors">
+                                <td class="px-8 py-6">
+                                    <div class="flex flex-col">
+                                        <span class="text-white font-bold text-sm">{{ $task->title }}</span>
+                                        <span class="text-[10px] text-slate-600 font-bold uppercase mt-1 truncate max-w-[200px]">{{ $task->description }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 rounded-lg bg-slate-800 border border-white/5 flex items-center justify-center font-black text-[10px] text-primary-400">
+                                            {{ substr($task->employee->first_name, 0, 1) }}{{ substr($task->employee->last_name, 0, 1) }}
                                         </div>
-                                        <div class="text-gray-500 dark:text-gray-400 truncate max-w-xs">
-                                            {{ $task->description }}</div>
-                                    </td>
-                                    <!-- Assigned To -->
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-center space-x-3">
-                                            <div
-                                                class="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-gray-700 dark:text-gray-200">
-                                                {{ substr($task->employee->first_name, 0, 1) }}{{ substr($task->employee->last_name, 0, 1) }}
-                                            </div>
-                                            <div class="text-gray-900 dark:text-gray-100">
-                                                {{ $task->employee->first_name }} {{ $task->employee->last_name }}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <!-- Due Date -->
-                                    <td class="px-6 py-4">
-                                        <div class="text-gray-900 dark:text-gray-100">
-                                            {{ $task->due_date->format('M d, Y') }}</div>
-                                        <div class="text-gray-500 dark:text-gray-400">
-                                            {{ $task->due_date->diffForHumans() }}</div>
-                                    </td>
-                                    <!-- Priority -->
-                                    <td class="px-6 py-4">
-                                        <span
-                                            class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full text-white
-        @if ($task->priority === 'high') bg-red-600 dark:bg-red-500
-        @elseif($task->priority === 'medium') bg-yellow-600 dark:bg-yellow-500
-        @else bg-green-600 dark:bg-green-500 @endif">
-                                            {{ ucfirst($task->priority) }}
-                                        </span>
-                                    </td>
-
-                                    <!-- Status -->
-                                    <td class="px-6 py-4">
-                                        <span
-                                            class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full text-white
-                                                @if ($task->status === 'completed') bg-green-600 dark:bg-green-500
-                                                @elseif($task->status === 'in_progress') bg-yellow-600 dark:bg-yellow-500 text-black
-                                                @else bg-gray-600 dark:bg-gray-500 @endif">
-                                            {{ str_replace('_', ' ', ucfirst($task->status)) }}
-                                        </span>
-                                    </td>
-                                    <!-- Actions -->
-                                    <td class="px-6 py-4 space-x-2 flex items-center">
-                                        <a href="{{ route('admin.tasks.show', $task) }}" title="View"
-                                        class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                            </svg>
+                                        <span class="text-xs text-slate-300 font-bold">{{ $task->employee->first_name }} {{ $task->employee->last_name }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <div class="flex flex-col">
+                                        <span class="text-white font-black text-[10px] uppercase">{{ $task->due_date->format('M d, Y') }}</span>
+                                        <span class="text-[9px] text-slate-600 font-black uppercase mt-1">{{ $task->due_date->diffForHumans() }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    @php
+                                        $priorityColors = [
+                                            'high' => 'red',
+                                            'medium' => 'amber',
+                                            'low' => 'emerald',
+                                        ];
+                                        $pColor = $priorityColors[$task->priority] ?? 'slate';
+                                    @endphp
+                                    <span class="px-3 py-1 text-[8px] font-black uppercase tracking-widest rounded-md border bg-{{ $pColor }}-500/10 text-{{ $pColor }}-500 border-{{ $pColor }}-500/20">
+                                        {{ $task->priority }}
+                                    </span>
+                                </td>
+                                <td class="px-8 py-6">
+                                    @php
+                                        $statusColors = [
+                                            'completed' => 'emerald',
+                                            'in_progress' => 'primary',
+                                            'pending' => 'slate',
+                                        ];
+                                        $sColor = $statusColors[$task->status] ?? 'slate';
+                                    @endphp
+                                    <div class="flex items-center space-x-2">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-{{ $sColor }}-500 {{ $task->status === 'in_progress' ? 'animate-pulse' : '' }}"></span>
+                                        <span class="text-[9px] font-black text-{{ $sColor }}-400 uppercase tracking-widest">{{ str_replace('_', ' ', $task->status) }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <div class="flex items-center justify-end space-x-2">
+                                        <a href="{{ route('admin.tasks.show', $task) }}" class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-900 border border-white/5 text-slate-500 hover:text-white hover:bg-primary-500 transition-all">
+                                            <i class="fas fa-eye text-[10px]"></i>
                                         </a>
-
-                                        <a href="{{ route('admin.tasks.edit', $task) }}" title="Edit"
-                                        class="text-yellow-600 dark:text-yellow-400 hover:text-yellow-800 dark:hover:text-yellow-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                            </svg>
+                                        <a href="{{ route('admin.tasks.edit', $task) }}" class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-900 border border-white/5 text-slate-500 hover:text-white hover:bg-amber-500 transition-all">
+                                            <i class="fas fa-edit text-[10px]"></i>
                                         </a>
-
                                         <form action="{{ route('admin.tasks.destroy', $task) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" onclick="return confirm('Are you sure?')" title="Delete"
-                                                    class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
-                                                    viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                                </svg>
+                                            <button type="submit" onclick="return confirm('Initiate protocol termination?')" class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-900 border border-white/5 text-slate-500 hover:text-white hover:bg-red-500 transition-all">
+                                                <i class="fas fa-trash-alt text-[10px]"></i>
                                             </button>
                                         </form>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-                                        No tasks found. Create your first task!
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-                <div class="mt-4">
-                    {{ $tasks->links() }}
-                </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-8 py-20 text-center">
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-16 h-16 rounded-2xl bg-slate-900 flex items-center justify-center mb-6 border border-white/5">
+                                            <i class="fas fa-list-check text-2xl text-slate-700"></i>
+                                        </div>
+                                        <p class="text-slate-500 font-bold uppercase tracking-widest text-[10px]">Matrix empty: All protocols synchronized</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
-    </div>
 
+        <div class="mt-8">
+            {{ $tasks->links() }}
+        </div>
+    </div>
 </x-app-layout>

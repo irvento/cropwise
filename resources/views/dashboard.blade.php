@@ -1,705 +1,295 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Farm Management Dashboard') }}
-        </h2>
+        <div class="flex items-center justify-between">
+            <h2 class="font-bold text-xl sm:text-3xl text-white tracking-tight">
+                {{ __('Executive Dashboard') }}
+            </h2>
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <span class="sm:flex hidden items-center px-3 py-1 bg-primary-500/20 rounded-full text-primary-400 text-xs font-bold uppercase tracking-wider">
+                    <span class="w-1.5 h-1.5 bg-primary-500 rounded-full mr-2 animate-pulse"></span>
+                    Live Data
+                </span>
+                <span class="text-slate-400 text-[10px] sm:text-sm font-medium">{{ now()->format('l, F j, Y') }}</span>
+            </div>
+        </div>
     </x-slot>
 
     @if(auth()->user()->role_id === 1)
-    <div class="py-4">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Overview Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <!-- Total Fields -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/30">
-                                <i class="fas fa-map-marked-alt text-2xl text-green-600 dark:text-green-400"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Total Fields</p>
-                                <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $totalFields ?? 0 }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="space-y-8">
+        <!-- Key Metrics -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            @php
+                $metrics = [
+                    ['title' => 'Total Fields', 'value' => $totalFields ?? 0, 'icon' => 'fa-map-marked-alt', 'color' => 'primary'],
+                    ['title' => 'Active Crops', 'value' => $activeCrops ?? 0, 'icon' => 'fa-seedling', 'color' => 'emerald'],
+                    ['title' => 'Pending Tasks', 'value' => $pendingTasks ?? 0, 'icon' => 'fa-tasks', 'color' => 'amber'],
+                    ['title' => 'Total Workforce', 'value' => $totalEmployees ?? 0, 'icon' => 'fa-users', 'color' => 'indigo'],
+                ];
+            @endphp
 
-                <!-- Active Crops -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30">
-                                <i class="fas fa-seedling text-2xl text-blue-600 dark:text-blue-400"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Active Crops</p>
-                                <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $activeCrops ?? 0 }}</p>
-                            </div>
-                        </div>
-                    </div>
+            @foreach($metrics as $metric)
+            <div class="glass-card p-6 flex items-center justify-between hover:scale-[1.02] transition-transform duration-300 group cursor-pointer">
+                <div>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">{{ $metric['title'] }}</p>
+                    <p class="text-3xl font-black text-white leading-none">{{ $metric['value'] }}</p>
                 </div>
+                <div class="w-12 h-12 rounded-2xl bg-{{ $metric['color'] }}-500/10 flex items-center justify-center border border-{{ $metric['color'] }}-500/20 group-hover:bg-{{ $metric['color'] }}-500 group-hover:text-white transition-all duration-300 text-{{ $metric['color'] }}-400">
+                    <i class="fas {{ $metric['icon'] }} text-xl"></i>
+                </div>
+            </div>
+            @endforeach
+        </div>
 
-                <!-- Pending Tasks -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900/30">
-                                <i class="fas fa-tasks text-2xl text-yellow-600 dark:text-yellow-400"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Pending Tasks</p>
-                                <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $pendingTasks ?? 0 }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <!-- Quick Access Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @php
+                $quickActions = [
+                    [
+                        'route' => route('farm.index'),
+                        'icon' => 'fa-tractor',
+                        'title' => 'Farm Operations',
+                        'desc' => 'Manage fields, crops, and live livestock tracking.',
+                        'accent' => 'primary'
+                    ],
+                    [
+                        'route' => route('admin.schedule.index'),
+                        'icon' => 'fa-calendar-alt',
+                        'title' => 'Agronomic Calendar',
+                        'desc' => 'Planting, harvesting, and daily operations management.',
+                        'accent' => 'accent'
+                    ],
+                    [
+                        'route' => route('hr.index'),
+                        'icon' => 'fa-id-badge',
+                        'title' => 'Resource Center',
+                        'desc' => 'Workforce management, payroll, and attendance.',
+                        'accent' => 'indigo'
+                    ],
+                    [
+                        'route' => route('admin.inventory.index'),
+                        'icon' => 'fa-warehouse',
+                        'title' => 'Inventory Matrix',
+                        'desc' => 'Real-time supply chain and equipment tracking.',
+                        'accent' => 'emerald'
+                    ],
+                    [
+                        'route' => route('admin.finance.index'),
+                        'icon' => 'fa-chart-pie',
+                        'title' => 'Financial Analytics',
+                        'desc' => 'Cashflow, expenses, and strategic projections.',
+                        'accent' => 'primary'
+                    ],
+                    [
+                        'route' => route('weather.show', $currentCity ?? 'Manolo Fortich'),
+                        'icon' => 'fa-cloud-sun-rain',
+                        'title' => 'Climate Insights',
+                        'desc' => 'Advanced weather forecasting and field conditions.',
+                        'accent' => 'amber'
+                    ],
+                ];
+            @endphp
 
-                <!-- Total Livestock -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900/30">
-                                <i class="fas fa-cow text-2xl text-purple-600 dark:text-purple-400"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Total Livestock</p>
-                                <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $totalLivestock ?? 0 }}</p>
-                            </div>
+            @foreach($quickActions as $action)
+            <a href="{{ $action['route'] }}" class="glass-card overflow-hidden group">
+                <div class="px-8 py-10 relative">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-slate-800/50 flex items-center justify-center border border-white/5 group-hover:border-primary-500/50 transition-colors duration-300">
+                            <i class="fas {{ $action['icon'] }} text-2xl text-slate-400 group-hover:text-primary-400"></i>
                         </div>
+                        <h3 class="text-xl font-bold text-white group-hover:text-primary-400 transition-colors duration-300">{{ $action['title'] }}</h3>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">{{ $action['desc'] }}</p>
+                    <div class="flex items-center text-primary-400 text-xs font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-[-10px] group-hover:translate-x-0">
+                        Launch Module <i class="fas fa-arrow-right ml-2 text-[10px]"></i>
                     </div>
                 </div>
+            </a>
+            @endforeach
+        </div>
 
-                <!-- Total Employees -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900/30">
-                                <i class="fas fa-users text-2xl text-indigo-600 dark:text-indigo-400"></i>
+        <!-- Insights Layer -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Recent Schedules -->
+            <div class="glass-card flex flex-col h-full">
+                <div class="px-8 py-6 border-b border-white/5 flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-white flex items-center">
+                        <i class="fas fa-history text-primary-400 mr-3"></i> Strategic Feed
+                    </h3>
+                    <a href="{{ route('admin.schedule.index') }}" class="text-[10px] font-bold text-slate-500 uppercase tracking-widest hover:text-primary-400 transition-colors">View All</a>
+                </div>
+                <div class="p-8 space-y-6">
+                    @forelse($recentSchedules as $schedule)
+                        <div class="flex items-start space-x-4 group">
+                            <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center border border-white/5 flex-shrink-0 group-hover:bg-primary-500/20 transition-colors">
+                                <i class="fas {{ $schedule->icon ?? 'fa-circle' }} text-sm text-slate-500 group-hover:text-primary-400"></i>
                             </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Total Employees</p>
-                                <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $totalEmployees ?? 0 }}</p>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex justify-between items-start mb-1">
+                                    <h4 class="text-sm font-bold text-white truncate">{{ $schedule->title }}</h4>
+                                    <span class="text-[10px] text-slate-500 uppercase font-black">{{ \Carbon\Carbon::parse($schedule->planting_date ?? $schedule->date)->diffForHumans() }}</span>
+                                </div>
+                                <p class="text-xs text-slate-400 line-clamp-1">{{ $schedule->description }}</p>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="py-10 text-center">
+                            <p class="text-slate-500 text-sm font-medium">No strategic updates available</p>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- Financial Pulse -->
+            <div class="glass-card flex flex-col h-full">
+                <div class="px-8 py-6 border-b border-white/5 flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-white flex items-center">
+                        <i class="fas fa-chart-line text-emerald-400 mr-3"></i> Financial Pulse
+                    </h3>
+                    <div class="px-3 py-1 bg-emerald-500/10 rounded-full text-[10px] font-bold text-emerald-400 uppercase tracking-widest">
+                        MTD Analysis
+                    </div>
+                </div>
+                <div class="p-8">
+                    <div class="grid grid-cols-2 gap-6 mb-10">
+                        <div class="relative">
+                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2 px-1">Net Income</p>
+                            <div class="bg-primary-500/5 border border-primary-500/10 rounded-2xl p-6">
+                                <p class="text-2xl font-black text-primary-400">₱{{ number_format($financialSummary['income'], 2) }}</p>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2 px-1">Expenditure</p>
+                            <div class="bg-red-500/5 border border-red-500/10 rounded-2xl p-6">
+                                <p class="text-2xl font-black text-red-500/80">₱{{ number_format($financialSummary['expenses'], 2) }}</p>
                             </div>
                         </div>
                     </div>
-                </div>
                     
-                <!-- Total Inventory -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-red-100 dark:bg-red-900/30">
-                                <i class="fas fa-warehouse text-2xl text-red-600 dark:text-red-400"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Total Inventory</p>
-                                <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $totalInventory ?? 0 }}</p>
-                            </div>
-                        </div>
-                        </div>
-                </div>
-
-                <!-- Total Leave Requests -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-pink-100 dark:bg-pink-900/30">
-                                <i class="fas fa-calendar-times text-2xl text-pink-600 dark:text-pink-400"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Total Leave Requests</p>
-                                <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $totalLeaveRequests ?? 0 }}</p>
-                            </div>
-                        </div>
-                        </div>
-                </div>
-
-                <!-- Total Attendance -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-teal-100 dark:bg-teal-900/30">
-                                <i class="fas fa-clipboard-check text-2xl text-teal-600 dark:text-teal-400"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Total Attendance</p>
-                                <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $totalAttendance ?? 0 }}</p>
-                            </div>
-                        </div>
-                        </div>
-                </div>
-
-                <!-- Total Payrolls -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-orange-100 dark:bg-orange-900/30">
-                                <i class="fas fa-money-bill-wave text-2xl text-orange-600 dark:text-orange-400"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Total Payrolls</p>
-                                <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $totalPayrolls ?? 0 }}</p>
-                            </div>
-                        </div>
-                        </div>
-                </div>
-            </div>
-<!-- Main Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    @php
-        $cards = [
-            [
-                'route' => route('farm.index'),
-                'icon' => 'fas fa-tractor',
-                'title' => 'Farm Overview',
-                'desc' => 'Manage fields, crops, and livestock',
-                'bg' => 'from-green-100 to-green-200 dark:from-green-700 dark:to-green-800'
-            ],
-            [
-                'route' => route('admin.schedule.index'),
-                'icon' => 'fas fa-calendar-alt',
-                'title' => 'Schedule Management',
-                'desc' => 'Tasks and planting schedules',
-                'bg' => 'from-blue-100 to-blue-200 dark:from-blue-700 dark:to-blue-800'
-            ],
-            [
-                'route' => route('weather.show', $currentCity ?? 'Manolo Fortich'),
-                'icon' => 'fas fa-cloud-sun',
-                'title' => 'Weather',
-                'desc' => 'Current weather and forecasts',
-                'bg' => 'from-yellow-100 to-yellow-200 dark:from-yellow-600 dark:to-yellow-700'
-            ],
-            [
-                'route' => route('hr.index'),
-                'icon' => 'fas fa-users',
-                'title' => 'Human Resources',
-                'desc' => 'Manage employees and tasks',
-                'bg' => 'from-purple-100 to-purple-200 dark:from-purple-700 dark:to-purple-800'
-            ],
-            [
-                'route' => route('admin.inventory.index'),
-                'icon' => 'fas fa-warehouse',
-                'title' => 'Inventory',
-                'desc' => 'Manage supplies and equipment',
-                'bg' => 'from-red-100 to-red-200 dark:from-red-700 dark:to-red-800'
-            ],
-            [
-                'route' => route('admin.finance.index'),
-                'icon' => 'fas fa-chart-line',
-                'title' => 'Finance',
-                'desc' => 'Track income and expenses',
-                'bg' => 'from-indigo-100 to-indigo-200 dark:from-indigo-700 dark:to-indigo-800'
-            ],
-        ];
-    @endphp
-
-    @foreach ($cards as $card)
-        <a href="{{ $card['route'] }}" class="block rounded-xl shadow-md border border-gray-300 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200 overflow-hidden">
-            <div class="relative bg-gradient-to-br {{ $card['bg'] }} p-6 text-center">
-                <div class="absolute inset-0 bg-white/40 dark:bg-black/20 backdrop-blur-md rounded-xl"></div>
-                        <div class="relative z-10">
-                    <i class="{{ $card['icon'] }} text-4xl text-gray-800 dark:text-white mb-4"></i>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ $card['title'] }}</h3>
-                    <p class="text-gray-700 dark:text-gray-300 mt-2">{{ $card['desc'] }}</p>
-                        </div>
-                        </div>
-                    </a>
-    @endforeach
-            </div>
-
-            <!-- Recent Schedules Section -->
-            <div class="mt-6">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Schedules</h3>
-                        <div class="space-y-4">
-                            @forelse($recentSchedules as $schedule)
-                                <div class="flex items-center space-x-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                    <div class="flex-shrink-0">
-                                        <i class="fas {{ $schedule->icon }} text-lg 
-                                            @if($schedule->type === 'task')
-                                                @if($schedule->priority === 'high') text-red-500 dark:text-red-400
-                                                @elseif($schedule->priority === 'medium') text-yellow-500 dark:text-yellow-400
-                                                @else text-green-500 dark:text-green-400
-                                                @endif
-                                            @else text-blue-500 dark:text-blue-400
-                                            @endif">
-                                        </i>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-medium text-gray-900 dark:text-white">
-                                            {{ $schedule->title }}
-                                        </p>
-                                        <p class="text-sm text-gray-600 dark:text-gray-300">
-                                            {{ $schedule->description }}
-                                        </p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">
-                                            @if($schedule->type === 'planting')
-                                                Planting Date: {{ \Carbon\Carbon::parse($schedule->planting_date)->format('M d, Y') }}
-                                            @else
-                                                Created: {{ $schedule->date->diffForHumans() }}
-                                            @endif
-                                        </p>
-                                    </div>
-                                </div>
-                            @empty
-                                <p class="text-gray-500 dark:text-gray-400">No recent schedules</p>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Upcoming Tasks Section -->
-            <div class="mt-6">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Upcoming Tasks</h3>
-                        <div class="space-y-4">
-                            @forelse($upcomingTasks as $task)
-                                <div class="flex items-center justify-between p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="flex-shrink-0">
-                                            <i class="fas fa-tasks text-lg text-blue-500 dark:text-blue-400"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-900 dark:text-white">
-                                                {{ $task->title }}
-                                            </p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300">
-                                                Due: {{ $task->due_date->format('M d, Y') }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                        @if($task->priority === 'high') bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400
-                                        @elseif($task->priority === 'medium') bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400
-                                        @else bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400
-                                        @endif">
-                                        {{ ucfirst($task->priority) }}
-                                    </span>
-                                </div>
-                            @empty
-                                <p class="text-gray-500 dark:text-gray-400">No upcoming tasks</p>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Financial Summary Section -->
-            <div class="mt-6">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Financial Summary</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-100 dark:border-green-800">
-                                <p class="text-sm font-medium text-green-800 dark:text-green-200">Income</p>
-                                <p class="text-2xl font-semibold text-green-600 dark:text-green-300">
-                                    ₱{{ number_format($financialSummary['income'], 2) }}
-                                </p>
-                            </div>
-                            <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-100 dark:border-red-800">
-                                <p class="text-sm font-medium text-red-800 dark:text-red-200">Expenses</p>
-                                <p class="text-2xl font-semibold text-red-600 dark:text-red-300">
-                                    ₱{{ number_format($financialSummary['expenses'], 2) }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                        </div>
-
-            <!-- Recent Leave Requests Section -->
-            <div class="mt-6">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Leave Requests</h3>
-                        <div class="space-y-4">
-                            @forelse($recentLeaveRequests as $leaveRequest)
-                                <div class="flex items-center justify-between p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="flex-shrink-0">
-                                            <i class="fas fa-calendar-times text-lg text-pink-500 dark:text-pink-400"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-900 dark:text-white">
-                                                {{ $leaveRequest->employee->first_name }} {{ $leaveRequest->employee->last_name }}
-                                            </p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300">
-                                                {{ $leaveRequest->start_date->format('M d, Y') }} - {{ $leaveRequest->end_date->format('M d, Y') }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                        @if($leaveRequest->status === 'approved') bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400
-                                        @elseif($leaveRequest->status === 'pending') bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400
-                                        @else bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400
-                                        @endif">
-                                        {{ ucfirst($leaveRequest->status) }}
-                                    </span>
-                                </div>
-                            @empty
-                                <p class="text-gray-500 dark:text-gray-400">No recent leave requests</p>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Attendance Section -->
-            <div class="mt-6">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Attendance</h3>
-                        <div class="space-y-4">
-                            @forelse($recentAttendance as $attendance)
-                                <div class="flex items-center justify-between p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="flex-shrink-0">
-                                            <i class="fas fa-clipboard-check text-lg text-teal-500 dark:text-teal-400"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-900 dark:text-white">
-                                                {{ $attendance->employee->first_name }} {{ $attendance->employee->last_name }}
-                                            </p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300">
-                                                {{ $attendance->date->format('M d, Y') }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                        @if($attendance->status === 'present') bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400
-                                        @elseif($attendance->status === 'late') bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400
-                                        @else bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400
-                                        @endif">
-                                        {{ ucfirst($attendance->status) }}
-                                    </span>
-                                </div>
-                            @empty
-                                <p class="text-gray-500 dark:text-gray-400">No recent attendance records</p>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Payrolls Section -->
-            <div class="mt-6">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Payrolls</h3>
-                        <div class="space-y-4">
-                            @forelse($recentPayrolls as $payroll)
-                                <div class="flex items-center justify-between p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="flex-shrink-0">
-                                            <i class="fas fa-money-bill-wave text-lg text-orange-500 dark:text-orange-400"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-900 dark:text-white">
-                                                {{ $payroll->employee->first_name }} {{ $payroll->employee->last_name }}
-                                            </p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300">
-                                                {{ $payroll->date ? $payroll->date->format('M d, Y') : 'N/A' }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
-                                        ₱{{ number_format($payroll->amount, 2) }}
-                                    </span>
-                                </div>
-                            @empty
-                                <p class="text-gray-500 dark:text-gray-400">No recent payroll records</p>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Weather Section -->
-            @if($weather)
-            <div class="mt-6">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Current Weather</h3>
-                        <div class="flex items-center justify-between p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                            <div class="flex items-center space-x-4">
-                                <img src="http://openweathermap.org/img/wn/{{ $weather['icon'] }}@2x.png" alt="Weather icon">
+                    @if($weather)
+                    <div class="bg-slate-900/40 rounded-3xl p-8 border border-white/5 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-primary-500/10 blur-[40px] rounded-full translate-x-8 translate-y--8"></div>
+                        <div class="flex items-center justify-between relative z-10">
+                            <div class="flex items-center space-x-6">
+                                <div class="text-5xl font-black text-white">{{ $weather['temperature'] }}°C</div>
                                 <div>
-                                    <p class="text-2xl font-semibold text-gray-900 dark:text-white">
-                                        {{ $weather['temperature'] }}°C
-                                    </p>
-                                    <p class="text-sm text-gray-600 dark:text-gray-300 capitalize">
-                                        {{ $weather['description'] }}
-                                    </p>
+                                    <p class="text-sm font-bold text-white capitalize">{{ $weather['description'] }}</p>
+                                    <p class="text-xs text-slate-500">Relative Humidity: {{ $weather['humidity'] }}%</p>
                                 </div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-sm text-gray-600 dark:text-gray-300">Humidity: {{ $weather['humidity'] }}%</p>
-                                <p class="text-sm text-gray-600 dark:text-gray-300">Wind: {{ $weather['wind_speed'] }} m/s</p>
-                            </div>
+                            <img src="https://openweathermap.org/img/wn/{{ $weather['icon'] }}@2x.png" alt="Weather" class="w-20 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
-            @endif
         </div>
     </div>
     @endif
 
     @if(auth()->user()->role_id === 2)
-    <div class="py-4">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Summary Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-                
-
-                <!-- Today's Attendance -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/30">
-                                <i class="fas fa-clipboard-check text-2xl text-green-600 dark:text-green-400"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Today's Attendance</p>
-                                <div class="flex items-center mt-1">
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                        {{ $todayAttendanceStatus === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
-                                           ($todayAttendanceStatus === 'late' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
-                                           ($todayAttendanceStatus === 'absent' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400')) }}">
-                                        {{ ucfirst(str_replace('_', ' ', $todayAttendanceStatus)) }}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            @if($todayAttendanceStatus === 'not_checked_in')
-                                <form action="{{ route('dashboard.time-in') }}" method="POST" class="time-in-form">
-                                    @csrf
-                                    <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">
-                                        Check In
-                                    </button>
-                                </form>
-                            @elseif($todayAttendanceStatus === 'present' || $todayAttendanceStatus === 'late')
-                                <form action="{{ route('dashboard.time-out') }}" method="POST" class="time-out-form">
-                                    @csrf
-                                    <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">
-                                        Check Out
-                                    </button>
-                                </form>
-                            @elseif($todayAttendanceStatus === 'checked_out')
-                                <div class="text-center text-gray-600 dark:text-gray-400">
-                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
-                                    Checked Out
-                                </div>
-                            @endif
-                        </div>
-                    </div>
+    <div class="space-y-8">
+        <!-- Personnel Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Attendance Terminal -->
+            <div class="glass-card p-10 flex flex-col justify-center items-center text-center relative overflow-hidden group">
+                <div class="absolute inset-0 bg-primary-500/5 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                <div class="w-20 h-20 rounded-3xl bg-primary-500 flex items-center justify-center shadow-2xl shadow-primary-500/40 mb-6 relative z-10">
+                    <i class="fas fa-clock text-3xl text-white"></i>
                 </div>
-
+                <h3 class="text-2xl font-black text-white mb-2 relative z-10">Shift Terminal</h3>
+                <p class="text-slate-500 text-sm font-medium mb-8 uppercase tracking-[0.2em] relative z-10">{{ now()->format('H:i') }} - Status: {{ ucfirst(str_replace('_', ' ', $todayAttendanceStatus)) }}</p>
                 
-
-            <!-- Feature Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 mb-6">
-                <!-- Upcoming Tasks Card -->
-                <a href="{{ route('user.tasks.index') }}" class="block">
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
-                        <div class="p-6">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30">
-                                        <i class="fas fa-calendar-alt text-2xl text-blue-600 dark:text-blue-400"></i>
-                                    </div>
-                                    <div class="ml-4">
-                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Upcoming Tasks</h3>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">View your upcoming tasks</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $upcomingTasks->count() }}</span>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">Tasks</p>
-                                </div>
-                            </div>
+                <div class="w-full relative z-10">
+                    @if($todayAttendanceStatus === 'not_checked_in')
+                        <form action="{{ route('dashboard.time-in') }}" method="POST" class="time-in-form">
+                            @csrf
+                            <button type="submit" class="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold py-4 px-8 rounded-2xl shadow-xl shadow-primary-500/20 transition-all duration-300 transform hover:scale-[1.02]">
+                                Initialize Shift
+                            </button>
+                        </form>
+                    @elseif($todayAttendanceStatus === 'present' || $todayAttendanceStatus === 'late')
+                        <form action="{{ route('dashboard.time-out') }}" method="POST" class="time-out-form">
+                            @csrf
+                            <button type="submit" class="w-full bg-red-500/80 hover:bg-red-500 text-white font-bold py-4 px-8 rounded-2xl shadow-xl shadow-red-500/20 transition-all duration-300 transform hover:scale-[1.02]">
+                                Terminate Shift
+                            </button>
+                        </form>
+                    @elseif($todayAttendanceStatus === 'checked_out')
+                        <div class="bg-emerald-500/10 border border-emerald-500/20 py-4 px-8 rounded-2xl">
+                            <p class="text-emerald-400 font-bold uppercase tracking-widest text-sm">Shift Completed <i class="fas fa-check-circle ml-2"></i></p>
                         </div>
-                    </div>
-                </a>
-
-                <!-- Leave Requests Card -->
-                <a href="{{ route('user.leave-requests.index') }}" class="block">
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
-                        <div class="p-6">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900/30">
-                                        <i class="fas fa-calendar-times text-2xl text-purple-600 dark:text-purple-400"></i>
-                                    </div>
-                                    <div class="ml-4">
-                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">My Leave Requests</h3>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">View and submit leave requests</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-2xl font-bold text-purple-600 dark:text-purple-400">{{ $leaveRequestsCount }}</span>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">Requests</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Payroll Card -->
-                <a href="{{ route('user.payroll.index') }}" class="block">
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
-                        <div class="p-6">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/30">
-                                        <i class="fas fa-money-bill-wave text-2xl text-green-600 dark:text-green-400"></i>
-                                    </div>
-                                    <div class="ml-4">
-                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">My Payroll</h3>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">View your salary and payment history</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-2xl font-bold text-green-600 dark:text-green-400">₱{{ number_format($latestPayroll->net_salary ?? 0, 2) }}</span>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">Latest Salary</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Attendance Card -->
-                <div class="block">
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
-                        <div class="p-6">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="p-3 rounded-full bg-teal-100 dark:bg-teal-900/30">
-                                        <i class="fas fa-clipboard-check text-2xl text-teal-600 dark:text-teal-400"></i>
-                                    </div>
-                                    <div class="ml-4">
-                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">My Attendance</h3>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">View your attendance records</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                        {{ $todayAttendanceStatus === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
-                                           ($todayAttendanceStatus === 'late' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
-                                           ($todayAttendanceStatus === 'absent' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400')) }}">
-                                        {{ ucfirst(str_replace('_', ' ', $todayAttendanceStatus)) }}
-                                    </span>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Today's Status</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                                        </div>
-            </div>
-
-            <!-- Recent Activities -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Recent Tasks -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Tasks</h3>
-                            <a href="{{ route('user.tasks.index') }}" class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">View All</a>
-                        </div>
-                        <div class="space-y-4">
-                            @forelse($recentTasks as $task)
-                                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <p class="font-medium text-gray-900 dark:text-gray-100">{{ $task->title }}</p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                                Due: {{ $task->due_date->format('M d, Y') }}
-                                            </p>
-                                        </div>
-                                        <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                            {{ $task->status === 'completed' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
-                                               ($task->status === 'in_progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
-                                               'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400') }}">
-                                            {{ ucfirst($task->status) }}
-                                        </span>
-                                    </div>
-                                </div>
-                            @empty
-                                <p class="text-gray-500 dark:text-gray-400 text-center py-4">No recent tasks</p>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Leave Requests -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Leave Requests</h3>
-                            <a href="{{ route('user.leave-requests.index') }}" class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">View All</a>
-                        </div>
-                        <div class="space-y-4">
-                            @forelse($recentLeaveRequests as $request)
-                                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <p class="font-medium text-gray-900 dark:text-gray-100">{{ $request->leave_type }}</p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                                {{ $request->start_date->format('M d') }} - {{ $request->end_date->format('M d, Y') }}
-                                            </p>
-                                        </div>
-                                        <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                            {{ $request->status === 'approved' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
-                                               ($request->status === 'pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
-                                               'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400') }}">
-                                            {{ ucfirst($request->status) }}
-                                        </span>
-                                    </div>
-                                </div>
-                            @empty
-                                <p class="text-gray-500 dark:text-gray-400 text-center py-4">No recent leave requests</p>
-                            @endforelse
-                        </div>
-                    </div>
+                    @endif
                 </div>
             </div>
 
-            <!-- Upcoming Tasks Section -->
-            <div class="mt-6">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Upcoming Tasks</h3>
-                            <a href="{{ route('user.tasks.index') }}" class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">View All</a>
+            <!-- Task Central -->
+            <a href="{{ route('user.tasks.index') }}" class="glass-card p-10 flex items-center justify-between group overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-primary-500/5 blur-[40px] rounded-full translate-x-12 translate-y--12"></div>
+                <div class="relative z-10">
+                    <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2">Active Assignments</p>
+                    <h3 class="text-4xl font-black text-white mb-4 group-hover:text-primary-400 transition-colors">{{ $upcomingTasks->count() }}</h3>
+                    <p class="text-slate-400 text-sm font-medium group-hover:translate-x-1 transition-transform inline-flex items-center">Execute Tasks <i class="fas fa-arrow-right ml-2 text-[10px]"></i></p>
+                </div>
+                <div class="w-16 h-16 rounded-2xl bg-slate-800/50 flex items-center justify-center border border-white/5 relative z-10">
+                    <i class="fas fa-clipboard-list text-2xl text-primary-400"></i>
+                </div>
+            </a>
+
+            <!-- Payroll Summary -->
+            <a href="{{ route('user.payroll.index') }}" class="glass-card p-10 flex items-center justify-between group overflow-hidden">
+                <div class="absolute bottom-0 right-0 w-32 h-32 bg-emerald-500/5 blur-[40px] rounded-full translate-x-12 translate-y-12"></div>
+                <div class="relative z-10">
+                    <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2">Earnings Balance</p>
+                    <h3 class="text-3xl font-black text-white mb-4">₱{{ number_format($latestPayroll->net_salary ?? 0, 2) }}</h3>
+                    <p class="text-slate-400 text-sm font-medium group-hover:translate-x-1 transition-transform inline-flex items-center">Review Details <i class="fas fa-arrow-right ml-2 text-[10px]"></i></p>
+                </div>
+                <div class="w-16 h-16 rounded-2xl bg-slate-800/50 flex items-center justify-center border border-white/5 relative z-10">
+                    <i class="fas fa-wallet text-2xl text-emerald-400"></i>
+                </div>
+            </a>
+        </div>
+
+        <!-- Task & Requests Feed -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="glass-card">
+                <div class="px-8 py-6 border-b border-white/5 flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-white">Pending Assignments</h3>
+                    <i class="fas fa-tasks text-primary-400"></i>
+                </div>
+                <div class="p-8 space-y-4">
+                    @forelse($recentTasks->take(3) as $task)
+                        <div class="bg-white/5 rounded-2xl p-5 border border-white/5 hover:border-primary-500/30 transition-all duration-300">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-white font-bold text-sm">{{ $task->title }}</h4>
+                                <span class="text-[10px] font-black uppercase tracking-wider text-primary-400">{{ $task->status }}</span>
+                            </div>
+                            <p class="text-xs text-slate-400">Deadline: {{ $task->due_date->format('M d, Y') }}</p>
                         </div>
-                        <div class="space-y-4">
-                            @forelse($upcomingTasks as $task)
-                                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <p class="font-medium text-gray-900 dark:text-gray-100">{{ $task->title }}</p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                                Due: {{ $task->due_date->format('M d, Y') }}
-                                            </p>
-                                        </div>
-                                        <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                            {{ $task->priority === 'high' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' : 
-                                               ($task->priority === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
-                                               'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400') }}">
-                                            {{ ucfirst($task->priority) }}
-                                        </span>
-                                    </div>
-                                </div>
-                            @empty
-                                <p class="text-gray-500 dark:text-gray-400 text-center py-4">No upcoming tasks</p>
-                            @endforelse
+                    @empty
+                        <p class="text-slate-500 text-center py-6">No tasks assigned</p>
+                    @endforelse
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div class="px-8 py-6 border-b border-white/5 flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-white">Leave Protocol</h3>
+                    <i class="fas fa-plane-departure text-indigo-400"></i>
+                </div>
+                <div class="p-8 space-y-4">
+                    @forelse($recentLeaveRequests->take(3) as $leave)
+                        <div class="bg-white/5 rounded-2xl p-5 border border-white/5 flex items-center justify-between">
+                            <div>
+                                <h4 class="text-white font-bold text-sm">{{ $leave->leave_type }}</h4>
+                                <p class="text-xs text-slate-500">{{ $leave->start_date->format('M d') }} - {{ $leave->end_date->format('M d') }}</p>
+                            </div>
+                            <span class="px-3 py-1 bg-slate-800 rounded-lg text-[10px] font-black uppercase tracking-wider text-slate-400">
+                                {{ $leave->status }}
+                            </span>
                         </div>
-                    </div>
+                    @empty
+                        <p class="text-slate-500 text-center py-6">No leave protocols initialized</p>
+                    @endforelse
                 </div>
             </div>
         </div>
@@ -707,52 +297,41 @@
     @endif
 </x-app-layout>
 
-<!-- Simple Employee Registration Modal -->
-<div id="employeeModal" class="fixed inset-0 z-50 hidden">
-    <!-- Backdrop -->
-    <div class="fixed inset-0 bg-black bg-opacity-50"></div>
-    
-    <!-- Modal -->
-    <div class="fixed inset-0 flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
-            <!-- Header -->
-            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Complete Your Profile</h3>
+<!-- Personnel Registration Terminal -->
+<div id="employeeModal" class="fixed inset-0 z-[100] hidden">
+    <div class="fixed inset-0 bg-slate-950/90 backdrop-blur-xl"></div>
+    <div class="fixed inset-0 flex items-center justify-center p-6">
+        <div class="glass-card max-w-lg w-full p-10 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-primary-500"></div>
+            <div class="mb-8">
+                <h3 class="text-3xl font-black text-white mb-2">Identity Registration</h3>
+                <p class="text-slate-400 text-sm">Please provide your professional credentials to initialize your personnel profile.</p>
             </div>
             
-            <!-- Form -->
-            <form action="{{ route('employee.store') }}" method="POST" class="p-6">
+            <form action="{{ route('employee.store') }}" method="POST" class="space-y-6">
                 @csrf
-                <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-6">
                     <div>
-                        <label for="first_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">First Name</label>
-                        <input type="text" name="first_name" id="first_name" required 
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block px-1">First Name</label>
+                        <input type="text" name="first_name" required class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all outline-none">
                     </div>
                     <div>
-                        <label for="last_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Last Name</label>
-                        <input type="text" name="last_name" id="last_name" required 
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block px-1">Last Name</label>
+                        <input type="text" name="last_name" required class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all outline-none">
                     </div>
-                    <div>
-                        <label for="contact_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contact Number</label>
-                        <input type="text" name="contact_number" id="contact_number" required 
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                    </div>
-                    <div>
-                        <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address</label>
-                        <textarea name="address" id="address" required rows="3"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
-                    </div>
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block px-1">Contact Protocol</label>
+                    <input type="text" name="contact_number" required placeholder="+63 XXX XXX XXXX" class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all outline-none">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block px-1">Primary Address</label>
+                    <textarea name="address" required rows="2" class="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all outline-none resize-none"></textarea>
                 </div>
                 
-                <!-- Footer -->
-                <div class="mt-6 flex justify-end">
-                    <button type="submit" 
-                        class="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        Submit
-                    </button>
-                </div>
+                <button type="submit" class="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold py-4 rounded-xl shadow-xl shadow-primary-500/20 transition-all duration-300">
+                    Confirm Identity
+                </button>
             </form>
         </div>
     </div>
@@ -778,6 +357,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Disable the button to prevent double submission
             const submitButton = this.querySelector('button[type="submit"]');
+            const originalText = submitButton.innerHTML;
             submitButton.disabled = true;
             submitButton.innerHTML = 'Checking in...';
             
@@ -795,17 +375,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.error) {
                     throw new Error(data.error);
                 }
-                
-                // Show success message
-                const statusElement = document.querySelector('.attendance-status');
-                if (statusElement) {
-                    statusElement.textContent = data.status.charAt(0).toUpperCase() + data.status.slice(1);
-                    statusElement.className = 'px-2 py-1 text-xs font-semibold rounded-full ' + 
-                        (data.status === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
-                         'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400');
-                }
-                
-                // Reload after a short delay to show the success state
                 setTimeout(() => {
                     window.location.reload();
                 }, 1000);
@@ -813,10 +382,8 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => {
                 console.error('Error:', error);
                 alert(error.message || 'An error occurred while checking in');
-                
-                // Re-enable the button
                 submitButton.disabled = false;
-                submitButton.innerHTML = 'Check In';
+                submitButton.innerHTML = originalText;
             });
         });
     }
@@ -850,10 +417,8 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => {
                 console.error('Error:', error);
                 alert(error.message || 'An error occurred while checking out');
-                
-                // Re-enable the button
                 submitButton.disabled = false;
-                submitButton.innerHTML = 'Check Out';
+                submitButton.innerHTML = 'Terminate Shift';
             });
         });
     }

@@ -1,0 +1,47 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cropwise-app
+    container_name: cropwise-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    networks:
+      - cropwise-network
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:10.11
+    container_name: cropwise-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-cropwise}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-root}
+      MYSQL_USER: ${DB_USERNAME:-sail}
+    ports:
+      - "3306:3306"
+    networks:
+      - cropwise-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: cropwise-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - cropwise-network
+    depends_on:
+      - app
+
+networks:
+  cropwise-network:
+    driver: bridge

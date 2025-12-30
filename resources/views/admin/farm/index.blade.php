@@ -1,150 +1,139 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Farm Management') }}
-        </h2>
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="font-black text-3xl text-white tracking-tight mb-1">
+                    {{ __('Operations Hub') }}
+                </h2>
+                <p class="text-slate-500 text-xs font-bold uppercase tracking-[0.2em]">Agricultural Asset Command</p>
+            </div>
+            <div class="flex space-x-3">
+                <a href="{{ route('admin.tasks.index') }}" class="glass-button px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest text-primary-400 border border-primary-500/20 hover:bg-primary-500/10 transition-all">
+                    <i class="fas fa-list-check mr-2"></i> Task Matrix
+                </a>
+            </div>
+        </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg border border-gray-200 dark:border-gray-700">
-                <div class="p-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Task Management Card -->
-                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
-                            <div class="p-6">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 bg-blue-500 dark:bg-blue-600 rounded-md p-3">
-                                        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="ml-4">
-                                        <h3 class="text-lg font-medium text-gray-900 dark:text-white">Task Management</h3>
-                                        <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">Manage farm tasks and assignments</p>
-                                    </div>
-                                </div>
-                                <div class="mt-4">
-                                    <a href="{{ route('admin.tasks.index') }}" class="inline-flex items-center px-4 py-2 bg-blue-500 dark:bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-600 dark:hover:bg-blue-700 focus:bg-blue-600 dark:focus:bg-blue-700 active:bg-blue-700 dark:active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                        View Tasks
-                                    </a>
-                                </div>
+    <div class="space-y-8">
+        <!-- Live Intelligence -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Environmental Sensors -->
+            <div class="lg:col-span-2 glass-card p-8 flex items-center justify-between relative overflow-hidden group">
+                <div class="absolute inset-0 bg-gradient-to-r from-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="flex items-center space-x-10 relative z-10">
+                    <div class="text-center px-4">
+                        <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Location Chronos</p>
+                        <p class="text-4xl font-black text-white leading-none">{{ now()->format('H:i') }}</p>
+                        <p class="text-[10px] font-bold text-primary-400 mt-2">{{ now()->format('M d, Y') }}</p>
+                    </div>
+                    <div class="h-16 w-px bg-white/5"></div>
+                    <div class="flex items-center space-x-6">
+                        @if(isset($weatherData))
+                            <div class="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center border border-white/5 shadow-inner">
+                                <img src="{{ $weatherData['icon'] }}" alt="Weather" class="w-12 h-12 drop-shadow-lg">
                             </div>
-                        </div>
-
-                        <!-- Date Card -->
-                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
-                            <div class="p-6">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 bg-green-500 dark:bg-green-600 rounded-md p-3">
-                                        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                    </div>
-                                    <div class="ml-4">
-                                        <h3 class="text-lg font-medium text-gray-900 dark:text-white">Today's Date</h3>
-                                        <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">{{ now()->format('F d, Y') }}</p>
-                                    </div>
-                                </div>
+                            <div>
+                                <p class="text-3xl font-black text-white">{{ $weatherData['temp_c'] }}<span class="text-primary-400">°C</span></p>
+                                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Atmospheric Condition</p>
                             </div>
-                        </div>
-
-                        <!-- Weather Card -->
-                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
-                            <div class="p-6">
-                                <div class="text-center">
-                                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Weather in Manolo Fortich</h3>
-                                    @if(isset($weatherData))
-                                        <div class="flex justify-center items-center my-1">
-                                            <img src="{{ $weatherData['icon'] }}" alt="Weather icon" class="w-16 h-16">
-                                            <span class="text-gray-800 dark:text-white text-3xl ml-4">{{ $weatherData['temp_c'] }}°C</span>
-                                        </div>
-                                    @else
-                                        <div class="text-center text-red-500 dark:text-red-400">
-                                            <p>Weather data unavailable</p>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Farm Management Card -->
-                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
-                            <div class="p-6">
-                                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 text-center">Farm Management</h3>
-                                <div class="flex justify-center space-x-8">
-                                    <!-- Crops Circle -->
-                                    <a href="{{ route('admin.crops.index') }}" class="group">
-                                        <div class="w-24 h-24 rounded-full bg-green-500 dark:bg-green-600 border-2 border-gray-200 dark:border-gray-700 shadow-lg flex items-center justify-center transform transition-transform duration-200 group-hover:scale-105 overflow-hidden">
-                                            <img src="https://cdn-icons-png.flaticon.com/128/9923/9923298.png" alt="Crops" class="w-14 h-14 object-contain">
-                                        </div>
-                                        <p class="text-center mt-2 text-gray-700 dark:text-gray-300">Crops</p>
-                                    </a>
-
-                                    <!-- Livestock Circle -->
-                                    <a href="{{ route('admin.farm.livestock.index') }}" class="group">
-                                        <div class="w-24 h-24 rounded-full bg-yellow-500 dark:bg-yellow-600 border-2 border-gray-200 dark:border-gray-700 shadow-lg flex items-center justify-center transform transition-transform duration-200 group-hover:scale-105 overflow-hidden">
-                                            <img src="https://cdn-icons-png.flaticon.com/128/3397/3397478.png" alt="Livestock" class="w-14 h-14 object-contain">
-                                        </div>
-                                        <p class="text-center mt-2 text-gray-700 dark:text-gray-300">Livestock</p>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Fields Card -->
-                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
-                            <div class="p-6 flex flex-col items-center">
-                                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4 text-center">Fields</h3>
-                                <a href="{{ route('admin.fields.index') }}" class="group">
-                                    <div class="w-24 h-24 rounded-full bg-blue-500 dark:bg-blue-600 border-2 border-gray-200 dark:border-gray-700 shadow-lg flex items-center justify-center transform transition-transform duration-200 group-hover:scale-105 overflow-hidden">
-                                        <img src="https://cdn-icons-png.flaticon.com/128/9923/9923298.png" alt="Fields" class="w-14 h-14 object-contain">
-                                    </div>
-                                    <p class="text-center mt-2 text-gray-700 dark:text-gray-300">Fields</p>
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Finances Card -->
-                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
-                            <div class="p-6">
-                                <a href="{{ route('admin.finance.index') }}" class="group block">
-                                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
-                                        <img src="https://cdn-icons-png.flaticon.com/128/781/781760.png" alt="finance" class="w-5 h-5 mr-2"> Finances
-                                    </h4>
-                                    <div class="bg-blue-500 dark:bg-blue-600 border border-gray-200 dark:border-gray-700 shadow-lg rounded-lg p-4 transform transition-transform duration-200 group-hover:scale-105 my-4">
-                                        <div class="flex items-center space-x-4">
-                                            <img src="https://cdn-icons-png.flaticon.com/128/1077/1077976.png" alt="Finances" class="w-12 h-12 object-contain">
-                                            <div>
-                                                <p class="text-blue-100 dark:text-blue-200">View financial reports and transactions</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Inventory Card -->
-                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
-                            <div class="p-6">
-                                <a href="{{ route('admin.inventory.index') }}" class="group block">
-                                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
-                                        <img src="https://cdn-icons-png.flaticon.com/128/2897/2897785.png" alt="inventory" class="w-5 h-5 mr-2"> Inventory
-                                    </h4>
-                                    <div class="bg-yellow-500 dark:bg-yellow-600 border border-gray-200 dark:border-gray-700 shadow-lg rounded-lg p-4 transform transition-transform duration-200 group-hover:scale-105 my-4">
-                                        <div class="flex items-center space-x-4">
-                                            <img src="https://cdn-icons-png.flaticon.com/128/2897/2897616.png" alt="Inventory" class="w-12 h-12 object-contain">
-                                            <div>
-                                                <p class="text-yellow-100 dark:text-yellow-200">Manage farm supplies and equipment</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
+                        @endif
+                    </div>
+                </div>
+                <div class="hidden md:block relative z-10">
+                    <div class="flex space-x-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span class="w-2 h-2 rounded-full bg-emerald-500/40"></span>
+                        <span class="w-2 h-2 rounded-full bg-emerald-500/20"></span>
                     </div>
                 </div>
             </div>
+
+            <!-- Task Quick-Link -->
+            <a href="{{ route('admin.tasks.index') }}" class="glass-card p-8 flex items-center group">
+                <div class="w-14 h-14 rounded-2xl bg-primary-500/20 flex items-center justify-center border border-primary-500/20 group-hover:bg-primary-500 group-hover:text-white transition-all duration-500 mr-6">
+                    <i class="fas fa-tasks text-xl text-primary-400 group-hover:text-white"></i>
+                </div>
+                <div>
+                    <h4 class="text-white font-black text-lg group-hover:text-primary-400 transition-colors">Task Protocols</h4>
+                    <p class="text-slate-500 text-xs font-medium">Manage operational workflows</p>
+                </div>
+                <i class="fas fa-chevron-right ml-auto text-slate-700 group-hover:text-primary-400 group-hover:translate-x-1 transition-all"></i>
+            </a>
+        </div>
+
+        <!-- Primary Management Grids -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            @php
+                $modules = [
+                    [
+                        'title' => 'Crops',
+                        'icon' => 'fa-seedling',
+                        'route' => route('admin.crops.index'),
+                        'color' => 'emerald',
+                        'desc' => 'Genetic and cultivation tracking',
+                        'img' => 'https://cdn-icons-png.flaticon.com/128/9923/9923298.png'
+                    ],
+                    [
+                        'title' => 'Livestock',
+                        'icon' => 'fa-cow',
+                        'route' => route('admin.farm.livestock.index'),
+                        'color' => 'amber',
+                        'desc' => 'Biological asset management',
+                        'img' => 'https://cdn-icons-png.flaticon.com/128/3397/3397478.png'
+                    ],
+                    [
+                        'title' => 'Fields',
+                        'icon' => 'fa-map-marked-alt',
+                        'route' => route('admin.fields.index'),
+                        'color' => 'indigo',
+                        'desc' => 'Geospatial plot monitoring',
+                        'img' => 'https://cdn-icons-png.flaticon.com/128/9923/9923298.png'
+                    ],
+                    [
+                        'title' => 'Logistics',
+                        'icon' => 'fa-truck-loading',
+                        'route' => route('admin.inventory.index'),
+                        'color' => 'primary',
+                        'desc' => 'Supply chain & equipment matrix',
+                        'img' => 'https://cdn-icons-png.flaticon.com/128/2897/2897616.png'
+                    ],
+                ];
+            @endphp
+
+            @foreach($modules as $mod)
+            <a href="{{ $mod['route'] }}" class="glass-card group p-8 relative overflow-hidden flex flex-col items-center text-center">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-{{ $mod['color'] }}-500/5 blur-[30px] rounded-full translate-x-10 translate-y--10"></div>
+                
+                <div class="w-20 h-20 rounded-full bg-slate-800 border-2 border-white/5 p-4 mb-6 group-hover:scale-110 group-hover:border-{{ $mod['color'] }}-500/50 transition-all duration-500 shadow-2xl">
+                    <img src="{{ $mod['img'] }}" alt="{{ $mod['title'] }}" class="w-full h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-500">
+                </div>
+                
+                <h3 class="text-xl font-black text-white group-hover:text-{{ $mod['color'] }}-400 transition-colors mb-2">{{ $mod['title'] }}</h3>
+                <p class="text-slate-500 text-xs font-medium leading-tight">{{ $mod['desc'] }}</p>
+                
+                <div class="mt-8 flex items-center space-x-2 text-[10px] font-black uppercase tracking-widest text-{{ $mod['color'] }}-500/60 group-hover:text-{{ $mod['color'] }}-400 transition-colors">
+                    <span>Initialize</span>
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+            </a>
+            @endforeach
+        </div>
+
+        <!-- Integrated Analytics Preview -->
+        <div class="glass-card p-10 flex flex-col md:flex-row items-center justify-between border-primary-500/10 bg-primary-500/[0.02]">
+            <div class="flex items-center space-x-8 mb-6 md:mb-0">
+                <div class="w-16 h-16 rounded-2xl bg-primary-500 flex items-center justify-center shadow-xl shadow-primary-500/20">
+                    <i class="fas fa-chart-pie text-2xl text-white"></i>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-black text-white mb-1">Financial Intelligence</h3>
+                    <p class="text-slate-500 text-sm font-medium">Real-time fiscal monitoring and yield projections.</p>
+                </div>
+            </div>
+            <a href="{{ route('admin.finance.index') }}" class="glass-button bg-primary-500 hover:bg-primary-600 px-10 py-4 rounded-2xl text-white font-black uppercase tracking-widest text-xs shadow-2xl shadow-primary-500/20 transition-all hover:scale-[1.05]">
+                Launch Ledger
+            </a>
         </div>
     </div>
 </x-app-layout>

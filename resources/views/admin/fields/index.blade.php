@@ -1,107 +1,112 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Fields') }}
-            </h2>
-            <a href="{{ route('admin.fields.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Add New Field
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h2 class="font-black text-3xl text-white tracking-tight mb-1">
+                    {{ __('Field Matrix') }}
+                </h2>
+                <p class="text-slate-500 text-xs font-bold uppercase tracking-[0.2em]">Geospatial Asset Monitoring</p>
+            </div>
+            <a href="{{ route('admin.fields.create') }}" class="glass-button bg-primary-500 hover:bg-primary-600 px-6 py-3 rounded-xl text-white font-black uppercase tracking-widest text-[10px] shadow-xl shadow-primary-500/10 transition-all flex items-center justify-center">
+                <i class="fas fa-plus-circle mr-2"></i> Register New Sector
             </a>
         </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    @if(session('success'))
-                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-                            <span class="block sm:inline">{{ session('success') }}</span>
-                        </div>
-                    @endif
-
-                    <div class="overflow-x-auto">
-                        <!-- Search Form -->
-                        <div class="mb-6 bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                            <form action="{{ route('admin.fields.index') }}" method="GET" class="flex gap-4">
-                                <div class="flex-1">
-                                    <input type="text" name="search" id="search" value="{{ request('search') }}" 
-                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
-                                        placeholder="Search by field name, location, soil type, or status...">
-                                </div>
-                                <div class="flex gap-2">
-                                    <a href="{{ route('admin.fields.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-300 dark:bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest hover:bg-gray-400 dark:hover:bg-gray-500 focus:bg-gray-400 dark:focus:bg-gray-500 active:bg-gray-500 dark:active:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                        Reset
-                                    </a>
-                                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 dark:bg-indigo-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 dark:hover:bg-indigo-600 focus:bg-indigo-700 dark:focus:bg-indigo-600 active:bg-indigo-900 dark:active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                                        Search
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead class="bg-gray-50 dark:bg-gray-700">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Name</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Location</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Size (ha)</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Soil Type</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                @foreach($fields as $field)
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $field->name }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $field->location }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $field->size }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $field->soil_type }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $field->status }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <div class="flex items-center space-x-2">
-                                                <a href="{{ route('admin.fields.show', $field) }}" title="View"
-                                                    class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                                    </svg>
-                                                </a>
-
-                                                <a href="{{ route('admin.fields.edit', $field) }}" title="Edit"
-                                                    class="text-yellow-600 dark:text-yellow-400 hover:text-yellow-800 dark:hover:text-yellow-300">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                                    </svg>
-                                                </a>
-
-                                                <form action="{{ route('admin.fields.destroy', $field) }}" method="POST" class="inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this field?')" title="Delete"
-                                                        class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                                        </svg>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+    <div class="space-y-6">
+        <!-- Search & Analytical Control -->
+        <div class="glass-card p-6">
+            <form action="{{ route('admin.fields.index') }}" method="GET" class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1 relative group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i class="fas fa-satellite text-slate-500 group-focus-within:text-primary-400 transition-colors"></i>
                     </div>
-                    <div class="mt-4">
-                        {{ $fields->links() }}
+                    <input type="text" name="search" value="{{ request('search') }}" 
+                        class="w-full bg-slate-900/50 border border-white/5 rounded-2xl pl-12 pr-4 py-4 text-white text-sm focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all outline-none placeholder-slate-600"
+                        placeholder="Scan by sector name, location, soil profile, or status...">
+                </div>
+                <div class="flex gap-3">
+                    <a href="{{ route('admin.fields.index') }}" class="px-6 py-4 bg-slate-800/50 text-slate-400 border border-white/5 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-white/5 hover:text-white transition-all">
+                        Reset
+                    </a>
+                    <button type="submit" class="px-8 py-4 bg-primary-500 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-primary-600 shadow-lg shadow-primary-500/20 transition-all">
+                        Execute Scan
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        @if(session('success'))
+            <div class="glass-card border-emerald-500/20 bg-emerald-500/5 p-4 flex items-center space-x-4">
+                <div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white">
+                    <i class="fas fa-check text-xs"></i>
+                </div>
+                <p class="text-emerald-400 text-sm font-bold">{{ session('success') }}</p>
+            </div>
+        @endif
+
+        <!-- Monitoring Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @forelse($fields as $field)
+                <div class="glass-card group p-8 relative overflow-hidden flex flex-col transition-all duration-500 hover:translate-y-[-4px]">
+                    <div class="absolute top-0 right-0 p-6">
+                        <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest {{ $field->status === 'Active' ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : 'bg-slate-500/10 text-slate-500 border border-slate-500/20' }}">
+                            {{ $field->status }}
+                        </span>
+                    </div>
+
+                    <div class="mb-6">
+                        <div class="w-14 h-14 rounded-2xl bg-slate-800 border border-white/5 flex items-center justify-center mb-4 transition-colors group-hover:border-primary-500/30">
+                            <i class="fas fa-layer-group text-xl text-slate-500 group-hover:text-primary-400"></i>
+                        </div>
+                        <h3 class="text-xl font-black text-white group-hover:text-primary-400 transition-colors uppercase tracking-tight">{{ $field->name }}</h3>
+                        <p class="text-slate-500 text-xs font-bold flex items-center mt-1 uppercase tracking-widest">
+                            <i class="fas fa-map-marker-alt mr-2 text-primary-500/50"></i> {{ $field->location }}
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 py-4 border-y border-white/5 mb-6">
+                        <div>
+                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Scale</p>
+                            <p class="text-white font-bold">{{ $field->size }} <span class="text-slate-500 text-[10px]">HA</span></p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Soil Profile</p>
+                            <p class="text-white font-bold text-sm">{{ $field->soil_type }}</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between mt-auto">
+                        <div class="flex space-x-2">
+                            <a href="{{ route('admin.fields.show', $field) }}" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-800 text-slate-400 hover:text-white hover:bg-primary-500 transition-all border border-white/5">
+                                <i class="fas fa-eye text-xs"></i>
+                            </a>
+                            <a href="{{ route('admin.fields.edit', $field) }}" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-800 text-slate-400 hover:text-white hover:bg-amber-500 transition-all border border-white/5">
+                                <i class="fas fa-edit text-xs"></i>
+                            </a>
+                        </div>
+                        <form action="{{ route('admin.fields.destroy', $field) }}" method="POST" class="inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" onclick="return confirm('Are you sure?')" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-800 text-slate-400 hover:text-white hover:bg-red-500 transition-all border border-white/5">
+                                <i class="fas fa-trash-alt text-xs"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
-            </div>
+            @empty
+                <div class="lg:col-span-3 glass-card p-20 text-center">
+                    <div class="w-20 h-20 rounded-3xl bg-slate-900 flex items-center justify-center mb-6 border border-white/5 mx-auto">
+                        <i class="fas fa-satellite-dish text-3xl text-slate-700"></i>
+                    </div>
+                    <p class="text-slate-500 font-bold uppercase tracking-widest text-xs">No sectors detected in deployment grid</p>
+                </div>
+            @endforelse
+        </div>
+
+        <div class="mt-8">
+            {{ $fields->links() }}
         </div>
     </div>
-</x-app-layout> 
+</x-app-layout>
+ 

@@ -5,7 +5,7 @@ use App\Models\Employee;
 
 use Illuminate\Http\Request;
 
-class registeremployeeController extends Controller
+class RegisterEmployeeController extends Controller
 {
     public function index()
     {

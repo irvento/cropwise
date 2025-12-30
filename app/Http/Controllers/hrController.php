@@ -7,10 +7,20 @@ use App\Models\LeaveRequest;
 use App\Models\Attendance;
 use App\Models\Payroll;
 use App\Models\Employee;
+use App\Services\HRService;
 use Carbon\Carbon;
 
 class HRController extends Controller
 {
+    /**
+     * @var HRService
+     */
+    protected $hrService;
+
+    public function __construct(HRService $hrService)
+    {
+        $this->hrService = $hrService;
+    }
     public function index()
     {
         // Get all employees
@@ -82,7 +92,7 @@ class HRController extends Controller
             'status' => 'required|in:active,inactive'
         ]);
 
-        $employee = Employee::create($validated);
+        $this->hrService->createEmployee($validated);
 
         return redirect()->route('hr.index')
             ->with('success', 'Employee created successfully.');
