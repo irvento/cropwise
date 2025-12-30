@@ -4,20 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Finance;
 use App\Models\FinanceTransaction;
-use App\Services\FinanceService;
 use Illuminate\Http\Request;
 
-class FinanceController extends Controller
+class financeController extends Controller
 {
-    /**
-     * @var FinanceService
-     */
-    protected $financeService;
-
-    public function __construct(FinanceService $financeService)
-    {
-        $this->financeService = $financeService;
-    }
     public function index()
     {
         $query = Finance::query();
@@ -50,7 +40,7 @@ class FinanceController extends Controller
             'description' => 'nullable|string'
         ]);
 
-        $this->financeService->createAccount($validated);
+        Finance::create($validated);
 
         return redirect()
             ->route('admin.finance.index')

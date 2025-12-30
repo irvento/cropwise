@@ -1,21 +1,20 @@
-<nav x-data="{ open: false }" class="bg-white/5 backdrop-blur-lg border-b border-white/10 sticky top-0 z-[60] shadow-2xl">
+<nav x-data="{ open: false }" class="bg-amber-400 dark:bg-gray-800 border-b border-black dark:border-gray-700 shadow-lg sticky top-0 z-50 shadow-md">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
         <div class="flex justify-between h-16">
-            <div class="flex items-center">
-                <!-- Mobile Burger for Sidebar (Different from Profile Menu) -->
-                <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden mr-4 text-slate-400 hover:text-white transition-colors focus:outline-none">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
-                
+            <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}" class="flex items-center space-x-2">
-                        <div class="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center shadow-lg shadow-primary-500/20">
-                            <i class="fas fa-leaf text-white text-xs"></i>
-                        </div>
-                        <span class="text-xl font-black text-white tracking-tighter sm:block hidden">CROPWISE<span class="text-primary-400">.</span></span>
+                    <a href="{{ route('dashboard') }}">
+                        <x-application-mark class="block h-9 w-auto" />
                     </a>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="text-white text-3xl font-bold uppercase mb-5 mt-5">
+                        {{ __('CROP WISE') }}
+                    </x-nav-link>
                 </div>
             </div>
 

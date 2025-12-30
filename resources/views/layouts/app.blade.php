@@ -1,79 +1,55 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Cropwise') }} - Elite Agricultural Management</title>
+        <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <!-- Styles -->
         @livewireStyles
     </head>
-    <body class="font-sans antialiased bg-slate-950 text-slate-200" x-data="{ sidebarOpen: false }">
+    <body class="font-sans antialiased">
         <x-banner />
     
-        <div class="min-h-screen flex flex-col bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-primary-900 via-slate-950 to-black relative">
-            @livewire('navigation-menu')
-
-            <!-- Mobile Sidebar Overlay -->
-            <template x-if="sidebarOpen">
-                <div class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" @click="sidebarOpen = false"></div>
-            </template>
-
-            <div class="flex flex-1 overflow-hidden relative">
-                <!-- Background Decorative Elements -->
-                <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-                    <div class="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] bg-primary-600/10 blur-[120px] rounded-full"></div>
-                    <div class="absolute bottom-[-10%] right-[-5%] w-[30%] h-[30%] bg-accent-600/5 blur-[100px] rounded-full"></div>
-                </div>
-
-                <!-- Sidenav include with responsive class -->
-                <div class="fixed inset-y-0 left-0 z-50 transform lg:relative lg:translate-x-0 transition duration-300 ease-in-out"
-                     :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
-                    @include('sidenav-menu')
-                </div>
-
+        <div class="min-h-screen bg-gradient-to-b from-white to-yellow-400 dark:from-gray-900 dark:to-yellow-600 flex flex-col">
+            @livewire('navigation-menu') <!-- TOP NAV -->
+    
+            <div class="flex flex-1 overflow-hidden">
+                @include('sidenav-menu') <!-- Move sidebar OUTSIDE the scrollable content -->
+    
                 <!-- Main Content Area -->
-                <div class="flex-1 flex flex-col min-w-0 overflow-hidden z-10">
+                <div class="flex-1 flex flex-col overflow-hidden">
                     @if (isset($header))
-                        <header class="bg-white/5 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-6">
-                            <div class="max-w-7xl mx-auto flex items-center">
-                                <!-- Mobile Menu Toggle -->
-                                <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden mr-4 text-slate-400 hover:text-white transition-colors">
-                                    <i class="fas fa-bars text-xl"></i>
-                                </button>
-                                <div class="flex-1">
-                                    {{ $header }}
-                                </div>
+                        <header class="bg-amber-300 dark:bg-gray-800 shadow-md px-4 py-4">
+                            <div class="max-w-7xl mx-auto">
+                                {{ $header }}
                             </div>
                         </header>
                     @endif
     
-                    <main class="flex-1 overflow-y-auto px-4 sm:px-8 py-8 scrollbar-hide">
-                        <div class="max-w-7xl mx-auto">
-                            {{ $slot }}
-                        </div>
+                    <main class="flex-1 overflow-y-auto px-4 py-2">
+                        {{ $slot }}
                     </main>
                 </div>
             </div>
     
             <!-- Footer -->
-            <footer class="bg-black/40 backdrop-blur-md border-t border-white/5 py-6">
-                <div class="max-w-7xl mx-auto px-8 flex flex-col sm:flex-row justify-between items-center text-slate-500">
-                    <p class="text-xs uppercase tracking-widest font-semibold">&copy; 2025 Cropwise Elite. Precision Agriculture.</p>
-                    <div class="flex space-x-6 mt-4 sm:mt-0">
-                        <a href="#" class="hover:text-primary-400 transition-colors duration-300"><i class="fab fa-facebook-f text-sm"></i></a>
-                        <a href="#" class="hover:text-primary-400 transition-colors duration-300"><i class="fab fa-twitter text-sm"></i></a>
-                        <a href="#" class="hover:text-primary-400 transition-colors duration-300"><i class="fab fa-instagram text-sm"></i></a>
+            <footer class="bg-white dark:bg-gray-900 border-t border-black dark:border-gray-700">
+                <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col sm:flex-row justify-between items-center text-gray-700 dark:text-gray-300">
+                    <p class="text-sm">&copy; 2025 Cropwise. All rights reserved.</p>
+                    <div class="flex space-x-4 mt-2 sm:mt-0">
+                        <a href="#" class="hover:text-blue-500 transition-colors duration-200"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="hover:text-blue-400 transition-colors duration-200"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-pink-500 transition-colors duration-200"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
             </footer>
@@ -81,15 +57,6 @@
     
         @stack('modals')
         @livewireScripts
-
-        <style>
-            .scrollbar-hide::-webkit-scrollbar {
-                display: none;
-            }
-            .scrollbar-hide {
-                -ms-overflow-style: none;
-                scrollbar-width: none;
-            }
-        </style>
     </body>
+    
 </html>

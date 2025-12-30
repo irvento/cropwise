@@ -1,185 +1,197 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-                <h2 class="font-black text-3xl text-white tracking-tight mb-1">
-                    {{ __('Logistics Matrix') }}
-                </h2>
-                <p class="text-slate-500 text-xs font-bold uppercase tracking-[0.2em]">Supply Chain & Inventory Intelligence</p>
-            </div>
-            <div class="flex flex-wrap gap-3">
-                <a href="{{ route('admin.inventory-transactions.index') }}" class="glass-button px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-slate-400 border border-white/5 hover:bg-white/5 transition-all flex-1 sm:flex-none text-center">
-                    <i class="fas fa-exchange-alt mr-2"></i> Ledger
+        <div class="flex justify-between items-center">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                {{ __('Inventory Dashboard') }}
+        </h2>
+            <div class="flex space-x-4">
+                <a href="{{ route('admin.inventory-category.index') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    Manage Categories
                 </a>
-                <a href="{{ route('admin.inventory.create') }}" class="glass-button bg-primary-500 hover:bg-primary-600 px-6 py-2.5 rounded-xl text-white font-black uppercase tracking-widest text-xs shadow-xl shadow-primary-500/10 transition-all flex-1 sm:flex-none text-center">
-                    <i class="fas fa-plus-circle mr-2"></i> New Resource
+                <a href="{{ route('admin.supplier.index') }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+                    Manage Suppliers
+                </a>
+                <a href="{{ route('admin.inventory-transactions.index') }}" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+                    View Transactions
+                </a>
+                <a href="{{ route('admin.inventory.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Add New Item
                 </a>
             </div>
         </div>
     </x-slot>
 
-    <div class="space-y-8">
-        <!-- Strategic Intelligence Metric Units -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            @php
-                $metrics = [
-                    [
-                        'label' => 'Total Assets',
-                        'value' => $items->total(),
-                        'icon' => 'fa-boxes',
-                        'color' => 'primary',
-                        'desc' => 'Unique resource identifiers'
-                    ],
-                    [
-                        'label' => 'Critical Stock',
-                        'value' => $lowStockItems,
-                        'icon' => 'fa-exclamation-triangle',
-                        'color' => 'red',
-                        'desc' => 'Below threshold alerts'
-                    ],
-                    [
-                        'label' => 'Classifications',
-                        'value' => $categoriesCount,
-                        'icon' => 'fa-tags',
-                        'color' => 'emerald',
-                        'desc' => 'Operational categories'
-                    ],
-                    [
-                        'label' => 'Asset Valuation',
-                        'value' => '₱' . number_format($totalValue, 0),
-                        'icon' => 'fa-file-invoice-dollar',
-                        'color' => 'amber',
-                        'desc' => 'Aggregated market value'
-                    ],
-                ];
-            @endphp
-
-            @foreach($metrics as $metric)
-                <div class="glass-card p-6 border-l-4 border-{{ $metric['color'] }}-500/50">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 rounded-xl bg-{{ $metric['color'] }}-500/10 flex items-center justify-center border border-{{ $metric['color'] }}-500/20">
-                            <i class="fas {{ $metric['icon'] }} text-{{ $metric['color'] }}-400 text-xs"></i>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 ">
+                <!-- Total Items Card -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg p-6  border border-black">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900">
+                            <svg class="h-8 w-8 text-blue-600 dark:text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                            </svg>
                         </div>
-                        <span class="text-[10px] font-black text-slate-600 uppercase tracking-widest">Active</span>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Total Items</h3>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $items->total() }}</p>
+                        </div>
                     </div>
-                    <h3 class="text-2xl font-black text-white mb-1">{{ $metric['value'] }}</h3>
-                    <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ $metric['label'] }}</p>
-                    <p class="text-[9px] text-slate-600 font-bold mt-2 italic">{{ $metric['desc'] }}</p>
                 </div>
-            @endforeach
-        </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Terminal: Recent Transactions -->
-            <div class="lg:col-span-1 glass-card overflow-hidden">
-                <div class="p-6 border-b border-white/5 flex items-center justify-between bg-white/[0.01]">
-                    <h3 class="text-[10px] font-black text-white uppercase tracking-widest flex items-center">
-                        <i class="fas fa-stream mr-2 text-primary-400"></i> Transaction Stream
-                    </h3>
-                    <a href="{{ route('admin.inventory-transactions.index') }}" class="text-[9px] font-black text-primary-400 uppercase tracking-widest hover:text-white transition-colors">History »</a>
+                <!-- Low Stock Items Card -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg p-6  border border-black">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-red-100 dark:bg-red-900">
+                            <svg class="h-8 w-8 text-red-600 dark:text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Low Stock Items</h3>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $lowStockItems }}</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="p-6 space-y-4 max-h-[500px] overflow-y-auto">
-                    @forelse($recentTransactions as $transaction)
-                        <div class="p-4 rounded-2xl bg-slate-900/50 border border-white/5 group hover:border-primary-500/30 transition-all">
-                            <div class="flex justify-between items-start mb-2">
-                                <p class="text-white font-bold text-sm">{{ $transaction->inventory->name }}</p>
-                                <span class="text-[9px] font-black uppercase text-{{ $transaction->type === 'IN' ? 'emerald' : 'red' }}-500 bg-{{ $transaction->type === 'IN' ? 'emerald' : 'red' }}-500/10 px-2 py-0.5 rounded-md border border-{{ $transaction->type === 'IN' ? 'emerald' : 'red' }}-500/20">
-                                    {{ $transaction->type }}
-                                </span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <p class="text-[10px] text-slate-500 font-bold">{{ $transaction->quantity }} Units</p>
-                                <p class="text-[10px] text-slate-700 font-bold uppercase">{{ $transaction->created_at->diffForHumans() }}</p>
-                            </div>
+
+                <!-- Total Categories Card -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg p-6  border border-black">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-green-100 dark:bg-green-900">
+                            <svg class="h-8 w-8 text-green-600 dark:text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                            </svg>
                         </div>
-                    @empty
-                        <div class="py-10 text-center">
-                            <p class="text-slate-600 text-[10px] font-black uppercase tracking-widest">No activity detected</p>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Categories</h3>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $categoriesCount }}</p>
+                            <a href="{{ route('admin.inventory-category.index') }}" class="text-sm text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300">View all categories</a>
                         </div>
-                    @endforelse
+                    </div>
+                </div>
+
+                <!-- Total Value Card -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg p-6  border border-black">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900">
+                            <svg class="h-8 w-8 text-yellow-600 dark:text-yellow-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Total Value</h3>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">₱{{ number_format($totalValue, 2) }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Central Inventory Matrix -->
-            <div class="lg:col-span-2 space-y-6">
-                <div class="glass-card p-6">
-                    <form action="{{ route('admin.inventory.index') }}" method="GET" class="flex gap-3">
-                        <div class="flex-1 relative">
-                            <i class="fas fa-barcode absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
-                            <input type="text" name="search" value="{{ request('search') }}" 
-                                class="w-full bg-slate-900/50 border border-white/5 rounded-xl pl-12 pr-4 py-3 text-white text-xs font-bold focus:border-primary-500/50 outline-none transition-all placeholder-slate-700"
-                                placeholder="IDENTIFY RESOURCE BY NAME OR CLASSIFICATION...">
+            <!-- Recent Transactions and Low Stock Items -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Recent Transactions -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg  border border-black">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Recent Transactions</h3>
+                            <a href="{{ route('admin.inventory-transactions.index') }}" class="text-sm text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300">View all transactions</a>
                         </div>
-                        <button type="submit" class="px-6 py-3 bg-primary-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-primary-600 transition-all shadow-lg shadow-primary-500/20">
-                            SCAN
-                        </button>
-                    </form>
+                        <div class="space-y-4">
+                            @forelse($recentTransactions as $transaction)
+                                <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <div>
+                                        <p class="font-medium text-gray-900 dark:text-white">{{ $transaction->inventory->name }}</p>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ $transaction->type }} - {{ $transaction->quantity }} units</p>
+                                    </div>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">{{ $transaction->created_at->diffForHumans() }}</span>
+                                </div>
+                            @empty
+                                <p class="text-gray-500 dark:text-gray-400">No recent transactions</p>
+                            @endforelse
+                        </div>
+                    </div>
                 </div>
 
-                <div class="glass-card overflow-hidden">
+                <!-- Low Stock Items -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg  border border-black">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">Low Stock Items</h3>
+                        <div class="space-y-4">
+                            @forelse($lowStockItemsList as $item)
+                                <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <div>
+                                        <p class="font-medium text-gray-900 dark:text-white">{{ $item->name }}</p>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Current: {{ $item->current_stock_level }} / Min: {{ $item->minimum_stock_level }}</p>
+                                    </div>
+                                    <a href="{{ route('admin.inventory.edit', $item) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">Restock</a>
+                                </div>
+                            @empty
+                                <p class="text-gray-500 dark:text-gray-400">No low stock items</p>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Items Table -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-lg  border border-black">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Recent Inventory Items</h3>
+                        <form action="{{ route('admin.inventory.index') }}" method="GET" class="flex space-x-2">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name or category..." class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Search
+                            </button>
+                            @if(request('search'))
+                                <a href="{{ route('admin.inventory.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                                    Clear
+                                </a>
+                            @endif
+                        </form>
+                    </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead>
-                                <tr class="bg-white/[0.01] border-b border-white/5">
-                                    <th class="px-8 py-5 text-left text-[9px] font-black text-slate-500 uppercase tracking-widest">Resource Descriptor</th>
-                                    <th class="px-8 py-5 text-left text-[9px] font-black text-slate-500 uppercase tracking-widest">Class</th>
-                                    <th class="px-8 py-5 text-left text-[9px] font-black text-slate-500 uppercase tracking-widest">Level</th>
-                                    <th class="px-8 py-5 text-right text-[9px] font-black text-slate-500 uppercase tracking-widest">Executables</th>
+                                <tr>
+                                    <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Category</th>
+                                    <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Current Stock</th>
+                                    <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Unit</th>
+                                    <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-white/5">
+                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                 @forelse($items as $item)
-                                    <tr class="group hover:bg-white/[0.01] transition-colors">
-                                        <td class="px-8 py-5">
-                                            <div class="flex flex-col">
-                                                <span class="text-white font-bold text-sm">{{ $item->name }}</span>
-                                                <span class="text-[10px] text-slate-600 font-bold uppercase mt-0.5 tracking-tighter">ID: {{ str_pad($item->id, 6, '0', STR_PAD_LEFT) }}</span>
-                                            </div>
-                                        </td>
-                                        <td class="px-8 py-5 text-slate-400 text-xs font-bold uppercase tracking-tighter">
-                                            {{ $item->category->name }}
-                                        </td>
-                                        <td class="px-8 py-5">
-                                            <div class="flex flex-col">
-                                                <span class="text-white font-black text-sm">{{ $item->current_stock_level }} <span class="text-[10px] text-slate-500 font-bold">{{ $item->unit_of_measurement }}</span></span>
-                                                <div class="w-24 h-1 bg-slate-800 rounded-full mt-2 overflow-hidden">
-                                                    @php $percent = min(100, ($item->current_stock_level / ($item->minimum_stock_level ?: 1)) * 50); @endphp
-                                                    <div class="h-full bg-{{ $item->current_stock_level <= $item->minimum_stock_level ? 'red' : 'primary' }}-500" style="width: {{ $percent }}%"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-8 py-5">
-                                            <div class="flex items-center justify-end space-x-2">
-                                                <a href="{{ route('admin.inventory.show', $item) }}" class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800 text-slate-500 hover:text-white hover:bg-primary-500 transition-all">
-                                                    <i class="fas fa-eye text-[10px]"></i>
-                                                </a>
-                                                <a href="{{ route('admin.inventory.edit', $item) }}" class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800 text-slate-500 hover:text-white hover:bg-amber-500 transition-all">
-                                                    <i class="fas fa-edit text-[10px]"></i>
-                                                </a>
-                                                <form action="{{ route('admin.inventory.destroy', $item) }}" method="POST" class="inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" onclick="return confirm('Initiate asset deletion protocol?')" class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800 text-slate-500 hover:text-white hover:bg-red-500 transition-all">
-                                                        <i class="fas fa-trash-alt text-[10px]"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $item->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $item->category->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $item->current_stock_level }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $item->unit_of_measurement }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <a href="{{ route('admin.inventory.show', $item) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-3">View</a>
+                                            <a href="{{ route('admin.inventory.edit', $item) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3">Edit</a>
+                                            <form action="{{ route('admin.inventory.destroy', $item) }}" method="POST" class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300" onclick="return confirm('Are you sure you want to delete this item?')">Delete</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="px-8 py-20 text-center">
-                                            <p class="text-slate-600 text-xs font-black uppercase tracking-widest">Inventory Matrix Is Depleted</p>
+                                        <td colspan="5" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                                            No inventory items found.
                                         </td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
                     </div>
-                </div>
 
-                <div class="mt-8">
-                    {{ $items->links() }}
+                    <div class="mt-4">
+                        {{ $items->links() }}
+                    </div>
                 </div>
             </div>
         </div>

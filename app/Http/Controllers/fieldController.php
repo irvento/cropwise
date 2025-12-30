@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Field;
 use Illuminate\Http\Request;
 
-class FieldController extends Controller
+class fieldController extends Controller
 {
     public function index(Request $request)
     {

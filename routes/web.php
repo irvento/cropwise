@@ -1,27 +1,28 @@
 <?php
 
-use App\Http\Controllers\FarmController;
-use App\Http\Controllers\FinanceController;
-use App\Http\Controllers\FieldController;
-use App\Http\Controllers\HRController;
-use App\Http\Controllers\InventoryController;
-use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\farmController;
+use App\Http\Controllers\financeController;
+use App\Http\Controllers\fieldController;
+use App\Http\Controllers\hrController;
+use App\Http\Controllers\inventoryController;
+use App\Http\Controllers\schedulesController;
 use App\Http\Controllers\WeatherController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CropController;
+use App\Http\Controllers\cropController;
 use App\Http\Controllers\PlantingScheduleController;    
-use App\Http\Controllers\InventoryCategoryController;
+use App\Http\Controllers\inventorycategoryController;
 use App\Http\Controllers\InventoryTransactionController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\FullCalenderController;
 use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\EmployeeRegistrationController;
-use App\Http\Controllers\LivestockController;
+use App\Http\Controllers\livestockController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -32,7 +33,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [dashboardController::class, 'index'])->name('dashboard');
 });
 
 
@@ -40,14 +41,14 @@ Route::middleware([
 Route::get('/weather/{city}', [WeatherController::class, 'show'])->name('weather.show');
 
 //FARM
-Route::get('/farm', [FarmController::class, 'index'])->name('farm.index');
+Route::get('/farm', [farmController::class, 'index'])->name('farm.index');
 
-Route::get('/hr', [HRController::class, 'index'])->name('hr.index');
+Route::get('/hr', [hrController::class, 'index'])->name('hr.index');
 
 // HR Routes
 Route::prefix('hr')->name('hr.')->group(function () {
     // Dashboard
-    Route::get('/', [HRController::class, 'index'])->name('index');
+    Route::get('/', [hrController::class, 'index'])->name('index');
     
     // Leave Management
     Route::get('/leave-requests', [LeaveRequestController::class, 'index'])->name('leave-requests.index');
@@ -59,7 +60,7 @@ Route::prefix('hr')->name('hr.')->group(function () {
     Route::delete('/leave-requests/{leaveRequest}', [LeaveRequestController::class, 'destroy'])->name('leave-requests.destroy');
 
     // Attendance
-    Route::get('/attendance', [HRController::class, 'attendanceindex'])->name('attendance.index');
+    Route::get('/attendance', [hrController::class, 'attendanceindex'])->name('attendance.index');
     Route::get('/attendance/create', [AttendanceController::class, 'create'])->name('attendance.create');
     Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
     Route::get('/attendance/{attendance}', [AttendanceController::class, 'show'])->name('attendance.show');
@@ -70,7 +71,7 @@ Route::prefix('hr')->name('hr.')->group(function () {
     Route::post('/attendance/time-out', [AttendanceController::class, 'timeOut'])->name('attendance.time-out');
 
     // Payroll
-    Route::get('/payroll', [HRController::class, 'payrollindex'])->name('payroll.index');
+    Route::get('/payroll', [hrController::class, 'payrollindex'])->name('payroll.index');
     Route::get('/payroll/create', [PayrollController::class, 'create'])->name('payroll.create');
     Route::post('/payroll', [PayrollController::class, 'store'])->name('payroll.store');
     Route::get('/payroll/{payroll}', [PayrollController::class, 'show'])->name('payroll.show');
@@ -83,28 +84,28 @@ Route::prefix('hr')->name('hr.')->group(function () {
         ->name('payroll.mark-as-paid');
 
     // Employees
-    Route::get('/employees', [HRController::class, 'employeesindex'])->name('employees.index');
-    Route::get('/employees/create', [HRController::class, 'create'])->name('create');
-    Route::post('/employees', [HRController::class, 'store'])->name('store');
-    Route::get('/employees/{id}', [HRController::class, 'show'])->name('show');
-    Route::get('/employees/{id}/edit', [HRController::class, 'edit'])->name('edit');
-    Route::put('/employees/{id}', [HRController::class, 'update'])->name('update');
-    Route::delete('/employees/{id}', [HRController::class, 'destroy'])->name('destroy');
+    Route::get('/employees', [hrController::class, 'employeesindex'])->name('employees.index');
+    Route::get('/employees/create', [hrController::class, 'create'])->name('create');
+    Route::post('/employees', [hrController::class, 'store'])->name('store');
+    Route::get('/employees/{id}', [hrController::class, 'show'])->name('show');
+    Route::get('/employees/{id}/edit', [hrController::class, 'edit'])->name('edit');
+    Route::put('/employees/{id}', [hrController::class, 'update'])->name('update');
+    Route::delete('/employees/{id}', [hrController::class, 'destroy'])->name('destroy');
 });
 
 // Task management routes
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
     // Inventory Routes
-    Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
-    Route::get('/inventory/create', [InventoryController::class, 'create'])->name('inventory.create');
-    Route::post('/inventory', [InventoryController::class, 'store'])->name('inventory.store');
-    Route::get('/inventory/{inventory}', [InventoryController::class, 'show'])->name('inventory.show');
-    Route::get('/inventory/{inventory}/edit', [InventoryController::class, 'edit'])->name('inventory.edit');
-    Route::put('/inventory/{inventory}', [InventoryController::class, 'update'])->name('inventory.update');
-    Route::delete('/inventory/{inventory}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
+    Route::get('/inventory', [inventoryController::class, 'index'])->name('inventory.index');
+    Route::get('/inventory/create', [inventoryController::class, 'create'])->name('inventory.create');
+    Route::post('/inventory', [inventoryController::class, 'store'])->name('inventory.store');
+    Route::get('/inventory/{inventory}', [inventoryController::class, 'show'])->name('inventory.show');
+    Route::get('/inventory/{inventory}/edit', [inventoryController::class, 'edit'])->name('inventory.edit');
+    Route::put('/inventory/{inventory}', [inventoryController::class, 'update'])->name('inventory.update');
+    Route::delete('/inventory/{inventory}', [inventoryController::class, 'destroy'])->name('inventory.destroy');
 
-    Route::resource('finance', FinanceController::class);
-    Route::resource('crops', CropController::class);
+    Route::resource('finance', financeController::class);
+    Route::resource('crops', cropController::class);
     Route::get('crops/{crop}/schedules', [CropController::class, 'getPlantingSchedules'])->name('crops.schedules');
     Route::get('crops/{crop}/fields', [CropController::class, 'getFields'])->name('crops.fields');
     Route::resource('tasks', TaskController::class)->names([
@@ -116,7 +117,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'update' => 'tasks.update',
         'destroy' => 'tasks.destroy',
     ]);
-    Route::resource('fields', FieldController::class);
+    Route::resource('fields', fieldController::class);
     Route::resource('planting-schedules', PlantingScheduleController::class)->names([
         'index' => 'planting-schedules.index',
         'create' => 'planting-schedules.create',
@@ -126,7 +127,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'update' => 'planting-schedules.update',
         'destroy' => 'planting-schedules.destroy',
     ]);
-    Route::resource('inventory-category', InventoryCategoryController::class);
+    Route::resource('inventory-category', inventorycategoryController::class);
     Route::resource('inventory-transactions', InventoryTransactionController::class);
     Route::resource('supplier', SupplierController::class);
 
@@ -143,7 +144,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     // Farm Management Routes
     Route::prefix('farm')->name('farm.')->group(function () {
         // Livestock Management
-        Route::resource('livestock', LivestockController::class);
+        Route::resource('livestock', livestockController::class);
     });
 });
 
@@ -178,11 +179,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('user.attendance.index');
 
     // User Tasks Routes
-    Route::get('/tasks', [TaskController::class, 'userTasks'])
+    Route::get('/tasks', [App\Http\Controllers\taskController::class, 'userTasks'])
         ->name('user.tasks.index');
-    Route::get('/tasks/{task}', [TaskController::class, 'userShow'])
+    Route::get('/tasks/{task}', [App\Http\Controllers\taskController::class, 'userShow'])
         ->name('user.tasks.show');
-    Route::put('/tasks/{task}/status', [TaskController::class, 'updateStatus'])
+    Route::put('/tasks/{task}/status', [App\Http\Controllers\taskController::class, 'updateStatus'])
         ->name('user.tasks.update-status');
 
     // User Leave Requests Routes

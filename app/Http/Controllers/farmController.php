@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\WeatherService;
 use Illuminate\Http\Request;
 
-class FarmController extends Controller
+class farmController extends Controller
 {
     public function __construct(
         protected WeatherService $weatherService

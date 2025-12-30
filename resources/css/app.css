@@ -1,28 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-    .glass-card {
-        @apply bg-white/70 dark:bg-gray-900/70 backdrop-blur-md border border-white/20 dark:border-gray-700/30 shadow-glass rounded-xl;
-    }
-    
-    .glass-sidebar {
-        @apply bg-primary-950/80 backdrop-blur-lg border-r border-white/10;
-    }
-
-    .btn-premium {
-        @apply px-4 py-2 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-sm hover:shadow-md;
-    }
-}
-
 [x-cloak] {
     display: none;
-}
-
-body {
-    @apply antialiased text-secondary-900 dark:text-secondary-100 bg-secondary-50 dark:bg-black;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }

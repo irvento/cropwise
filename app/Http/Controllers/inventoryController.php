@@ -7,21 +7,11 @@ use App\Models\InventoryCategory;
 use App\Models\Supplier;
 use App\Models\InventoryTransaction;
 use App\Models\Finance;
-use App\Services\InventoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class InventoryController extends Controller
+class inventoryController extends Controller
 {
-    /**
-     * @var InventoryService
-     */
-    protected $inventoryService;
-
-    public function __construct(InventoryService $inventoryService)
-    {
-        $this->inventoryService = $inventoryService;
-    }
     public function index()
     {
         $query = Inventory::with(['category', 'supplier']);
@@ -96,13 +86,59 @@ class InventoryController extends Controller
                 'finance_account_id' => 'required|exists:financial_accounts,id'
             ]);
 
-            $this->inventoryService->createItem($validated);
+            DB::beginTransaction();
+
+            // Get the financial account
+            $financeAccount = Finance::findOrFail($validated['finance_account_id']);
+            
+            // Calculate total amount
+            $totalAmount = $validated['quantity'] * $validated['purchase_price'];
+
+            // Check if account has sufficient balance
+            if ($financeAccount->balance < $totalAmount) {
+                throw new \Exception('Insufficient balance in the selected financial account.');
+            }
+
+            // Create the inventory item
+            $inventory = Inventory::create([
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'category_id' => $validated['category_id'],
+                'supplier_id' => $validated['supplier_id'],
+                'unit_of_measurement' => $validated['unit_of_measurement'],
+                'minimum_stock_level' => $validated['minimum_stock_level'],
+                'current_stock_level' => $validated['current_stock_level'],
+                'purchase_price' => $validated['purchase_price'],
+                'selling_price' => $validated['selling_price'],
+                'expiry_date' => $validated['expiry_date'],
+                'storage_location' => $validated['storage_location'],
+                'quantity' => $validated['quantity']
+            ]);
+
+            // Create initial transaction record
+            InventoryTransaction::create([
+                'item_id' => $inventory->id,
+                'finance_account_id' => $validated['finance_account_id'],
+                'transaction_type' => $validated['transaction_type'],
+                'quantity' => $validated['quantity'],
+                'unit_price' => $validated['purchase_price'],
+                'total_amount' => $totalAmount,
+                'notes' => "Initial stock entry for {$validated['name']}"
+            ]);
+
+            // Deduct from financial account balance
+            $financeAccount->update([
+                'balance' => $financeAccount->balance - $totalAmount
+            ]);
+
+            DB::commit();
 
             return redirect()
                 ->route('admin.inventory.index')
                 ->with('success', 'Inventory item created successfully.');
 
         } catch (\Exception $e) {
+            DB::rollBack();
             return back()
                 ->withInput()
                 ->withErrors(['error' => 'Failed to create inventory item: ' . $e->getMessage()]);

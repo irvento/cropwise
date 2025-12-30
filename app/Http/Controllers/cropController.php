@@ -6,20 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Crop;
 use App\Models\Field;
 use App\Models\PlantingSchedule;
-use App\Services\CropService;
 use Illuminate\Http\Request;
 
-class CropController extends Controller
+class cropController extends Controller
 {
-    /**
-     * @var CropService
-     */
-    protected $cropService;
-
-    public function __construct(CropService $cropService)
-    {
-        $this->cropService = $cropService;
-    }
     /**
      * Display a listing of the crops.
      */
@@ -77,12 +67,36 @@ class CropController extends Controller
             'variety' => 'required|string|max:255',
             'growth_duration' => 'required|integer|min:1',
             'conditions' => 'nullable|string',
-            'field_id' => 'nullable|exists:fields,id',
-            'quantity_planted' => 'nullable|integer|min:1',
-            'status' => 'nullable|string'
+            'field_id' => 'nullable|exists:fields,id'
         ]);
 
-        $this->cropService->createCrop($validated);
+        // Set default values if not provided
+        $validated['growth_duration'] = $validated['growth_duration'] ?? 30;
+        $validated['conditions'] = $validated['conditions'] ?? 'Standard growing conditions';
+        
+        // Set default field if none selected
+        if (empty($validated['field_id'])) {
+            // Get the first available field or create a default one
+            $defaultField = Field::first() ?? Field::create([
+                'name' => 'Default Field',
+                'location' => 'Main Farm',
+                'size' => 100,
+                'status' => 'Active'
+            ]);
+            $validated['field_id'] = $defaultField->id;
+        }
+
+        $crop = Crop::create($validated);
+
+        // Create a planting schedule with the field (now we always have a field)
+        PlantingSchedule::create([
+            'field_id' => $validated['field_id'],
+            'crop_id' => $crop->id,
+            'planting_date' => now(),
+            'expected_harvest_date' => now()->addDays((int) $crop->growth_duration),
+            'quantity_planted' => 1,
+            'status' => 'Planned',
+        ]);
 
         return redirect()->route('admin.crops.index')
             ->with('success', 'Crop created successfully.');
@@ -122,12 +136,38 @@ class CropController extends Controller
             'variety' => 'required|string|max:255',
             'growth_duration' => 'required|integer|min:1',
             'conditions' => 'nullable|string',
-            'field_id' => 'nullable|exists:fields,id',
-            'quantity_planted' => 'nullable|integer|min:1',
-            'status' => 'nullable|string'
+            'field_id' => 'nullable|exists:fields,id'
         ]);
 
-        $this->cropService->updateCrop($crop, $validated);
+        // Set default values if not provided
+        $validated['growth_duration'] = $validated['growth_duration'] ?? 30;
+        $validated['conditions'] = $validated['conditions'] ?? 'Standard growing conditions';
+        
+        // Set default field if none selected
+        if (empty($validated['field_id'])) {
+            // Get the first available field or create a default one
+            $defaultField = Field::first() ?? Field::create([
+                'name' => 'Default Field',
+                'location' => 'Main Farm',
+                'size' => 100,
+                'status' => 'Active'
+            ]);
+            $validated['field_id'] = $defaultField->id;
+        }
+
+        $crop->update($validated);
+
+        // Update or create planting schedule with the field
+        PlantingSchedule::updateOrCreate(
+            ['crop_id' => $crop->id],
+            [
+                'field_id' => $validated['field_id'],
+                'planting_date' => now(),
+                'expected_harvest_date' => now()->addDays((int) $crop->growth_duration),
+                'quantity_planted' => 1,
+                'status' => 'Planned',
+            ]
+        );
 
         return redirect()->route('admin.crops.index')
             ->with('success', 'Crop updated successfully.');

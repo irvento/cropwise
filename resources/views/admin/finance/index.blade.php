@@ -1,179 +1,118 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-                <h2 class="font-black text-3xl text-white tracking-tight mb-1">
-                    {{ __('Fiscal Ledger') }}
-                </h2>
-                <p class="text-slate-500 text-xs font-bold uppercase tracking-[0.2em]">Financial Intelligence & Oversight</p>
-            </div>
-            <a href="{{ route('admin.finance.create') }}" class="glass-button bg-primary-500 hover:bg-primary-600 px-6 py-3 rounded-xl text-white font-black uppercase tracking-widest text-[10px] shadow-xl shadow-primary-500/10 transition-all flex items-center justify-center">
-                <i class="fas fa-plus-circle mr-2"></i> Register Account
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                {{ __('Finance Accounts') }}
+            </h2>
+            <a href="{{ route('admin.finance.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Add New Account
             </a>
         </div>
     </x-slot>
 
-    <div class="space-y-8">
-        @if(session('success'))
-            <div class="glass-card border-emerald-500/20 bg-emerald-500/5 p-4 flex items-center space-x-4">
-                <div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white">
-                    <i class="fas fa-check text-xs"></i>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6">
+                @if(session('success'))
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                <!-- Summary Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-green-100 dark:bg-green-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-semibold text-green-800 dark:text-green-200">Total Income</h3>
+                        <p class="text-2xl font-bold text-green-600 dark:text-green-300">
+                            ₱{{ number_format($accounts->where('type', 'income')->sum('balance'), 2) }}
+                        </p>
+                    </div>
+                    <div class="bg-red-100 dark:bg-red-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-semibold text-red-800 dark:text-red-200">Total Expenses</h3>
+                        <p class="text-2xl font-bold text-red-600 dark:text-red-300">
+                            ₱{{ number_format($accounts->where('type', 'expense')->sum('balance'), 2) }}
+                        </p>
+                    </div>
+                    <div class="bg-blue-100 dark:bg-blue-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-semibold text-blue-800 dark:text-blue-200">Total Assets</h3>
+                        <p class="text-2xl font-bold text-blue-600 dark:text-blue-300">
+                            ₱{{ number_format($accounts->where('type', 'asset')->sum('balance'), 2) }}
+                        </p>
+                    </div>
+                    <div class="bg-yellow-100 dark:bg-yellow-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-semibold text-yellow-800 dark:text-yellow-200">Total Liabilities</h3>
+                        <p class="text-2xl font-bold text-yellow-600 dark:text-yellow-300">
+                            ₱{{ number_format($accounts->where('type', 'liability')->sum('balance'), 2) }}
+                        </p>
+                    </div>
                 </div>
-                <p class="text-emerald-400 text-sm font-bold">{{ session('success') }}</p>
-            </div>
-        @endif
 
-        <!-- Global Liquidity Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            @php
-                $financeMetrics = [
-                    [
-                        'label' => 'Total Liquidity',
-                        'value' => $accounts->where('type', 'income')->sum('balance'),
-                        'icon' => 'fa-wallet',
-                        'color' => 'emerald',
-                        'desc' => 'Aggregated incoming assets'
-                    ],
-                    [
-                        'label' => 'Operational Expenditure',
-                        'value' => $accounts->where('type', 'expense')->sum('balance'),
-                        'icon' => 'fa-file-invoice-dollar',
-                        'color' => 'red',
-                        'desc' => 'Resource consumption costs'
-                    ],
-                    [
-                        'label' => 'Fixed Capital',
-                        'value' => $accounts->where('type', 'asset')->sum('balance'),
-                        'icon' => 'fa-landmark',
-                        'color' => 'blue',
-                        'desc' => 'Infrastructure & hardware'
-                    ],
-                    [
-                        'label' => 'Pending Liabilities',
-                        'value' => $accounts->where('type', 'liability')->sum('balance'),
-                        'icon' => 'fa-hand-holding-usd',
-                        'color' => 'amber',
-                        'desc' => 'Debt & recurring obligations'
-                    ],
-                ];
-            @endphp
-
-            @foreach($financeMetrics as $metric)
-                <div class="glass-card group p-6 relative overflow-hidden flex flex-col transition-all duration-500 hover:translate-y-[-2px]">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <i class="fas {{ $metric['icon'] }} text-4xl text-{{ $metric['color'] }}-400"></i>
+                <!-- Accounts Table -->
+                <div class="overflow-x-auto">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Finance Accounts</h3>
+                        <form action="{{ route('admin.finance.index') }}" method="GET" class="flex space-x-2">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name or type..." class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Search
+                            </button>
+                            @if(request('search'))
+                                <a href="{{ route('admin.finance.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                                    Clear
+                                </a>
+                            @endif
+                        </form>
                     </div>
-                    <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">{{ $metric['label'] }}</p>
-                    <div class="flex items-baseline space-x-1 mb-2">
-                        <span class="text-slate-400 font-bold">₱</span>
-                        <h3 class="text-2xl font-black text-white leading-none tracking-tight">{{ number_format($metric['value'], 0) }}</h3>
-                    </div>
-                    <p class="text-[9px] text-{{ $metric['color'] }}-500/70 font-black uppercase tracking-widest mt-auto">{{ $metric['desc'] }}</p>
-                </div>
-            @endforeach
-        </div>
-
-        <!-- Ledger Matrix -->
-        <div class="glass-card overflow-hidden">
-            <div class="p-8 border-b border-white/5 flex flex-col md:flex-row md:items-center justify-between bg-white/[0.01] gap-4">
-                <h3 class="text-[10px] font-black text-white uppercase tracking-widest flex items-center">
-                    <i class="fas fa-microchip mr-2 text-primary-400"></i> Account Synchronization Grid
-                </h3>
-                <form action="{{ route('admin.finance.index') }}" method="GET" class="flex gap-3">
-                    <div class="relative group">
-                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-primary-400"></i>
-                        <input type="text" name="search" value="{{ request('search') }}" 
-                            class="bg-slate-900/50 border border-white/5 rounded-xl pl-10 pr-4 py-2 text-white text-xs font-bold focus:border-primary-500/50 outline-none w-64"
-                            placeholder="QUERY ACCOUNT NAME OR TYPE...">
-                    </div>
-                    @if(request('search'))
-                        <a href="{{ route('admin.finance.index') }}" class="px-4 py-2 bg-slate-800 text-slate-400 rounded-xl text-[9px] font-black uppercase tracking-widest hover:text-white border border-white/5 transition-all">Clear</a>
-                    @endif
-                </form>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full border-collapse">
-                    <thead>
-                        <tr class="bg-slate-900/20">
-                            <th class="px-8 py-5 text-left text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5">Account Name</th>
-                            <th class="px-8 py-5 text-left text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5">Classification</th>
-                            <th class="px-8 py-5 text-left text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5">Net Balance</th>
-                            <th class="px-8 py-5 text-left text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5">Last Sync</th>
-                            <th class="px-8 py-5 text-right text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5">Protocols</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-white/5">
-                        @forelse($accounts as $account)
-                            <tr class="group hover:bg-white/[0.01] transition-colors">
-                                <td class="px-8 py-6">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="w-9 h-9 rounded-lg bg-slate-800 border border-white/5 flex items-center justify-center font-black text-primary-400">
-                                            {{ substr($account->name, 0, 1) }}
-                                        </div>
-                                        <span class="text-white font-bold text-sm">{{ $account->name }}</span>
-                                    </div>
-                                </td>
-                                <td class="px-8 py-6">
-                                    @php
-                                        $typeColors = [
-                                            'income' => 'emerald',
-                                            'expense' => 'red',
-                                            'asset' => 'blue',
-                                            'liability' => 'amber'
-                                        ];
-                                        $color = $typeColors[$account->type] ?? 'slate';
-                                    @endphp
-                                    <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-{{ $color }}-500/10 text-{{ $color }}-500 border border-{{ $color }}-500/20">
-                                        {{ $account->type }}
-                                    </span>
-                                </td>
-                                <td class="px-8 py-6">
-                                    <div class="flex items-center justify-start">
-                                        <span class="text-slate-500 text-[10px] mr-1">₱</span>
-                                        <span class="text-white font-black text-sm">{{ number_format($account->balance, 2) }}</span>
-                                    </div>
-                                </td>
-                                <td class="px-8 py-6">
-                                    <span class="text-[10px] text-slate-500 font-bold uppercase">{{ $account->updated_at->format('M d, Y') }}</span>
-                                </td>
-                                <td class="px-8 py-6">
-                                    <div class="flex items-center justify-end space-x-2">
-                                        <a href="{{ route('admin.finance.show', $account) }}" class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-900 border border-white/5 text-slate-500 hover:text-white hover:bg-primary-500 transition-all">
-                                            <i class="fas fa-eye text-[10px]"></i>
-                                        </a>
-                                        <a href="{{ route('admin.finance.edit', $account) }}" class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-900 border border-white/5 text-slate-500 hover:text-white hover:bg-amber-500 transition-all">
-                                            <i class="fas fa-edit text-[10px]"></i>
-                                        </a>
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead>
+                            <tr>
+                                <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Name</th>
+                                <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Type</th>
+                                <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Balance</th>
+                                <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Last Updated</th>
+                                <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                            @forelse($accounts as $account)
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $account->name }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                            {{ $account->type === 'income' ? 'bg-green-100 text-green-800' : '' }}
+                                            {{ $account->type === 'expense' ? 'bg-red-100 text-red-800' : '' }}
+                                            {{ $account->type === 'asset' ? 'bg-blue-100 text-blue-800' : '' }}
+                                            {{ $account->type === 'liability' ? 'bg-yellow-100 text-yellow-800' : '' }}">
+                                            {{ ucfirst($account->type) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">₱{{ number_format($account->balance, 2) }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $account->updated_at->format('M d, Y') }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <a href="{{ route('admin.finance.show', $account) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-3">View</a>
+                                        <a href="{{ route('admin.finance.edit', $account) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3">Edit</a>
                                         <form action="{{ route('admin.finance.destroy', $account) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" onclick="return confirm('Initiate account deletion protocol?')" class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-900 border border-white/5 text-slate-500 hover:text-white hover:bg-red-500 transition-all">
-                                                <i class="fas fa-trash-alt text-[10px]"></i>
-                                            </button>
+                                            <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300" onclick="return confirm('Are you sure you want to delete this account?')">Delete</button>
                                         </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="px-8 py-20 text-center">
-                                    <div class="flex flex-col items-center">
-                                        <div class="w-16 h-16 rounded-2xl bg-slate-900 flex items-center justify-center mb-6 border border-white/5">
-                                            <i class="fas fa-calculator text-2xl text-slate-700"></i>
-                                        </div>
-                                        <p class="text-slate-500 font-bold uppercase tracking-widest text-[10px]">No liquidity accounts found in database</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                                        No finance accounts found.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
 
-        <div class="mt-8">
-            {{ $accounts->links() }}
+                <div class="mt-4">
+                    {{ $accounts->links() }}
+                </div>
+            </div>
         </div>
     </div>
 </x-app-layout>
