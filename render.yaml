@@ -1,0 +1,69 @@
+services:
+  # The Laravel Web Service
+  - type: web
+    name: cropwise-web
+    env: docker
+    dockerContext: .
+    dockerfilePath: Dockerfile
+    plan: free # or starter
+    region: singapore # Change to your preferred region
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_URL
+        fromService:
+          type: web
+          name: cropwise-web
+          property: host
+      - key: APP_KEY
+        generateValue: true # Generates a random base64 key
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: cropwise-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: cropwise-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: cropwise-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: cropwise-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: cropwise-db
+          property: password
+      - key: LOG_CHANNEL
+        value: errorlog # Use errorlog for Docker/Render
+      - key: SESSION_DRIVER
+        value: redis
+      - key: CACHE_STORE
+        value: redis
+      - key: QUEUE_CONNECTION
+        value: redis
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: cropwise-cache
+          property: connectionString
+
+  # Redis for Session/Cache/Queue
+  - type: redis
+    name: cropwise-cache
+    plan: free
+    region: singapore
+    ipAllowList: [] # Only allow internal connections
+
+databases:
+  # Managed PostgreSQL Database
+  - name: cropwise-db
+    plan: free
+    region: singapore
