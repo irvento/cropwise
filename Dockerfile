@@ -10,16 +10,23 @@ RUN apk add --no-cache \
     zlib-dev \
     icu-dev \
     oniguruma-dev \
-    postgresql-dev
+    postgresql-dev \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libwebp-dev
+
+# Configure extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
 
 # Install PHP extensions
-RUN docker-php-ext-install \
+RUN docker-php-ext-install -j$(nproc) \
     gd \
     zip \
     bcmath \
     intl \
     pdo_pgsql \
-    mbstring
+    mbstring \
+    opcache
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -56,15 +63,19 @@ RUN apk add --no-cache \
     libpng \
     libzip \
     icu \
-    postgresql-libs
+    postgresql-libs \
+    freetype \
+    libjpeg-turbo \
+    libwebp
 
 # Install PHP extensions for runtime
-RUN docker-php-ext-install \
+RUN docker-php-ext-install -j$(nproc) \
     gd \
     zip \
     bcmath \
     intl \
-    pdo_pgsql
+    pdo_pgsql \
+    opcache
 
 WORKDIR /var/www/html
 
