@@ -124,6 +124,18 @@ return new class extends Migration {
             $table->string('status');
             $table->timestamps();
         });
+        
+        // HR Management
+        Schema::create('hr', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
+            $table->string('department');
+            $table->string('position');
+            $table->date('hire_date');
+            $table->enum('employment_status', ['active', 'inactive', 'on_leave'])->default('active');
+            $table->enum('employment_type', ['full_time', 'part_time', 'contract'])->default('full_time');
+            $table->timestamps();
+        });
 
         // Attendance
         Schema::create('attendance', function (Blueprint $table) {
@@ -270,6 +282,7 @@ return new class extends Migration {
         Schema::dropIfExists('payroll');
         Schema::dropIfExists('attendance');
         Schema::dropIfExists('employees');
+        Schema::dropIfExists('hr');
         Schema::dropIfExists('budgets');
         Schema::dropIfExists('financial_transactions');
         Schema::dropIfExists('financial_accounts');
