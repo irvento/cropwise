@@ -9,18 +9,16 @@ use Illuminate\Http\Client\RequestException;
 class WeatherService
 {
     protected $apiKey;
-    protected $baseUrl;
+    protected $baseUrl = 'https://api.weatherapi.com/v1';
 
     public function __construct()
     {
-        // Retrieve and sanitize the API key (removes hidden control characters/whitespace)
-        $this->apiKey = preg_replace('/[^a-zA-Z0-9]/', '', config('services.weatherapi.key'));
-        $this->baseUrl = config('services.weatherapi.url');
+        $this->apiKey = config('services.weatherapi.key');
     }
 
     public function getCurrentWeather($city)
     {
-        return Cache::remember("weather.current.{$city}", 3600, function () use ($city) {
+        return Cache::remember("weather.{$city}", 3600, function () use ($city) {
             $response = Http::get("{$this->baseUrl}/current.json", [
                 'key' => $this->apiKey,
                 'q' => $city,
@@ -31,7 +29,6 @@ class WeatherService
                 $data = $response->json();
                 return [
                     'temperature' => $data['current']['temp_c'],
-                    'temp_c' => $data['current']['temp_c'],
                     'description' => $data['current']['condition']['text'],
                     'icon' => $data['current']['condition']['icon'],
                     'humidity' => $data['current']['humidity'],
@@ -79,7 +76,8 @@ class WeatherService
     public function getTwoMonthForecast(string $city): array
     {
         return Cache::remember("weather.forecast.{$city}", now()->addHours(12), function() use ($city) {
-            $response = Http::get("{$this->baseUrl}/forecast.json", [
+            $response = Http::baseUrl($this->baseUrl)
+                ->get('/forecast.json', [
                     'key' => $this->apiKey,
                     'q' => $city,
                     'days' => 60, // Get forecast for 60 days

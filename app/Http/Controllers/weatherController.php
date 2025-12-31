@@ -15,9 +15,11 @@ class WeatherController extends Controller
     {
         try {
             $weatherData = $this->weatherService->getWeatherByCity($city);
+            $weatherForecast = $this->weatherService->getTwoMonthForecast($city);
             
             return view('weather.show', [
                 'weatherData' => $weatherData,
+                'weatherForecast' => $weatherForecast,
                 'city' => $city
             ]);
             

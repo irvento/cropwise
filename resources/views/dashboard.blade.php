@@ -12,7 +12,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <!-- Total Fields -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
+                    <div class="p-4">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/30">
                                 <i class="fas fa-map-marked-alt text-2xl text-green-600 dark:text-green-400"></i>
@@ -27,7 +27,7 @@
 
                 <!-- Active Crops -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
+                    <div class="p-4">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30">
                                 <i class="fas fa-seedling text-2xl text-blue-600 dark:text-blue-400"></i>
@@ -42,7 +42,7 @@
 
                 <!-- Pending Tasks -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
+                    <div class="p-4">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900/30">
                                 <i class="fas fa-tasks text-2xl text-yellow-600 dark:text-yellow-400"></i>
@@ -57,7 +57,7 @@
 
                 <!-- Total Livestock -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
+                    <div class="p-4">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900/30">
                                 <i class="fas fa-cow text-2xl text-purple-600 dark:text-purple-400"></i>
@@ -69,10 +69,13 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
+            <!-- Second Row of Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <!-- Total Employees -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
+                    <div class="p-4">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900/30">
                                 <i class="fas fa-users text-2xl text-indigo-600 dark:text-indigo-400"></i>
@@ -84,10 +87,10 @@
                         </div>
                     </div>
                 </div>
-                    
+
                 <!-- Total Inventory -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
+                    <div class="p-4">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-red-100 dark:bg-red-900/30">
                                 <i class="fas fa-warehouse text-2xl text-red-600 dark:text-red-400"></i>
@@ -97,12 +100,12 @@
                                 <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $totalInventory ?? 0 }}</p>
                             </div>
                         </div>
-                        </div>
+                    </div>
                 </div>
 
                 <!-- Total Leave Requests -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
+                    <div class="p-4">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-pink-100 dark:bg-pink-900/30">
                                 <i class="fas fa-calendar-times text-2xl text-pink-600 dark:text-pink-400"></i>
@@ -112,12 +115,12 @@
                                 <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $totalLeaveRequests ?? 0 }}</p>
                             </div>
                         </div>
-                        </div>
+                    </div>
                 </div>
 
                 <!-- Total Attendance -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
+                    <div class="p-4">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-teal-100 dark:bg-teal-900/30">
                                 <i class="fas fa-clipboard-check text-2xl text-teal-600 dark:text-teal-400"></i>
@@ -127,89 +130,76 @@
                                 <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $totalAttendance ?? 0 }}</p>
                             </div>
                         </div>
-                        </div>
-                </div>
-
-                <!-- Total Payrolls -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-orange-100 dark:bg-orange-900/30">
-                                <i class="fas fa-money-bill-wave text-2xl text-orange-600 dark:text-orange-400"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Total Payrolls</p>
-                                <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $totalPayrolls ?? 0 }}</p>
-                            </div>
-                        </div>
-                        </div>
+                    </div>
                 </div>
             </div>
-<!-- Main Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    @php
-        $cards = [
-            [
-                'route' => route('farm.index'),
-                'icon' => 'fas fa-tractor',
-                'title' => 'Farm Overview',
-                'desc' => 'Manage fields, crops, and livestock',
-                'bg' => 'from-green-100 to-green-200 dark:from-green-700 dark:to-green-800'
-            ],
-            [
-                'route' => route('admin.schedule.index'),
-                'icon' => 'fas fa-calendar-alt',
-                'title' => 'Schedule Management',
-                'desc' => 'Tasks and planting schedules',
-                'bg' => 'from-blue-100 to-blue-200 dark:from-blue-700 dark:to-blue-800'
-            ],
-            [
-                'route' => route('weather.show', $currentCity ?? 'Manolo Fortich'),
-                'icon' => 'fas fa-cloud-sun',
-                'title' => 'Weather',
-                'desc' => 'Current weather and forecasts',
-                'bg' => 'from-yellow-100 to-yellow-200 dark:from-yellow-600 dark:to-yellow-700'
-            ],
-            [
-                'route' => route('hr.index'),
-                'icon' => 'fas fa-users',
-                'title' => 'Human Resources',
-                'desc' => 'Manage employees and tasks',
-                'bg' => 'from-purple-100 to-purple-200 dark:from-purple-700 dark:to-purple-800'
-            ],
-            [
-                'route' => route('admin.inventory.index'),
-                'icon' => 'fas fa-warehouse',
-                'title' => 'Inventory',
-                'desc' => 'Manage supplies and equipment',
-                'bg' => 'from-red-100 to-red-200 dark:from-red-700 dark:to-red-800'
-            ],
-            [
-                'route' => route('admin.finance.index'),
-                'icon' => 'fas fa-chart-line',
-                'title' => 'Finance',
-                'desc' => 'Track income and expenses',
-                'bg' => 'from-indigo-100 to-indigo-200 dark:from-indigo-700 dark:to-indigo-800'
-            ],
-        ];
-    @endphp
 
-    @foreach ($cards as $card)
-        <a href="{{ $card['route'] }}" class="block rounded-xl shadow-md border border-gray-300 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200 overflow-hidden">
-            <div class="relative bg-gradient-to-br {{ $card['bg'] }} p-6 text-center">
-                <div class="absolute inset-0 bg-white/40 dark:bg-black/20 backdrop-blur-md rounded-xl"></div>
-                        <div class="relative z-10">
-                    <i class="{{ $card['icon'] }} text-4xl text-gray-800 dark:text-white mb-4"></i>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ $card['title'] }}</h3>
-                    <p class="text-gray-700 dark:text-gray-300 mt-2">{{ $card['desc'] }}</p>
-                        </div>
+            <!-- Main Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                @php
+                    $cards = [
+                        [
+                            'route' => route('farm.index'),
+                            'icon' => 'fas fa-tractor',
+                            'title' => 'Farm Overview',
+                            'desc' => 'Manage fields, crops, and livestock',
+                            'bg' => 'from-green-100 to-green-200 dark:from-green-700 dark:to-green-800'
+                        ],
+                        [
+                            'route' => route('admin.schedule.index'),
+                            'icon' => 'fas fa-calendar-alt',
+                            'title' => 'Schedule Management',
+                            'desc' => 'Tasks and planting schedules',
+                            'bg' => 'from-blue-100 to-blue-200 dark:from-blue-700 dark:to-blue-800'
+                        ],
+                        [
+                            'route' => route('weather.show', $currentCity ?? 'Manolo Fortich'),
+                            'icon' => 'fas fa-cloud-sun',
+                            'title' => 'Weather',
+                            'desc' => 'Current weather and forecasts',
+                            'bg' => 'from-yellow-100 to-yellow-200 dark:from-yellow-600 dark:to-yellow-700'
+                        ],
+                        [
+                            'route' => route('hr.index'),
+                            'icon' => 'fas fa-users',
+                            'title' => 'Human Resources',
+                            'desc' => 'Manage employees and tasks',
+                            'bg' => 'from-purple-100 to-purple-200 dark:from-purple-700 dark:to-purple-800'
+                        ],
+                        [
+                            'route' => route('admin.inventory.index'),
+                            'icon' => 'fas fa-warehouse',
+                            'title' => 'Inventory',
+                            'desc' => 'Manage supplies and equipment',
+                            'bg' => 'from-red-100 to-red-200 dark:from-red-700 dark:to-red-800'
+                        ],
+                        [
+                            'route' => route('admin.finance.index'),
+                            'icon' => 'fas fa-chart-line',
+                            'title' => 'Finance',
+                            'desc' => 'Track income and expenses',
+                            'bg' => 'from-indigo-100 to-indigo-200 dark:from-indigo-700 dark:to-indigo-800'
+                        ],
+                    ];
+                @endphp
+
+                @foreach ($cards as $card)
+                    <a href="{{ $card['route'] }}" class="block rounded-xl shadow-md border border-gray-300 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200 overflow-hidden">
+                        <div class="relative bg-gradient-to-br {{ $card['bg'] }} p-6 text-center">
+                            <div class="absolute inset-0 bg-white/40 dark:bg-black/20 backdrop-blur-md rounded-xl"></div>
+                            <div class="relative z-10">
+                                <i class="{{ $card['icon'] }} text-4xl text-gray-800 dark:text-white mb-4"></i>
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ $card['title'] }}</h3>
+                                <p class="text-gray-700 dark:text-gray-300 mt-2">{{ $card['desc'] }}</p>
+                            </div>
                         </div>
                     </a>
-    @endforeach
+                @endforeach
             </div>
 
-            <!-- Recent Schedules Section -->
-            <div class="mt-6">
+            <!-- Recent Activities Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Recent Schedules -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Schedules</h3>
@@ -249,201 +239,42 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Upcoming Tasks Section -->
-            <div class="mt-6">
+                <!-- Financial Summary -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
                     <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Upcoming Tasks</h3>
-                        <div class="space-y-4">
-                            @forelse($upcomingTasks as $task)
-                                <div class="flex items-center justify-between p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="flex-shrink-0">
-                                            <i class="fas fa-tasks text-lg text-blue-500 dark:text-blue-400"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-900 dark:text-white">
-                                                {{ $task->title }}
-                                            </p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300">
-                                                Due: {{ $task->due_date->format('M d, Y') }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                        @if($task->priority === 'high') bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400
-                                        @elseif($task->priority === 'medium') bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400
-                                        @else bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400
-                                        @endif">
-                                        {{ ucfirst($task->priority) }}
-                                    </span>
-                                </div>
-                            @empty
-                                <p class="text-gray-500 dark:text-gray-400">No upcoming tasks</p>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Financial Summary Section -->
-            <div class="mt-6">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Financial Summary</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Storage Stock Info</h3>
                         <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-100 dark:border-blue-800">
+                                <p class="text-sm font-medium text-blue-800 dark:text-blue-200">Total Items</p>
+                                <p class="text-2xl font-semibold text-blue-600 dark:text-blue-300">
+                                    {{ $inventoryStats['total_items'] }}
+                                </p>
+                            </div>
+                            <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg border border-yellow-100 dark:border-yellow-800">
+                                <p class="text-sm font-medium text-yellow-800 dark:text-yellow-200">Low Stock Items</p>
+                                <p class="text-2xl font-semibold text-yellow-600 dark:text-yellow-300">
+                                    {{ $inventoryStats['low_stock'] }}
+                                </p>
+                            </div>
                             <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-100 dark:border-green-800">
-                                <p class="text-sm font-medium text-green-800 dark:text-green-200">Income</p>
+                                <p class="text-sm font-medium text-green-800 dark:text-green-200">Total Value</p>
                                 <p class="text-2xl font-semibold text-green-600 dark:text-green-300">
-                                    ₱{{ number_format($financialSummary['income'], 2) }}
+                                    ₱{{ number_format($inventoryStats['total_value'], 2) }}
                                 </p>
                             </div>
-                            <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-100 dark:border-red-800">
-                                <p class="text-sm font-medium text-red-800 dark:text-red-200">Expenses</p>
-                                <p class="text-2xl font-semibold text-red-600 dark:text-red-300">
-                                    ₱{{ number_format($financialSummary['expenses'], 2) }}
+                            <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-100 dark:border-purple-800">
+                                <p class="text-sm font-medium text-purple-800 dark:text-purple-200">Categories</p>
+                                <p class="text-2xl font-semibold text-purple-600 dark:text-purple-300">
+                                    {{ $inventoryStats['categories'] }}
                                 </p>
                             </div>
                         </div>
                     </div>
-                </div>
-                        </div>
-
-            <!-- Weather Section -->
-            @if(isset($weather) && isset($detailedWeather))
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 mb-6 mt-6">
-                <div class="p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Current Weather</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Current Weather -->
-                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-6">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-4">
-                                    <img src="{{ $detailedWeather['icon'] ?? $weather['icon'] }}" alt="Weather icon" class="w-16 h-16">
-                                    <div>
-                                        <p class="text-3xl font-bold text-gray-900 dark:text-white">
-                                            {{ $detailedWeather['temp_c'] ?? $weather['temp_c'] }}°C
-                                        </p>
-                                        <p class="text-sm text-gray-600 dark:text-gray-300 capitalize">
-                                            {{ $detailedWeather['condition'] ?? $weather['description'] }}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-sm text-gray-600 dark:text-gray-300">
-                                        <i class="fas fa-map-marker-alt mr-1"></i>
-                                        {{ $detailedWeather['city'] ?? 'Manolo Fortich' }}
-                                    </p>
-                                    <p class="text-sm text-gray-600 dark:text-gray-300">
-                                        {{ now()->format('F j, Y') }}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Weather Details -->
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-white dark:bg-gray-700/50 rounded-lg p-4">
-                                <div class="flex items-center space-x-3">
-                                    <div class="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30">
-                                        <i class="fas fa-wind text-blue-600 dark:text-blue-400"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-600 dark:text-gray-300">Wind Speed</p>
-                                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            {{ $detailedWeather['wind_kph'] ?? $weather['wind_speed'] }} km/h
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="bg-white dark:bg-gray-700/50 rounded-lg p-4">
-                                <div class="flex items-center space-x-3">
-                                    <div class="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30">
-                                        <i class="fas fa-tint text-blue-600 dark:text-blue-400"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-600 dark:text-gray-300">Humidity</p>
-                                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            {{ $detailedWeather['humidity'] ?? $weather['humidity'] }}%
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="bg-white dark:bg-gray-700/50 rounded-lg p-4">
-                                <div class="flex items-center space-x-3">
-                                    <div class="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30">
-                                        <i class="fas fa-temperature-high text-blue-600 dark:text-blue-400"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-600 dark:text-gray-300">Feels Like</p>
-                                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            {{ $detailedWeather['feelslike_c'] ?? $weather['temp_c'] }}°C
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="bg-white dark:bg-gray-700/50 rounded-lg p-4">
-                                <div class="flex items-center space-x-3">
-                                    <div class="p-2 rounded-full bg-blue-100 dark:bg-blue-900/30">
-                                        <i class="fas fa-cloud text-blue-600 dark:text-blue-400"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-600 dark:text-gray-300">UV Index</p>
-                                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            {{ $detailedWeather['uv'] ?? '0' }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Two Month Forecast -->
-                    @if(isset($weatherForecast))
-                    <div class="mt-6">
-                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Month Forecast</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            @foreach($weatherForecast as $month => $forecast)
-                            <div class="bg-white dark:bg-gray-700/50 rounded-lg p-4">
-                                <div class="flex items-center justify-between mb-3">
-                                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $month }}</h5>
-                                    <span class="px-3 py-1 text-sm font-medium rounded-full 
-                                        {{ $forecast['season'] === 'Summer' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
-                                           ($forecast['season'] === 'Rainy' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' : 
-                                           'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400') }}">
-                                        {{ $forecast['season'] }}
-                                    </span>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <p class="text-sm text-gray-600 dark:text-gray-300">Avg Temperature</p>
-                                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            {{ $forecast['avg_temp'] }}°C
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-600 dark:text-gray-300">Avg Rainfall</p>
-                                        <p class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            {{ $forecast['avg_rain'] }}mm
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="mt-3">
-                                    <p class="text-sm text-gray-600 dark:text-gray-300">Most Common Condition</p>
-                                    <p class="text-sm font-medium text-gray-900 dark:text-white capitalize">
-                                        {{ $forecast['most_common_condition'] }}
-                                    </p>
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    @endif
                 </div>
             </div>
-            @endif
+
+            
         </div>
     </div>
     @endif
@@ -451,58 +282,56 @@
     @if(auth()->user()->role_id === 2)
     <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Summary Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-                
-
-                <!-- Today's Attendance -->
+            <!-- First Row: Attendance Button -->
+            <div class="mb-6">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
                     <div class="p-6">
-                        <div class="flex items-center">
-                            <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/30">
-                                <i class="fas fa-clipboard-check text-2xl text-green-600 dark:text-green-400"></i>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Today's Attendance</p>
-                                <div class="flex items-center mt-1">
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                        {{ $todayAttendanceStatus === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
-                                           ($todayAttendanceStatus === 'late' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
-                                           ($todayAttendanceStatus === 'absent' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400')) }}">
-                                        {{ ucfirst(str_replace('_', ' ', $todayAttendanceStatus)) }}
-                                    </span>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/30">
+                                    <i class="fas fa-clipboard-check text-2xl text-green-600 dark:text-green-400"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Today's Attendance</p>
+                                    <div class="flex items-center mt-1">
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full 
+                                            {{ $todayAttendanceStatus === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
+                                               ($todayAttendanceStatus === 'late' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
+                                               ($todayAttendanceStatus === 'absent' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400')) }}">
+                                            {{ ucfirst(str_replace('_', ' ', $todayAttendanceStatus)) }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="mt-4">
-                            @if($todayAttendanceStatus === 'not_checked_in')
-                                <form action="{{ route('dashboard.time-in') }}" method="POST" class="time-in-form">
-                                    @csrf
-                                    <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">
-                                        Check In
-                                    </button>
-                                </form>
-                            @elseif($todayAttendanceStatus === 'present' || $todayAttendanceStatus === 'late')
-                                <form action="{{ route('dashboard.time-out') }}" method="POST" class="time-out-form">
-                                    @csrf
-                                    <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">
-                                        Check Out
-                                    </button>
-                                </form>
-                            @elseif($todayAttendanceStatus === 'checked_out')
-                                <div class="text-center text-gray-600 dark:text-gray-400">
-                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
-                                    Checked Out
-                                </div>
-                            @endif
+                            <div class="flex-shrink-0">
+                                @if($todayAttendanceStatus === 'not_checked_in')
+                                    <form action="{{ route('dashboard.time-in') }}" method="POST" class="time-in-form">
+                                        @csrf
+                                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-6 rounded-lg transition duration-150 ease-in-out">
+                                            Check In
+                                        </button>
+                                    </form>
+                                @elseif($todayAttendanceStatus === 'present' || $todayAttendanceStatus === 'late')
+                                    <form action="{{ route('dashboard.time-out') }}" method="POST" class="time-out-form">
+                                        @csrf
+                                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-6 rounded-lg transition duration-150 ease-in-out">
+                                            Check Out
+                                        </button>
+                                    </form>
+                                @elseif($todayAttendanceStatus === 'checked_out')
+                                    <div class="text-center text-gray-600 dark:text-gray-400">
+                                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                        Checked Out
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                
-
-            <!-- Feature Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 mb-6">
+            <!-- Second Row: Upcoming Tasks and Payroll -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <!-- Upcoming Tasks Card -->
                 <a href="{{ route('user.tasks.index') }}" class="block">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
@@ -518,7 +347,7 @@
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <span class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $upcomingTasks->count() }}</span>
+                                    <span class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ $upcomingTasksCount }}</span>
                                     <p class="text-sm text-gray-600 dark:text-gray-400">Tasks</p>
                                 </div>
                             </div>
@@ -526,6 +355,32 @@
                     </div>
                 </a>
 
+                <!-- Payroll Card -->
+                <a href="{{ route('user.payroll.index') }}" class="block">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/30">
+                                        <i class="fas fa-money-bill-wave text-2xl text-green-600 dark:text-green-400"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">My Payroll</h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">View your salary and payment history</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold text-green-600 dark:text-green-400">{{ $totalPayrolls }}</span>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Payrolls</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Third Row: Leave Requests and Attendance Info -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <!-- Leave Requests Card -->
                 <a href="{{ route('user.leave-requests.index') }}" class="block">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
@@ -549,70 +404,38 @@
                     </div>
                 </a>
 
-                <!-- Payroll Card -->
-                <a href="{{ route('user.payroll.index') }}" class="block">
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
-                        <div class="p-6">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/30">
-                                        <i class="fas fa-money-bill-wave text-2xl text-green-600 dark:text-green-400"></i>
-                                    </div>
-                                    <div class="ml-4">
-                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">My Payroll</h3>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">View your salary and payment history</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-2xl font-bold text-green-600 dark:text-green-400">₱{{ number_format($latestPayroll->net_salary ?? 0, 2) }}</span>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">Latest Salary</p>
-                                </div>
+                <!-- Attendance Info Card -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-teal-100 dark:bg-teal-900/30">
+                                <i class="fas fa-clipboard-check text-2xl text-teal-600 dark:text-teal-400"></i>
                             </div>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Attendance Card -->
-                <div class="block">
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
-                        <div class="p-6">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="p-3 rounded-full bg-teal-100 dark:bg-teal-900/30">
-                                        <i class="fas fa-clipboard-check text-2xl text-teal-600 dark:text-teal-400"></i>
-                                    </div>
-                                    <div class="ml-4">
-                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">My Attendance</h3>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">View your attendance records</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Attendance Information</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    Current Status: 
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full 
                                         {{ $todayAttendanceStatus === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
                                            ($todayAttendanceStatus === 'late' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
                                            ($todayAttendanceStatus === 'absent' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400')) }}">
                                         {{ ucfirst(str_replace('_', ' ', $todayAttendanceStatus)) }}
                                     </span>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Today's Status</p>
-                                </div>
+                                </p>
                             </div>
                         </div>
                     </div>
-                                        </div>
+                </div>
             </div>
 
-            <!-- Recent Activities -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Recent Tasks -->
+            <!-- Fourth Row: Recent Tasks -->
+            <div class="mb-6">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
                     <div class="p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Tasks</h3>
-                            <a href="{{ route('user.tasks.index') }}" class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">View All</a>
-                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Tasks</h3>
                         <div class="space-y-4">
                             @forelse($recentTasks as $task)
-                                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out">
+                                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
                                     <div class="flex justify-between items-start">
                                         <div>
                                             <p class="font-medium text-gray-900 dark:text-gray-100">{{ $task->title }}</p>
@@ -634,17 +457,16 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Recent Leave Requests -->
+            <!-- Fifth Row: Recent Leave Requests -->
+            <div class="mb-6">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
                     <div class="p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Leave Requests</h3>
-                            <a href="{{ route('user.leave-requests.index') }}" class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">View All</a>
-                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Leave Requests</h3>
                         <div class="space-y-4">
                             @forelse($recentLeaveRequests as $request)
-                                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out">
+                                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
                                     <div class="flex justify-between items-start">
                                         <div>
                                             <p class="font-medium text-gray-900 dark:text-gray-100">{{ $request->leave_type }}</p>
@@ -668,17 +490,14 @@
                 </div>
             </div>
 
-            <!-- Upcoming Tasks Section -->
-            <div class="mt-6">
+            <!-- Sixth Row: Upcoming Tasks -->
+            <div class="mb-6">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
                     <div class="p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Upcoming Tasks</h3>
-                            <a href="{{ route('user.tasks.index') }}" class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">View All</a>
-                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Upcoming Tasks</h3>
                         <div class="space-y-4">
                             @forelse($upcomingTasks as $task)
-                                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out">
+                                <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
                                     <div class="flex justify-between items-start">
                                         <div>
                                             <p class="font-medium text-gray-900 dark:text-gray-100">{{ $task->title }}</p>
