@@ -43,8 +43,7 @@ class WeatherService
     public function getWeatherByCity(string $city): array
     {
         return Cache::remember("weather.{$city}", now()->addHour(), function() use ($city) {
-            $response = Http::baseUrl($this->baseUrl)
-                ->get('/current.json', [
+            $response = Http::get("{$this->baseUrl}/current.json", [
                     'key' => $this->apiKey,
                     'q' => $city,
                     'aqi' => 'no'

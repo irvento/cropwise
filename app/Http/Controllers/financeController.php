@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Finance;
-use App\Models\FinanceTransaction;
+use App\Models\FinancialAccount;
+use App\Models\FinancialTransaction;
 use Illuminate\Http\Request;
 
-class financeController extends Controller
+class FinanceController extends Controller
 {
     public function index()
     {
-        $query = Finance::query();
+        $query = FinancialAccount::query();
 
         // Handle search
         if (request()->has('search') && !empty(request('search'))) {
@@ -40,7 +40,7 @@ class financeController extends Controller
             'description' => 'nullable|string'
         ]);
 
-        Finance::create($validated);
+        FinancialAccount::create($validated);
 
         return redirect()
             ->route('admin.finance.index')
@@ -49,7 +49,7 @@ class financeController extends Controller
 
     public function show(Finance $finance)
     {
-        $transactions = FinanceTransaction::where('account_id', $finance->id)
+        $transactions = FinancialTransaction::where('account_id', $finance->id)
             ->latest()
             ->take(10)
             ->get();
