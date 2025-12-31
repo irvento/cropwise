@@ -57,16 +57,24 @@ RUN npm run build
 # Final production stage
 FROM php:8.2-fpm-alpine
 
-# Install Nginx and other runtime dependencies
+# Install Nginx and runtime/build dependencies
 RUN apk add --no-cache \
     nginx \
-    libpng \
-    libzip \
-    icu \
-    postgresql-libs \
-    freetype \
-    libjpeg-turbo \
-    libwebp
+    bash \
+    libpng-dev \
+    libzip-dev \
+    zlib-dev \
+    icu-dev \
+    oniguruma-dev \
+    postgresql-dev \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libwebp-dev \
+    icu-libs \
+    postgresql-libs
+
+# Configure extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
 
 # Install PHP extensions for runtime
 RUN docker-php-ext-install -j$(nproc) \
@@ -75,6 +83,7 @@ RUN docker-php-ext-install -j$(nproc) \
     bcmath \
     intl \
     pdo_pgsql \
+    mbstring \
     opcache
 
 WORKDIR /var/www/html
