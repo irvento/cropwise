@@ -1,16 +1,22 @@
 #!/bin/sh
 
+# Set default port if not provided by Render
+PORT="${PORT:-80}"
+echo "Starting application on port $PORT..."
+
+# Replace PORT_PLACEHOLDER in nginx config
+sed -i "s/PORT_PLACEHOLDER/$PORT/g" /etc/nginx/http.d/default.conf
+
 # Cache configurations
+echo "Caching Laravel configurations..."
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-# Run migrations (ensure DB is ready)
-# Skip if not needed or run manually via Render's dashboard shell
-# php artisan migrate --force
+# Start PHP-FPM in the background
+echo "Starting PHP-FPM..."
+php-fpm -D
 
-# Start Nginx
-nginx -g "daemon off;" &
-
-# Start PHP-FPM
-php-fpm
+# Start Nginx in the foreground
+echo "Starting Nginx..."
+nginx -g "daemon off;"
